@@ -255,34 +255,6 @@ nav a {
     box-sizing: border-box;
 }
 
-/* === Glass Button === */
-.glass-button {
-    position: relative;
-    width: 220px;
-    height: 64px;
-    padding: 12px 24px;
-    top: 2%;
-    margin: 0;
-    background-color: rgba(255, 72, 0, 0.2);
-    color: rgba(240, 240, 240, 0.8);
-    border: 2px solid rgba(255, 72, 0, 0.4);
-    border-radius: 6px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
-}
-
-.glass-button:hover {
-  background-color: #ff4800; /* #FF4800 at 100% */
-  color: rgba(240, 240, 240, 1);
-  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.4);
-  transform: translateY(-2px);
-}
-
 /* === Navigation (Mobile) === */
 @media (max-width: 768px) {
   .hamburger {
@@ -317,14 +289,6 @@ nav a {
 
   .hero_img {
     width: 80%;
-  }
-
-  .glass-button {
-    width: 40%;
-    height: 6%;
-    font-size: 70%;
-    padding: 1% 1%;
-    max-width: none;
   }
 }
 
