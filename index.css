@@ -49,7 +49,7 @@ header {
   text-shadow:
     0 0 8px rgba(240, 240, 240, 0.8),
     0 0 20px rgba(240, 240, 240, 0.6);
-  color: rgb(255, 255, 255);
+  color: rgb(240, 240, 240);
 }
 
 /* === Hamburger Menu === */
@@ -66,14 +66,14 @@ header {
 }
 
 .hamburger svg {
-  fill: white;
+  fill: rgb(240, 240, 240);
 }
 
 .hamburger .bar,
 .hamburger div {
   width: 25px;
   height: 3px;
-  background-color: white;
+  background-color: rgb(240, 240, 240);
   border-radius: 2px;
 }
 
@@ -117,12 +117,12 @@ header {
     transform: scale(1);
   }
   50% {
-    color: #ffffff;
+    color: rgb(240, 240, 240);
     letter-spacing: 2px;
     transform: scale(1.05);
   }
   100% {
-    color: #ffffff;
+    color: rgb(240, 240, 240);
     letter-spacing: 0px;
     transform: scale(1);
   }
@@ -130,12 +130,12 @@ header {
 
 @keyframes gtaColorFadeReverse {
   0% {
-    color: #ffffff;
+    color: rgb(240, 240, 240);
     letter-spacing: 0px;
     transform: scale(1);
   }
   50% {
-    color: #ffffff;
+    color: rgb(240, 240, 240);
     letter-spacing: 2px;
     transform: scale(1.05);
   }
@@ -262,4 +262,26 @@ nav a {
     margin-top: 10px;
     width: 80%;
   }
+}
+
+.glass-button {
+  padding: 12px 24px;
+  background-color: rgba(255, 72, 0, 0.5); /* #FF4800 at 50% */
+  color: rgba(240, 240, 240, 0.5);
+  border: none;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
+}
+
+.glass-button:hover {
+  background-color: rgba(255, 72, 0, 1); /* #FF4800 at 100% */
+  color: rgba(240, 240, 240, 1);
+  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.4);
+  transform: translateY(-2px);
 }
