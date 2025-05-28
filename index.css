@@ -117,6 +117,10 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+
+  .hero_img {
+    width: 100%;
+  }
 }
 
 
@@ -256,5 +260,15 @@ nav a {
 
 #scrollToTopBtn:hover svg {
   transform: translateY(-3px);
+}
+
+.hero_img {
+  width: 80%;
+  max-width: 100%;
+  height: auto;
+  padding-left: 4%;
+  padding-right: 4%;
+  margin-top: 120px;
+  box-sizing: border-box; 
 }
 
