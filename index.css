@@ -98,17 +98,6 @@ header {
   transform: rotate(-45deg);
 }
 
-/* === Hero Image === */
-.hero_img {
-  width: 80%;
-  max-width: 100%;
-  height: auto;
-  padding-left: 4%;
-  padding-right: 4%;
-  margin-top: 30px;
-  box-sizing: border-box;
-}
-
 /* === Animation Effects === */
 @keyframes gtaColorFade {
   0% {
@@ -171,15 +160,35 @@ nav a {
 }
 
 .main_div section {
-  width: 100%;
+  margin-top: 2%;
+  width: 96%;
+  margin: 0 auto;
   min-height: 720px;
   background-color: transparent;
 }
 
-/* Section Identifiers */
-#sect_1, #sect_2, #sect_3,
-#sect_4, #sect_5, #sect_6 {
-  background-color: transparent;
+#sect_1 {
+  background-color: #0c0c0c; /* Dark bluish */
+}
+
+#sect_2 {
+  background-color: #0c0c0c; /* Muted teal */
+}
+
+#sect_3 {
+  background-color: #4a4a6d; /* Soft purple */
+}
+
+#sect_4 {
+  background-color: #6b4226; /* Warm brown */
+}
+
+#sect_5 {
+  background-color: #264653; /* Deep blue-green */
+}
+
+#sect_6 {
+  background-color: #8d99ae; /* Light grey-blue */
 }
 
 /* === Scroll To Top Button === */
@@ -226,6 +235,54 @@ nav a {
   transform: translateY(-3px);
 }
 
+.sect_1 {
+    display: flex;
+    flex-direction: column;        /* Stack elements vertically */
+    align-items: flex-start;       /* Align everything to the left */
+    justify-content: flex-start;   /* Align to top */
+    padding: 0;                    /* Remove inner spacing */
+    margin: 0;                     /* Remove outer spacing */
+    gap: 0;                        /* No gap between image & button */
+}
+
+/* === Hero Image === */
+.hero_img {
+    width: 80%;
+    max-width: none;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* === Glass Button === */
+.glass-button {
+    position: relative;
+    width: 220px;
+    height: 64px;
+    padding: 12px 24px;
+    top: 2%;
+    margin: 0;
+    background-color: rgba(255, 72, 0, 0.2);
+    color: rgba(240, 240, 240, 0.8);
+    border: 2px solid rgba(255, 72, 0, 0.4);
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
+}
+
+.glass-button:hover {
+  background-color: #ff4800; /* #FF4800 at 100% */
+  color: rgba(240, 240, 240, 1);
+  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.4);
+  transform: translateY(-2px);
+}
+
 /* === Navigation (Mobile) === */
 @media (max-width: 768px) {
   .hamburger {
@@ -259,29 +316,15 @@ nav a {
   }
 
   .hero_img {
-    margin-top: 10px;
     width: 80%;
+  }
+
+  .glass-button {
+    width: 40%;
+    height: 6%;
+    font-size: 70%;
+    padding: 1% 1%;
+    max-width: none;
   }
 }
 
-.glass-button {
-  padding: 12px 24px;
-  background-color: rgba(255, 72, 0, 0.5); /* #FF4800 at 50% */
-  color: rgba(240, 240, 240, 0.5);
-  border: none;
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
-}
-
-.glass-button:hover {
-  background-color: rgba(255, 72, 0, 1); /* #FF4800 at 100% */
-  color: rgba(240, 240, 240, 1);
-  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.4);
-  transform: translateY(-2px);
-}

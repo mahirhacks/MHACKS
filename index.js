@@ -102,6 +102,7 @@ links.forEach(link => {
   });
 });
 
+//Scroll to the specified destination
 document.querySelectorAll('.header_links a').forEach(link => {
   link.addEventListener('click', event => {
     event.preventDefault();
