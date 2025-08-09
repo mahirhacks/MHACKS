@@ -17,7 +17,7 @@
     width: 100%;
     height: 100%;
     z-index: -1; /* behind everything */
-    background: linear-gradient(180deg, #000000, #1a1a1a); /* your black/gray gradient */
+    background: linear-gradient(-135deg, #000000, #1a1a1a); /* your black/gray gradient */
     }
 
     /* Core visuals */
@@ -38,6 +38,14 @@
     /* navbar + section gradient */
     .grad {
       background: linear-gradient(90deg, var(--orange-1), var(--orange-2));
+    }
+
+    /* iOS-like glass */
+    .glass-navbar {
+        background: rgba(0, 0, 0, 0.0); /* dark transparent overlay */
+        backdrop-filter: blur(4px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* only bottom border */
     }
 
     /* iOS-like glass */
@@ -103,12 +111,11 @@
 
   <!-- NAVBAR -->
   <header class="fixed w-full z-50 top-0">
-    <nav class="grad nav-backdrop py-3 glass card-shadow">
+    <nav class="grad nav-backdrop py-3 glass-navbar card-shadow">
     <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
     <!-- Left section -->
     <div class="flex items-center gap-4">
         <div class="text-white rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
-        <div class="hidden md:block text-white/90 text-sm">Intern Security Operations Center (SOC) Analyst</div>
     </div>
 
     <!-- Hamburger button (mobile) -->
@@ -155,16 +162,24 @@
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
           <p class="mt-2 text-lg md:text-xl text-white/90">Intern SOC Analyst · Cybersecurity Student</p>
 
-          <div class="mt-6 flex flex-col sm:flex-row gap-3">
-            <a href="#contact" class="inline-flex items-center gap-3 bg-white/10 py-2 px-4 rounded-lg text-white hover:scale-105 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z"/></svg>
-              Email / Contact
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="#contact" 
+                class="glass inline-flex items-center gap-3 py-2 px-4 text-white hover:scale-105 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z"/>
+                </svg>
+                Email / Contact
             </a>
-            <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" class="inline-flex items-center gap-3 btn-ghost text-white hover:scale-105 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z"/></svg>
-              LinkedIn
+
+            <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" 
+                class="glass inline-flex items-center gap-3 py-2 px-4 text-white hover:scale-105 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z"/>
+                </svg>
+                LinkedIn
             </a>
-          </div>
+            </div>
         </div>
 
       </div>
