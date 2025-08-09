@@ -8,103 +8,216 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-
+<style>
     #starsCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* behind everything */
-    background: linear-gradient(-135deg, #000000, #1a1a1a); /* your black/gray gradient */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: var(--canvas-gradient);
+        transition: background 0.4s ease;
     }
 
-    /* Core visuals */
-    :root{
-      --orange-1: #ff7e29; /* modern orange (not too bright) */
-      --orange-2: #ff9e53;
-      --glass-bg: rgba(255,255,255,0.16);
-      --glass-border: rgba(255,255,255,0.2);
+    :root {
+        --bg-color: #000000;
+        --text-color: #ffffff;
+        --orange-1: #ff2929;
+        --orange-2: #ff5353;
+
+        /* Glass colors */
+        --glass-bg: rgba(0, 0, 0, 0.16);
+        --glass-border: rgba(255, 255, 255, 0.2);
+
+        /* Navbar gradient */
+        --navbar-gradient: linear-gradient(90deg, var(--orange-1), var(--orange-2));
+
+        /* Canvas gradient */
+        --canvas-gradient: linear-gradient(-135deg, #000000, #1a1a1a);
+
+        /* Skill bar background */
+        --skill-bar-bg: rgba(255, 255, 255, 0.1);
+
+        /* Modal overlay */
+        --modal-backdrop: rgba(0,0,0,0.45);
+
+        --star-color: 255, 255, 255;
+    }
+
+    .light-theme {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --orange-1: #ff2929;
+        --orange-2: #ff5353;
+        --glass-bg: rgba(255, 255, 255, 0.16);
+        --glass-border: rgba(0, 0, 0, 0.2);
+        --canvas-gradient: linear-gradient(135deg, #ffffff, #d3d3d3);
+        --star-color: 255, 0, 0;
+    }
+
+    .text-color {
+        color: var(--text-color) !important;
     }
 
     html { scroll-behavior: smooth; }
+
     body {
-    background: linear-gradient(180deg, #000000, #000000); 
-    -webkit-font-smoothing: antialiased; 
-    -moz-osx-font-smoothing: grayscale; 
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: var(--bg-color);
+        color: var(--text-color);
     }
 
     /* navbar + section gradient */
     .grad {
-      background: linear-gradient(90deg, var(--orange-1), var(--orange-2));
+        background: var(--navbar-gradient);
+        transition: background 0.4s ease;
     }
 
     /* iOS-like glass */
     .glass-navbar {
-        background: rgba(0, 0, 0, 0.0); /* dark transparent overlay */
+        background: var(--glass-bg);
         backdrop-filter: blur(4px) saturate(120%);
         -webkit-backdrop-filter: blur(6px) saturate(120%);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* only bottom border */
+        border-bottom: 1px solid var(--glass-border);
+        transition: background 0.4s ease, border-color 0.4s ease;
     }
 
     /* iOS-like glass */
     .glass {
-    background: rgba(0, 0, 0, 0.0); /* dark transparent overlay */
-    backdrop-filter: blur(4px) saturate(120%);
-    -webkit-backdrop-filter: blur(6px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* softer border */
-    border-radius: 14px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(4px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid var(--glass-border);
+        border-radius: 14px;
+        transition: background 0.4s ease, border-color 0.4s ease;
     }
 
     /* subtle card shadow */
     .card-shadow {
-      box-shadow: 0 8px 30px rgba(18,18,18,0.0);
+        box-shadow: 0 8px 30px rgba(18,18,18,0.0);
     }
 
     /* reveal animation helper */
     .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity .6s ease, transform .6s ease;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity .6s ease, transform .6s ease;
     }
     .reveal.show {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
 
     /* small UI niceties */
     .nav-backdrop { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-    .btn-ghost { background: rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.14); padding:.5rem .9rem; border-radius:10px; }
+    .btn-ghost {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.14);
+        padding: .5rem .9rem;
+        border-radius: 10px;
+    }
+
+    .nav-mobile-menu {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    .nav-mobile-menu.active {
+        max-height: 500px; /* A value larger than the menu's actual height */
+        opacity: 1;
+    }
+
+    .nav-links a {
+        position: relative; /* This is crucial for the ::after pseudo-element */
+        display: inline-block;
+        padding-bottom: 2px; /* This creates the space between the link and the underline */
+        overflow: hidden; /* This hides the line before it animates up */
+        text-decoration: none; /* Make sure to remove the default underline */
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px; /* The thickness of the underline */
+        background: var(--text-color); /* The color of the underline */
+        transform: translateY(100%); /* Start position: below the link */
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        opacity: 0; /* Start with opacity 0 for a fade-in effect */
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus::after { /* Good practice for accessibility */
+        transform: translateY(0); /* End position: at the bottom of the link */
+        opacity: 1; /* Fade in the underline */
+    }
+
+    /* Ensure the hover effect works on the mobile links as well */
+    #mobileMenu a {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+    }
+    #mobileMenu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--text-color);
+        transform: scaleX(0); /* A scaling effect looks good on mobile */
+        transition: transform 0.3s ease-in-out;
+    }
+    #mobileMenu a:hover::after,
+    #mobileMenu a:focus::after {
+        transform: scaleX(1);
+    }
 
     /* progress bar styling */
     .skill-bar {
-    background: rgba(255, 255, 255, 0.1);
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
+        background: var(--skill-bar-bg);
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+        transition: background 0.4s ease;
     }
 
     .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff7e29, #ff9e53);
-    box-shadow: 0 0 10px rgba(255, 126, 41, 0.8), 0 0 20px rgba(255, 126, 41, 0.6);
-    transition: width 1.5s ease-in-out;
-    border-radius: 12px;
+        height: 100%;
+        background: linear-gradient(90deg, var(--orange-1), var(--orange-2));
+        box-shadow: 0 0 10px rgba(255, 126, 41, 0.8), 0 0 20px rgba(255, 126, 41, 0.6);
+        transition: width 1.5s ease-in-out;
+        border-radius: 12px;
     }
 
     /* modal */
-    .modal-backdrop{ background: rgba(0,0,0,0.45); }
+    .modal-backdrop {
+        background: var(--modal-backdrop);
+        transition: background 0.4s ease;
+    }
 
     /* responsive tweaks */
-    @media (max-width: 820px){
-      .nav-links { display: none; }
-      .nav-mobile { display: inline-flex; }
+    @media (max-width: 840px){
+        /* The nav-links should still be hidden on mobile */
+        .nav-links { display: none; } 
     }
-    @media (min-width: 821px){
-      .nav-mobile { display: none; }
+
+    @media (min-width: 840px){
+        .nav-mobile { display: none; }
+        /* The nav-mobile-menu should also be hidden on desktop */
+        .nav-mobile-menu { display: none; }
+        /* Show the main nav links on desktop */
+        .nav-links { display: flex; }
     }
-  </style>
+</style>
+
 </head>
 <body class="text-gray-900">
     <canvas id="starsCanvas"></canvas>
@@ -115,42 +228,58 @@
     <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
     <!-- Left section -->
     <div class="flex items-center gap-4">
-        <div class="text-white rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
+        <div class="text-color rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
+
+            <!-- Add this inside your navbar div after the nav-links -->
+            <button id="themeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
+            <!-- Sun icon (light mode) -->
+            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m8.66-13.66l-.71.71M5.05 18.95l-.71.71M21 12h-1M4 12H3m15.66 6.66l-.71-.71M5.05 5.05l-.71-.71M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+            </svg>
+
+            <!-- Moon icon (dark mode) -->
+            <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+            </svg>
+            </button>
+
     </div>
 
     <!-- Hamburger button (mobile) -->
-    <button id="navToggle" class="nav-mobile text-white p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
+    <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M4 6h16M4 12h16M4 18h16" />
         </svg>
     </button>
 
-        <ul class="nav-links hidden md:flex items-center gap-6 text-white/95 font-medium">
-          <li><a href="#about" class="hover:underline">About</a></li>
-          <li><a href="#skills" class="hover:underline">Skills</a></li>
-          <li><a href="#projects" class="hover:underline">Projects</a></li>
-          <li><a href="#certifications" class="hover:underline">Certifications</a></li>
-          <li><a href="#achievements" class="hover:underline">Achievements</a></li>
-          <li><a href="#experience" class="hover:underline">Experience</a></li>
-          <li><a href="#education" class="hover:underline">Education</a></li>
-          <li><a href="#contact" class="hover:underline">Contact</a></li>
+        <ul class="nav-links md:flex items-center gap-6 text-color font-medium">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#achievements">Achievements</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
 
       <!-- mobile menu -->
-      <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 mt-3">
-        <div class="px-6 py-4 flex flex-col gap-3 text-white/95">
-          <a href="#about" class="py-2">About</a>
-          <a href="#skills" class="py-2">Skills</a>
-          <a href="#projects" class="py-2">Projects</a>
-          <a href="#certifications" class="py-2">Certifications</a>
-          <a href="#achievements" class="py-2">Achievements</a>
-          <a href="#experience" class="py-2">Experience</a>
-          <a href="#education" class="py-2">Education</a>
-          <a href="#contact" class="py-2">Contact</a>
+        <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
+            <div class="px-6 py-4 flex flex-col gap-3 text-color">
+                <a href="#about" class="py-2">About</a>
+                <a href="#skills" class="py-2">Skills</a>
+                <a href="#projects" class="py-2">Projects</a>
+                <a href="#certifications" class="py-2">Certifications</a>
+                <a href="#achievements" class="py-2">Achievements</a>
+                <a href="#experience" class="py-2">Experience</a>
+                <a href="#education" class="py-2">Education</a>
+                <a href="#contact" class="py-2">Contact</a>
+            </div>
         </div>
-      </div>
     </nav>
   </header>
 
@@ -158,13 +287,13 @@
   <section class="pt-28 pb-20">
     <div class="max-w-6xl mx-auto px-6">
       <div class="flex flex-col md:flex-row items-center gap-8">
-        <div class="flex-1 text-white">
+        <div class="flex-1 text-color">
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
-          <p class="mt-2 text-lg md:text-xl text-white/90">Intern SOC Analyst · Cybersecurity Student</p>
+          <p class="mt-2 text-lg md:text-xl text-color/90">Intern SOC Analyst · Cybersecurity Student</p>
 
             <div class="mt-6 flex flex-col sm:flex-row gap-3">
             <a href="#contact" 
-                class="glass inline-flex items-center gap-3 py-2 px-4 text-white hover:scale-105 transition">
+                class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z"/>
@@ -173,7 +302,7 @@
             </a>
 
             <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" 
-                class="glass inline-flex items-center gap-3 py-2 px-4 text-white hover:scale-105 transition">
+                class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z"/>
                 </svg>
@@ -192,8 +321,8 @@
     <section id="about" class="grad glass card-shadow p-8 rounded-2xl reveal">
       <div class="md:flex md:gap-8">
         <div class="md:flex-1">
-          <h2 class="text-3xl font-bold text-white">About Me</h2>
-          <p class="mt-3 text-white/95 leading-relaxed">
+          <h2 class="text-3xl font-bold text-color">About Me</h2>
+          <p class="mt-3 text-color leading-relaxed">
             Cybersecurity student with hands-on experience in SOC labs, SIEM tools, and Linux shell.
             Actively learning through CTFs and in pursuit of recognised certifications like Security+ and eJPT.
             Eager to grow through internships in cybersecurity and threat detection.
@@ -201,7 +330,7 @@
         </div>
 
         <div class="md:w-1/3 mt-6 md:mt-0">
-          <div class="glass p-4 rounded-lg text-white text-sm">
+          <div class="glass p-4 rounded-lg text-color text-sm">
             <h4 class="font-semibold">Core Summary</h4>
             <ul class="mt-2 space-y-1">
               <li>Hands-on SOC triage & incident response</li>
@@ -215,12 +344,12 @@
 
     <!-- SKILLS -->
     <section id="skills" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Core Skills</h2>
+      <h2 class="text-3xl font-bold text-color">Core Skills</h2>
       <div class="mt-6 grid md:grid-cols-2 gap-6">
         <div class="space-y-4">
-          <div class="text-white/95">
+          <div class="text-color">
             <h3 class="font-semibold">Technical Skills</h3>
-            <ul class="mt-2 list-disc list-inside text-white/90">
+            <ul class="mt-2 list-disc list-inside text-color/90">
               <li>Threat Detection & Log analysis</li>
               <li>SOC workflow, SIEM monitoring & alert analysis</li>
               <li>Firewall & Web Proxy, TCP/IP Networking & OSI Model</li>
@@ -229,9 +358,9 @@
             </ul>
           </div>
 
-          <div class="mt-4 text-white/95">
+          <div class="mt-4 text-color">
             <h3 class="font-semibold">Soft Skills</h3>
-            <ul class="mt-2 list-disc list-inside text-white/90">
+            <ul class="mt-2 list-disc list-inside text-color/90">
               <li>Teamwork & Communication</li>
               <li>Operational Efficiency, Research & Documentation</li>
               <li>Problem-solving, Creative & Analytical Thinking</li>
@@ -241,7 +370,7 @@
 
         <div class="space-y-4">
           <div>
-            <div class="flex items-center justify-between text-white/95 mb-2">
+            <div class="flex items-center justify-between text-color mb-2">
               <div class="font-medium">Linux Administration</div>
               <div class="text-sm">54%</div>
             </div>
@@ -251,7 +380,7 @@
           </div>
 
           <div>
-            <div class="flex items-center justify-between text-white/95 mb-2">
+            <div class="flex items-center justify-between text-color mb-2">
               <div class="font-medium">Security Tool Mastery</div>
               <div class="text-sm">44%</div>
             </div>
@@ -261,7 +390,7 @@
           </div>
 
           <div>
-            <div class="flex items-center justify-between text-white/95 mb-2">
+            <div class="flex items-center justify-between text-color mb-2">
               <div class="font-medium">Networking</div>
               <div class="text-sm">42%</div>
             </div>
@@ -271,7 +400,7 @@
           </div>
 
           <div>
-            <div class="flex items-center justify-between text-white/95 mb-2">
+            <div class="flex items-center justify-between text-color mb-2">
               <div class="font-medium">Programming & Scripting</div>
               <div class="text-sm">72%</div>
             </div>
@@ -285,51 +414,51 @@
 
     <!-- PROJECTS -->
     <section id="projects" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Projects</h2>
+      <h2 class="text-3xl font-bold text-color">Projects</h2>
 
       <div class="mt-6 grid md:grid-cols-2 gap-6">
         <!-- Project Card -->
-        <article class="glass p-5 rounded-lg text-white card-shadow">
+        <article class="glass p-5 rounded-lg text-color card-shadow">
           <h3 class="text-xl font-semibold">Secure Client-Server Network (Linux-based)</h3>
-          <p class="mt-2 text-sm text-white/90"><strong>Dec 2024 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-white/90">
+          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
+          <ul class="mt-3 list-disc pl-5 text-color/90">
             <li>Configured client-server network using Rocky Linux and Ubuntu with static IPs.</li>
             <li>Implemented NFS file sharing and Apache secured with SSL/TLS.</li>
             <li>Added Fail2Ban for brute-force protection and tested SSH login simulations.</li>
           </ul>
         </article>
 
-        <article class="glass p-5 rounded-lg text-white card-shadow">
+        <article class="glass p-5 rounded-lg text-color card-shadow">
           <h3 class="text-xl font-semibold">Secure Mail Server with Spam Filtering</h3>
-          <p class="mt-2 text-sm text-white/90"><strong>Dec 2024 - Feb 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-white/90">
+          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Feb 2025</strong></p>
+          <ul class="mt-3 list-disc pl-5 text-color/90">
             <li>Set up Postfix, Dovecot and SpamAssassin on Rocky Linux.</li>
             <li>Enabled SSL/TLS authentication and successful end-to-end testing via Thunderbird.</li>
           </ul>
         </article>
 
-        <article class="glass p-5 rounded-lg text-white card-shadow">
+        <article class="glass p-5 rounded-lg text-color card-shadow">
           <h3 class="text-xl font-semibold">Implemented a Honeypot + IDS in lab environment</h3>
-          <p class="mt-2 text-sm text-white/90"><strong>Jul 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-white/90">
+          <p class="mt-2 text-sm text-color/90"><strong>Jul 2025</strong></p>
+          <ul class="mt-3 list-disc pl-5 text-color/90">
             <li>Deployed Snort IDS and a honeypot on Ubuntu to monitor suspicious traffic.</li>
             <li>Simulated attacks from Kali Linux to test detection and verify logs.</li>
           </ul>
         </article>
 
-        <article class="glass p-5 rounded-lg text-white card-shadow">
+        <article class="glass p-5 rounded-lg text-color card-shadow">
           <h3 class="text-xl font-semibold">Engineered a Secure, Scalable Enterprise Network</h3>
-          <p class="mt-2 text-sm text-white/90"><strong>Jan 2025 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-white/90">
+          <p class="mt-2 text-sm text-color/90"><strong>Jan 2025 - Mar 2025</strong></p>
+          <ul class="mt-3 list-disc pl-5 text-color/90">
             <li>Designed network across KL & Australia branches with VLANs, ACLs, EtherChannel and OSPF.</li>
             <li>Enforced strong security policies and ensured interconnectivity and performance.</li>
           </ul>
         </article>
 
-        <article class="glass p-5 rounded-lg text-white card-shadow">
+        <article class="glass p-5 rounded-lg text-color card-shadow">
           <h3 class="text-xl font-semibold">Food Ordering Application</h3>
-          <p class="mt-2 text-sm text-white/90"><strong>Dec 2024 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-white/90">
+          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
+          <ul class="mt-3 list-disc pl-5 text-color/90">
             <li>Built Java-based ordering app with role-based auth, payments, cart and order tracking.</li>
           </ul>
         </article>
@@ -338,15 +467,15 @@
 
     <!-- CERTIFICATIONS -->
     <section id="certifications" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Certifications</h2>
+      <h2 class="text-3xl font-bold text-color">Certifications</h2>
       <div class="mt-4 grid md:grid-cols-2 gap-4">
-        <div class="glass p-4 rounded-lg text-white/95">
+        <div class="glass p-4 rounded-lg text-color">
           <h4 class="font-semibold">Cybersecurity for Students — LetsDefend</h4>
           <p class="text-sm mt-2">Learning Path — Jan 2025</p>
-          <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm underline text-white">View certificate</a>
+          <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm underline text-color">View certificate</a>
         </div>
 
-        <div class="glass p-4 rounded-lg text-white/95">
+        <div class="glass p-4 rounded-lg text-color">
           <h4 class="font-semibold">RH124 — Red Hat</h4>
           <p class="text-sm mt-2">Red Hat System Administration — Jan 2025</p>
         </div>
@@ -355,8 +484,8 @@
 
     <!-- ACHIEVEMENTS -->
     <section id="achievements" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Achievements</h2>
-      <ul class="mt-4 list-disc pl-5 text-white/90">
+      <h2 class="text-3xl font-bold text-color">Achievements</h2>
+      <ul class="mt-4 list-disc pl-5 text-color">
         <li>Analyzed and triaged 50+ security alerts in SOC environment.</li>
         <li>Created and responded to tickets in accordance with SOC SLA guidelines.</li>
         <li>Designed promotional materials for a university Cyber Talk and supported awareness around cybersecurity (Technical & Graphics Coordinator).</li>
@@ -365,27 +494,27 @@
 
     <!-- WORK EXPERIENCE -->
     <section id="experience" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Work Experience</h2>
+      <h2 class="text-3xl font-bold text-color">Work Experience</h2>
 
       <div class="mt-4 space-y-6">
-        <div class="glass p-5 rounded-lg text-white/95">
+        <div class="glass p-5 rounded-lg text-color">
           <div class="flex items-start justify-between">
             <div>
               <h3 class="text-xl font-semibold">SOC Intern — Asia Pacific University of Technology and Innovation (APU / APIIT)</h3>
               <p class="text-sm mt-1">Jul 2025 - Present · Greater Kuala Lumpur</p>
             </div>
           </div>
-          <ul class="list-disc pl-5 mt-3 text-white/90">
+          <ul class="list-disc pl-5 mt-3 text-color/90">
             <li>Participated in APU’s SIEM Elite Program, utilizing MSSGard to monitor security events and perform incident triage following documented runbooks.</li>
             <li>Analyzed 50+ security alerts and created/responded to tickets via internal ticketing system in accordance with SOC SLA guidelines.</li>
             <li>Performed basic investigation and initial containment procedures using Linux command line and documented all triage actions.</li>
           </ul>
         </div>
 
-        <div class="glass p-5 rounded-lg text-white/95">
+        <div class="glass p-5 rounded-lg text-color">
           <h3 class="text-xl font-semibold">Graphic Designer — MD Infotech</h3>
           <p class="text-sm mt-1">Dec 2022 · Rajshahi, Bangladesh</p>
-          <ul class="list-disc pl-5 mt-3 text-white/90">
+          <ul class="list-disc pl-5 mt-3 text-color/90">
             <li>Created an animated explanatory video for MD Infotech, visualizing a future company project.</li>
             <li>Conceptualized company's future project and translated technical specifications into visuals — increased stakeholder engagement by ~30%.</li>
           </ul>
@@ -395,35 +524,35 @@
 
     <!-- VOLUNTEER -->
     <section id="volunteer" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Volunteer</h2>
-      <div class="mt-4 glass p-4 rounded-lg text-white/95">
+      <h2 class="text-3xl font-bold text-color">Volunteer</h2>
+      <div class="mt-4 glass p-4 rounded-lg text-color">
         <h4 class="font-semibold">Technical & Graphics Coordinator — Asia Pacific International University</h4>
         <p class="text-sm mt-1">Jul 2025</p>
-        <p class="mt-2 text-white/90">Contributed to organizing a university Cyber Talk by designing promotional materials. Demonstrated teamwork, time management, and creativity while supporting awareness around cybersecurity.</p>
+        <p class="mt-2 text-color/90">Contributed to organizing a university Cyber Talk by designing promotional materials. Demonstrated teamwork, time management, and creativity while supporting awareness around cybersecurity.</p>
       </div>
     </section>
 
     <!-- EDUCATION -->
     <section id="education" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Education</h2>
-      <div class="mt-4 glass p-4 rounded-lg text-white/95">
+      <h2 class="text-3xl font-bold text-color">Education</h2>
+      <div class="mt-4 glass p-4 rounded-lg text-color">
         <h4 class="font-semibold">Asia Pacific University of Technology and Innovation (APU / APIIT) / De Montfort University (UK)</h4>
         <p class="text-sm mt-1">Nov 2023 - Nov 2026</p>
         <p class="mt-2"><strong>Bachelor of Computer Science with Specialism in Cybersecurity</strong> — CGPA: 3.54</p>
-        <p class="mt-2 text-white/90">Courses: Network Security (Firewall, Web Proxy, IDS, IPS, IAM), Programming (Python Automation, C, Assembly), Red Hat Administration (Privileged Access Monitoring, Access Control).</p>
+        <p class="mt-2 text-color/90">Courses: Network Security (Firewall, Web Proxy, IDS, IPS, IAM), Programming (Python Automation, C, Assembly), Red Hat Administration (Privileged Access Monitoring, Access Control).</p>
       </div>
     </section>
 
     <!-- LANGUAGES -->
     <section id="languages" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Languages</h2>
-      <p class="mt-3 text-white/90">English (Fluent), Bahasa Melayu (Basic)</p>
+      <h2 class="text-3xl font-bold text-color">Languages</h2>
+      <p class="mt-3 text-color">English (Fluent), Bahasa Melayu (Basic)</p>
     </section>
 
     <!-- INTERESTS -->
     <section id="interests" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Interests</h2>
-      <ul class="mt-3 list-disc pl-5 text-white/90">
+      <h2 class="text-3xl font-bold text-color">Interests</h2>
+      <ul class="mt-3 list-disc pl-5 text-color">
         <li>Coding & Low-Level Programming</li>
         <li>Project Building</li>
         <li>Fitness & Self-Improvement</li>
@@ -435,9 +564,9 @@
 
     <!-- CONTACT -->
     <section id="contact" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-white">Contact</h2>
+      <h2 class="text-3xl font-bold text-color">Contact</h2>
       <div class="mt-4 md:flex md:gap-6">
-        <div class="md:flex-1 glass p-4 rounded-lg text-white/95">
+        <div class="md:flex-1 glass p-4 rounded-lg text-color">
           <p><strong>Email:</strong> <span id="email2">asifmahir907@gmail.com</span></p>
           <p class="mt-2"><strong>Phone:</strong> +60 133329115</p>
           <p class="mt-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" class="underline">linkedin.com/in/mahir907</a></p>
@@ -449,7 +578,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="grad text-white py-6">
+  <footer class="grad text-color py-6">
     <div class="max-w-6xl mx-auto px-6 text-center">
       <p>&copy; Developed by Mahir Asif . 2025</p>
     </div>
@@ -459,7 +588,7 @@
   <div id="modal" class="fixed inset-0 hidden items-center justify-center z-60">
     <div class="modal-backdrop absolute inset-0"></div>
     <div class="relative z-50 max-w-3xl w-full p-6">
-      <div class="glass p-6 rounded-xl text-white card-shadow">
+      <div class="glass p-6 rounded-xl text-color card-shadow">
         <button id="modalClose" class="absolute top-4 right-6 bg-white/10 px-3 py-1 rounded-md">Close</button>
         <div id="modalContent"></div>
       </div>
@@ -470,8 +599,8 @@
     /* NAV TOGGLE (mobile) */
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
-    navToggle && navToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    navToggle?.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
     });
 
     /* COPY EMAIL */
@@ -541,7 +670,7 @@
 
     let stars = [];
     let mouse = { x: innerWidth / 2, y: innerHeight / 2 };
-    let numStars = 150;
+    let numStars = 500;
 
     // Resize handler
     function resizeCanvas() {
@@ -556,8 +685,8 @@
         stars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.15 + 0.05,
+            size: Math.random() * 0.25,
+            speed: Math.random() * 0.75 + 0.4,
             vx: (Math.random() - 0.5) * 0.2, // horizontal drift speed
             vy: (Math.random() - 0.5) * 0.2  // vertical drift speed
         });
@@ -572,6 +701,10 @@
     // Animation loop
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Get the color on every frame to ensure it's up-to-date
+        const rootStyles = getComputedStyle(document.documentElement);
+        const starColor = rootStyles.getPropertyValue('--star-color').trim();
 
         stars.forEach(star => {
             // Natural drift
@@ -589,8 +722,8 @@
             const dy = mouse.y - canvas.height / 2;
 
             // Random twinkle (slight size and brightness change)
-            const twinkle = Math.sin(Date.now() / 200 + star.x * 0.05) * 0.5 + 0.5;
-            const glowSize = star.size + twinkle * 0.5;
+            const twinkle = Math.sin(Date.now() / 400 + star.x * 0.1) * 0.5 + 0.5;
+            const glowSize = star.size + twinkle * 1;
             const alpha = 0.7 + twinkle * 0.3; // varies between 0.7 and 1.0
 
             ctx.beginPath();
@@ -601,9 +734,9 @@
                 0,
                 Math.PI * 2
             );
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
             ctx.shadowBlur = 8; // glowing effect
-            ctx.shadowColor = 'white';
+            ctx.shadowColor = `rgba(${starColor}, 1)`;
             ctx.fill();
             ctx.shadowBlur = 0; // reset blur for next star
         });
@@ -611,6 +744,27 @@
         requestAnimationFrame(animate);
     }
     animate();
+
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.add('light-theme');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('light-theme');
+        const isLight = document.documentElement.classList.contains('light-theme');
+
+        sunIcon.classList.toggle('hidden', !isLight);
+        moonIcon.classList.toggle('hidden', isLight);
+
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
 
   </script>
 </body>
