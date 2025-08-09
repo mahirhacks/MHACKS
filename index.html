@@ -284,465 +284,499 @@
 <body class="text-gray-900">
     <canvas id="starsCanvas"></canvas>
 
-  <!-- NAVBAR -->
-  <header class="fixed w-full z-50 top-0">
-    <nav class="grad nav-backdrop py-3 glass-navbar card-shadow">
-    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-    <!-- Left section -->
-    <div class="flex items-center gap-4">
-        <div class="text-color rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
-
-            <!-- Add this inside your navbar div after the nav-links -->
-            <button id="themeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
-            <!-- Sun icon (light mode) -->
-            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 3v1m0 16v1m8.66-13.66l-.71.71M5.05 18.95l-.71.71M21 12h-1M4 12H3m15.66 6.66l-.71-.71M5.05 5.05l-.71-.71M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-            </svg>
-
-            <!-- Moon icon (dark mode) -->
-            <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-            </svg>
-            </button>
-
-    </div>
-
-    <!-- Hamburger button (mobile) -->
-    <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M4 6h16M4 12h16M4 18h16" />
+    <!-- Door icon button initially hidden -->
+    <button 
+        id="exitStarView" 
+        title="Exit star view"
+        aria-label="Exit starry night view"
+        class="glass hidden fixed bottom-5 right-5 z-[9999] text-color rounded-3xl p-3 cursor-pointer backdrop-blur-sm border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-white/20 transition">
+        <!-- Sleek transparent door icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            class="h-6 w-6" 
+            fill="none" 
+            stroke="currentColor" 
+            stroke-width="1.8" 
+            viewBox="0 0 24 24" 
+            stroke-linecap="round" 
+            stroke-linejoin="round">
+            <!-- Door frame -->
+            <rect x="7" y="2" width="10" height="20" rx="1" ry="1" />
+            <!-- Door knob -->
+            <circle cx="15" cy="12" r="0.8" fill="currentColor" />
         </svg>
     </button>
 
-        <ul class="nav-links md:flex items-center gap-6 text-color font-medium">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#certifications">Certifications</a></li>
-          <li><a href="#achievements">Achievements</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
+    <div class="main_div" id="pageContent">
+        <!-- NAVBAR -->
+        <header class="fixed w-full z-50 top-0">
+            <nav class="grad nav-backdrop py-3 glass-navbar card-shadow">
+            <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <!-- Left section -->
+            <div class="flex items-center gap-4">
+                <div title="Hi! It's me!" class="text-color rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
 
-      <!-- mobile menu -->
-        <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
-            <div class="px-6 py-4 flex flex-col gap-3 text-color">
-                <a href="#about" class="py-2">About</a>
-                <a href="#skills" class="py-2">Skills</a>
-                <a href="#projects" class="py-2">Projects</a>
-                <a href="#certifications" class="py-2">Certifications</a>
-                <a href="#achievements" class="py-2">Achievements</a>
-                <a href="#experience" class="py-2">Experience</a>
-                <a href="#education" class="py-2">Education</a>
-                <a href="#contact" class="py-2">Contact</a>
+                    <!-- Add this inside your navbar div after the nav-links -->
+                    <button title="Toggle Theme" id="themeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
+                        <!-- Sun icon (light mode) -->
+                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/>
+                        </svg>
+
+                        <!-- Moon icon (dark mode) -->
+                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+                        </svg>
+                    </button>
+                <button id="telescopeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30 ml-2" title="View starry night">
+                <!-- Telescope SVG icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v1"></path>
+                    <path d="M17 21l-5-9-5 9"></path>
+                    <path d="M12 3v6"></path>
+                </svg>
+                </button>
+
             </div>
-        </div>
-    </nav>
-  </header>
 
-  <!-- HERO (orange card on white bg) -->
-    <section class="pt-28 pb-20">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center gap-8">
-                <div class="flex-1 text-color">
-                    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
-                    <p class="mt-2 text-lg md:text-xl text-color">Intern SOC Analyst · Cybersecurity Student</p>
+            <!-- Hamburger button (mobile) -->
+            <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
 
-                    <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                        <a href="#contact"
-                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z" />
-                            </svg>
-                            Email / Contact
-                        </a>
+                <ul class="nav-links md:flex items-center gap-6 text-color font-medium">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
 
-                        <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer"
-                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z" />
-                            </svg>
-                            LinkedIn
-                        </a>
-
-                        <a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer"
-                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.465-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.772.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.799 24 17.309 24 12c0-6.627-5.373-12-12-12z" />
-                            </svg>
-                            GitHub
-                        </a>
-
-                        <a href="Mahir_Asif_CV.pdf" download="Mahir_Asif_CV.pdf"
-                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                            Download CV
-                        </a>
+            <!-- mobile menu -->
+                <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
+                    <div class="px-6 py-4 flex flex-col gap-3 text-color">
+                        <a href="#about" class="py-2">About</a>
+                        <a href="#skills" class="py-2">Skills</a>
+                        <a href="#projects" class="py-2">Projects</a>
+                        <a href="#certifications" class="py-2">Certifications</a>
+                        <a href="#achievements" class="py-2">Achievements</a>
+                        <a href="#experience" class="py-2">Experience</a>
+                        <a href="#education" class="py-2">Education</a>
+                        <a href="#contact" class="py-2">Contact</a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </nav>
+        </header>
 
-  <main class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
+        <!-- HERO (orange card on white bg) -->
+            <section class="pt-28 pb-20">
+                <div class="max-w-6xl mx-auto px-6">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-1 text-color">
+                            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
+                            <p class="mt-2 text-lg md:text-xl text-color">Intern SOC Analyst · Cybersecurity Student</p>
 
-    <!-- ABOUT -->
-    <section id="about" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <div class="md:flex md:gap-8">
-        <div class="md:flex-1">
-          <h2 class="text-3xl font-bold text-color">About Me</h2>
-          <p class="mt-3 text-color leading-relaxed">
-            Cybersecurity student with hands-on experience in SOC labs, SIEM tools, and Linux shell.
-            Actively learning through CTFs and in pursuit of recognised certifications like Security+ and eJPT.
-            Eager to grow through internships in cybersecurity and threat detection.
-          </p>
-        </div>
+                            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                                <a href="#contact"
+                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z" />
+                                    </svg>
+                                    Email / Contact
+                                </a>
 
-        <div class="md:w-1/3 mt-6 md:mt-0">
-          <div class="glass p-4 rounded-lg text-color text-sm">
-            <h4 class="font-semibold">Core Summary</h4>
-            <ul class="mt-2 space-y-1">
-              <li>Hands-on SOC triage & incident response</li>
-              <li>SIEM monitoring (MSSGard) & alert analysis</li>
-              <li>Linux & network-focused investigations</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+                                <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer"
+                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z" />
+                                    </svg>
+                                    LinkedIn
+                                </a>
 
-    <!-- SKILLS -->
-    <section id="skills" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Core Skills</h2>
-      <div class="mt-6 grid md:grid-cols-2 gap-6">
-        <div class="space-y-4">
-          <div class="text-color">
-            <h3 class="font-semibold">Technical Skills</h3>
-            <ul class="mt-2 list-disc list-inside text-color/90">
-              <li>Threat Detection & Log analysis</li>
-              <li>SOC workflow, SIEM monitoring & alert analysis</li>
-              <li>Firewall & Web Proxy, TCP/IP Networking & OSI Model</li>
-              <li>Linux & Windows Command Line</li>
-              <li>IDS & IPS, Security Monitoring, IAM</li>
-            </ul>
-          </div>
+                                <a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer"
+                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.465-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.772.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.799 24 17.309 24 12c0-6.627-5.373-12-12-12z" />
+                                    </svg>
+                                    GitHub
+                                </a>
 
-          <div class="mt-4 text-color">
-            <h3 class="font-semibold">Soft Skills</h3>
-            <ul class="mt-2 list-disc list-inside text-color/90">
-              <li>Teamwork & Communication</li>
-              <li>Operational Efficiency, Research & Documentation</li>
-              <li>Problem-solving, Creative & Analytical Thinking</li>
-            </ul>
-          </div>
-        </div>
+                                <a href="Mahir_Asif_CV.pdf" download="Mahir_Asif_CV.pdf"
+                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Download CV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div class="space-y-4">
-          <div>
-            <div class="flex items-center justify-between text-color mb-2">
-              <div class="font-medium">Linux Administration</div>
-              <div class="text-sm">54%</div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" data-fill="54%"></div>
-            </div>
-          </div>
+        <main class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
 
-          <div>
-            <div class="flex items-center justify-between text-color mb-2">
-              <div class="font-medium">Security Tool Mastery</div>
-              <div class="text-sm">44%</div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" data-fill="44%"></div>
-            </div>
-          </div>
+            <!-- ABOUT -->
+            <section id="about" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <div class="md:flex md:gap-8">
+                    <div class="md:flex-1">
+                    <h2 class="text-3xl font-bold text-color">About Me</h2>
+                    <p class="mt-3 text-color leading-relaxed">
+                        Cybersecurity student with hands-on experience in SOC labs, SIEM tools, and Linux shell.
+                        Actively learning through CTFs and in pursuit of recognised certifications like Security+ and eJPT.
+                        Eager to grow through internships in cybersecurity and threat detection.
+                    </p>
+                    </div>
 
-          <div>
-            <div class="flex items-center justify-between text-color mb-2">
-              <div class="font-medium">Networking</div>
-              <div class="text-sm">42%</div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" data-fill="42%"></div>
-            </div>
-          </div>
+                    <div class="md:w-1/3 mt-6 md:mt-0">
+                    <div class="glass p-4 rounded-lg text-color text-sm">
+                        <h4 class="font-semibold">Core Summary</h4>
+                        <ul class="mt-2 space-y-1">
+                        <li>Hands-on SOC triage & incident response</li>
+                        <li>SIEM monitoring (MSSGard) & alert analysis</li>
+                        <li>Linux & network-focused investigations</li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </section>
 
-          <div>
-            <div class="flex items-center justify-between text-color mb-2">
-              <div class="font-medium">Programming & Scripting</div>
-              <div class="text-sm">72%</div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" data-fill="72%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <!-- SKILLS -->
+            <section id="skills" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Core Skills</h2>
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                    <div class="text-color">
+                        <h3 class="font-semibold">Technical Skills</h3>
+                        <ul class="mt-2 list-disc list-inside text-color/90">
+                        <li>Threat Detection & Log analysis</li>
+                        <li>SOC workflow, SIEM monitoring & alert analysis</li>
+                        <li>Firewall & Web Proxy, TCP/IP Networking & OSI Model</li>
+                        <li>Linux & Windows Command Line</li>
+                        <li>IDS & IPS, Security Monitoring, IAM</li>
+                        </ul>
+                    </div>
 
-<!-- PROGRAMMING PROFICIENCY -->
-    <h2 class="text-3xl font-bold text-color mt-6">Programming Proficiency</h2>
-    <svg width="0" height="0">
-        <defs>
-            <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:var(--orange-1);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--orange-2);stop-opacity:1" />
-            </linearGradient>
-        </defs>
-    </svg>
+                    <div class="mt-4 text-color">
+                        <h3 class="font-semibold">Soft Skills</h3>
+                        <ul class="mt-2 list-disc list-inside text-color/90">
+                        <li>Teamwork & Communication</li>
+                        <li>Operational Efficiency, Research & Documentation</li>
+                        <li>Problem-solving, Creative & Analytical Thinking</li>
+                        </ul>
+                    </div>
+                    </div>
 
-    <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 justify-items-center">
-        <div class="circular-progress-item">
-            <div class="circular-progress-container">
-                <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="80"></circle>
+                    <div class="space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between text-color mb-2">
+                        <div class="font-medium">Linux Administration</div>
+                        <div class="text-sm">54%</div>
+                        </div>
+                        <div class="skill-bar">
+                        <div class="skill-fill" data-fill="54%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between text-color mb-2">
+                        <div class="font-medium">Security Tool Mastery</div>
+                        <div class="text-sm">44%</div>
+                        </div>
+                        <div class="skill-bar">
+                        <div class="skill-fill" data-fill="44%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between text-color mb-2">
+                        <div class="font-medium">Networking</div>
+                        <div class="text-sm">42%</div>
+                        </div>
+                        <div class="skill-bar">
+                        <div class="skill-fill" data-fill="42%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between text-color mb-2">
+                        <div class="font-medium">Programming & Scripting</div>
+                        <div class="text-sm">72%</div>
+                        </div>
+                        <div class="skill-bar">
+                        <div class="skill-fill" data-fill="72%"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            <!-- PROGRAMMING PROFICIENCY -->
+                <h2 class="text-3xl font-bold text-color mt-6">Programming Proficiency</h2>
+                <svg width="0" height="0">
+                    <defs>
+                        <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:var(--orange-1);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--orange-2);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
                 </svg>
-                <div class="circular-progress-text">80%</div>
-            </div>
-            <div class="circular-progress-label text-color">Python</div>
-        </div>
 
-        <div class="circular-progress-item">
-            <div class="circular-progress-container">
-                <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="60"></circle>
-                </svg>
-                <div class="circular-progress-text">60%</div>
-            </div>
-            <div class="circular-progress-label text-color">C</div>
-        </div>
+                <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 justify-items-center">
+                    <div class="circular-progress-item">
+                        <div class="circular-progress-container">
+                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="80"></circle>
+                            </svg>
+                            <div class="circular-progress-text">80%</div>
+                        </div>
+                        <div class="circular-progress-label text-color">Python</div>
+                    </div>
 
-        <div class="circular-progress-item">
-            <div class="circular-progress-container">
-                <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="75"></circle>
-                </svg>
-                <div class="circular-progress-text">75%</div>
-            </div>
-            <div class="circular-progress-label text-color">Java</div>
-        </div>
+                    <div class="circular-progress-item">
+                        <div class="circular-progress-container">
+                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="60"></circle>
+                            </svg>
+                            <div class="circular-progress-text">60%</div>
+                        </div>
+                        <div class="circular-progress-label text-color">C</div>
+                    </div>
 
-        <div class="circular-progress-item">
-            <div class="circular-progress-container">
-                <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="50"></circle>
-                </svg>
-                <div class="circular-progress-text">50%</div>
-            </div>
-            <div class="circular-progress-label text-color">C++</div>
-        </div>
+                    <div class="circular-progress-item">
+                        <div class="circular-progress-container">
+                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="75"></circle>
+                            </svg>
+                            <div class="circular-progress-text">75%</div>
+                        </div>
+                        <div class="circular-progress-label text-color">Java</div>
+                    </div>
 
-        <div class="circular-progress-item">
-            <div class="circular-progress-container">
-                <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="35"></circle>
-                </svg>
-                <div class="circular-progress-text">35%</div>
+                    <div class="circular-progress-item">
+                        <div class="circular-progress-container">
+                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="50"></circle>
+                            </svg>
+                            <div class="circular-progress-text">50%</div>
+                        </div>
+                        <div class="circular-progress-label text-color">C++</div>
+                    </div>
+
+                    <div class="circular-progress-item">
+                        <div class="circular-progress-container">
+                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="35"></circle>
+                            </svg>
+                            <div class="circular-progress-text">35%</div>
+                        </div>
+                        <div class="circular-progress-label text-color">Assembly x86</div>
+                    </div>
+                </div>
+        </section>
+
+            <!-- PROJECTS -->
+            <section id="projects" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Projects</h2>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <!-- Project Card -->
+                    <article class="glass p-5 rounded-lg text-color card-shadow">
+                    <h3 class="text-xl font-semibold">Secure Client-Server Network (Linux-based)</h3>
+                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
+                    <ul class="mt-3 list-disc pl-5 text-color/90">
+                        <li>Configured client-server network using Rocky Linux and Ubuntu with static IPs.</li>
+                        <li>Implemented NFS file sharing and Apache secured with SSL/TLS.</li>
+                        <li>Added Fail2Ban for brute-force protection and tested SSH login simulations.</li>
+                    </ul>
+                    </article>
+
+                    <article class="glass p-5 rounded-lg text-color card-shadow">
+                    <h3 class="text-xl font-semibold">Secure Mail Server with Spam Filtering</h3>
+                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Feb 2025</strong></p>
+                    <ul class="mt-3 list-disc pl-5 text-color/90">
+                        <li>Set up Postfix, Dovecot and SpamAssassin on Rocky Linux.</li>
+                        <li>Enabled SSL/TLS authentication and successful end-to-end testing via Thunderbird.</li>
+                    </ul>
+                    </article>
+
+                    <article class="glass p-5 rounded-lg text-color card-shadow">
+                    <h3 class="text-xl font-semibold">Implemented a Honeypot + IDS in lab environment</h3>
+                    <p class="mt-2 text-sm text-color/90"><strong>Jul 2025</strong></p>
+                    <ul class="mt-3 list-disc pl-5 text-color/90">
+                        <li>Deployed Snort IDS and a honeypot on Ubuntu to monitor suspicious traffic.</li>
+                        <li>Simulated attacks from Kali Linux to test detection and verify logs.</li>
+                    </ul>
+                    </article>
+
+                    <article class="glass p-5 rounded-lg text-color card-shadow">
+                    <h3 class="text-xl font-semibold">Engineered a Secure, Scalable Enterprise Network</h3>
+                    <p class="mt-2 text-sm text-color/90"><strong>Jan 2025 - Mar 2025</strong></p>
+                    <ul class="mt-3 list-disc pl-5 text-color/90">
+                        <li>Designed network across KL & Australia branches with VLANs, ACLs, EtherChannel and OSPF.</li>
+                        <li>Enforced strong security policies and ensured interconnectivity and performance.</li>
+                    </ul>
+                    </article>
+
+                    <article class="glass p-5 rounded-lg text-color card-shadow">
+                    <h3 class="text-xl font-semibold">Food Ordering Application</h3>
+                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
+                    <ul class="mt-3 list-disc pl-5 text-color/90">
+                        <li>Built Java-based ordering app with role-based auth, payments, cart and order tracking.</li>
+                    </ul>
+                    </article>
+                </div>
+            </section>
+
+            <!-- CERTIFICATIONS -->
+            <section id="certifications" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Certifications</h2>
+                <div class="mt-4 grid md:grid-cols-2 gap-4">
+                    <div class="glass p-4 rounded-lg text-color">
+                    <h4 class="font-semibold">Cybersecurity for Students — LetsDefend</h4>
+                    <p class="text-sm mt-2">Learning Path — Jan 2025</p>
+                    <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm underline text-color">View certificate</a>
+                    </div>
+
+                    <div class="glass p-4 rounded-lg text-color">
+                    <h4 class="font-semibold">RH124 — Red Hat</h4>
+                    <p class="text-sm mt-2">Red Hat System Administration — Jan 2025</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACHIEVEMENTS -->
+            <section id="achievements" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Achievements</h2>
+                <ul class="mt-4 list-disc pl-5 text-color">
+                    <li>Analyzed and triaged 50+ security alerts in SOC environment.</li>
+                    <li>Created and responded to tickets in accordance with SOC SLA guidelines.</li>
+                    <li>Designed promotional materials for a university Cyber Talk and supported awareness around cybersecurity (Technical & Graphics Coordinator).</li>
+                </ul>
+            </section>
+
+            <!-- WORK EXPERIENCE -->
+            <section id="experience" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Work Experience</h2>
+
+                <div class="mt-4 space-y-6">
+                    <div class="glass p-5 rounded-lg text-color">
+                    <div class="flex items-start justify-between">
+                        <div>
+                        <h3 class="text-xl font-semibold">SOC Intern — Asia Pacific University of Technology and Innovation (APU / APIIT)</h3>
+                        <p class="text-sm mt-1">Jul 2025 - Present · Greater Kuala Lumpur</p>
+                        </div>
+                    </div>
+                    <ul class="list-disc pl-5 mt-3 text-color/90">
+                        <li>Participated in APU’s SIEM Elite Program, utilizing MSSGard to monitor security events and perform incident triage following documented runbooks.</li>
+                        <li>Analyzed 50+ security alerts and created/responded to tickets via internal ticketing system in accordance with SOC SLA guidelines.</li>
+                        <li>Performed basic investigation and initial containment procedures using Linux command line and documented all triage actions.</li>
+                    </ul>
+                    </div>
+
+                    <div class="glass p-5 rounded-lg text-color">
+                    <h3 class="text-xl font-semibold">Graphic Designer — MD Infotech</h3>
+                    <p class="text-sm mt-1">Dec 2022 · Rajshahi, Bangladesh</p>
+                    <ul class="list-disc pl-5 mt-3 text-color/90">
+                        <li>Created an animated explanatory video for MD Infotech, visualizing a future company project.</li>
+                        <li>Conceptualized company's future project and translated technical specifications into visuals — increased stakeholder engagement by ~30%.</li>
+                    </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VOLUNTEER -->
+            <section id="volunteer" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Volunteer</h2>
+                <div class="mt-4 glass p-4 rounded-lg text-color">
+                    <h4 class="font-semibold">Technical & Graphics Coordinator — Asia Pacific International University</h4>
+                    <p class="text-sm mt-1">Jul 2025</p>
+                    <p class="mt-2 text-color/90">Contributed to organizing a university Cyber Talk by designing promotional materials. Demonstrated teamwork, time management, and creativity while supporting awareness around cybersecurity.</p>
+                </div>
+            </section>
+
+            <!-- EDUCATION -->
+            <section id="education" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Education</h2>
+                <div class="mt-4 glass p-4 rounded-lg text-color">
+                    <h4 class="font-semibold">Asia Pacific University of Technology and Innovation (APU / APIIT) / De Montfort University (UK)</h4>
+                    <p class="text-sm mt-1">Nov 2023 - Nov 2026</p>
+                    <p class="mt-2"><strong>Bachelor of Computer Science with Specialism in Cybersecurity</strong> — CGPA: 3.54</p>
+                    <p class="mt-2 text-color/90">Courses: Network Security (Firewall, Web Proxy, IDS, IPS, IAM), Programming (Python Automation, C, Assembly), Red Hat Administration (Privileged Access Monitoring, Access Control).</p>
+                </div>
+            </section>
+
+            <!-- LANGUAGES -->
+            <section id="languages" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Languages</h2>
+                <p class="mt-3 text-color">English (Fluent), Bahasa Melayu (Basic)</p>
+            </section>
+
+            <!-- INTERESTS -->
+            <section id="interests" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Interests</h2>
+                <ul class="mt-3 list-disc pl-5 text-color">
+                    <li>Coding & Low-Level Programming</li>
+                    <li>Project Building</li>
+                    <li>Fitness & Self-Improvement</li>
+                    <li>Deep Thinking & Philosophy</li>
+                    <li>Cybersecurity & Ethical Hacking</li>
+                    <li>Creative Thinking & Design</li>
+                </ul>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="grad glass card-shadow p-8 rounded-2xl reveal">
+                <h2 class="text-3xl font-bold text-color">Contact</h2>
+                <div class="mt-4 md:flex md:gap-6">
+                    <div class="md:flex-1 glass p-4 rounded-lg text-color">
+                    <p><strong>Email:</strong> <span id="email2">asifmahir907@gmail.com</span></p>
+                    <p class="mt-2"><strong>Phone:</strong> +60 133329115</p>
+                    <p class="mt-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" class="underline">linkedin.com/in/mahir907</a></p>
+                    <p class="mt-2"><strong>Address:</strong> Serdang Raya Utara, Selangor, 43300, Malaysia</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="grad text-color py-6">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+            <p>&copy; Developed by Mahir Asif . 2025</p>
             </div>
-            <div class="circular-progress-label text-color">Assembly x86</div>
+        </footer>
+
+        <!-- Modal placeholder (project details) -->
+        <div id="modal" class="fixed inset-0 hidden items-center justify-center z-60">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative z-50 max-w-3xl w-full p-6">
+            <div class="glass p-6 rounded-xl text-color card-shadow">
+                <button id="modalClose" class="absolute top-4 right-6 bg-white/10 px-3 py-1 rounded-md">Close</button>
+                <div id="modalContent"></div>
+            </div>
+            </div>
         </div>
     </div>
-</section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Projects</h2>
-
-      <div class="mt-6 grid md:grid-cols-2 gap-6">
-        <!-- Project Card -->
-        <article class="glass p-5 rounded-lg text-color card-shadow">
-          <h3 class="text-xl font-semibold">Secure Client-Server Network (Linux-based)</h3>
-          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-color/90">
-            <li>Configured client-server network using Rocky Linux and Ubuntu with static IPs.</li>
-            <li>Implemented NFS file sharing and Apache secured with SSL/TLS.</li>
-            <li>Added Fail2Ban for brute-force protection and tested SSH login simulations.</li>
-          </ul>
-        </article>
-
-        <article class="glass p-5 rounded-lg text-color card-shadow">
-          <h3 class="text-xl font-semibold">Secure Mail Server with Spam Filtering</h3>
-          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Feb 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-color/90">
-            <li>Set up Postfix, Dovecot and SpamAssassin on Rocky Linux.</li>
-            <li>Enabled SSL/TLS authentication and successful end-to-end testing via Thunderbird.</li>
-          </ul>
-        </article>
-
-        <article class="glass p-5 rounded-lg text-color card-shadow">
-          <h3 class="text-xl font-semibold">Implemented a Honeypot + IDS in lab environment</h3>
-          <p class="mt-2 text-sm text-color/90"><strong>Jul 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-color/90">
-            <li>Deployed Snort IDS and a honeypot on Ubuntu to monitor suspicious traffic.</li>
-            <li>Simulated attacks from Kali Linux to test detection and verify logs.</li>
-          </ul>
-        </article>
-
-        <article class="glass p-5 rounded-lg text-color card-shadow">
-          <h3 class="text-xl font-semibold">Engineered a Secure, Scalable Enterprise Network</h3>
-          <p class="mt-2 text-sm text-color/90"><strong>Jan 2025 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-color/90">
-            <li>Designed network across KL & Australia branches with VLANs, ACLs, EtherChannel and OSPF.</li>
-            <li>Enforced strong security policies and ensured interconnectivity and performance.</li>
-          </ul>
-        </article>
-
-        <article class="glass p-5 rounded-lg text-color card-shadow">
-          <h3 class="text-xl font-semibold">Food Ordering Application</h3>
-          <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
-          <ul class="mt-3 list-disc pl-5 text-color/90">
-            <li>Built Java-based ordering app with role-based auth, payments, cart and order tracking.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <!-- CERTIFICATIONS -->
-    <section id="certifications" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Certifications</h2>
-      <div class="mt-4 grid md:grid-cols-2 gap-4">
-        <div class="glass p-4 rounded-lg text-color">
-          <h4 class="font-semibold">Cybersecurity for Students — LetsDefend</h4>
-          <p class="text-sm mt-2">Learning Path — Jan 2025</p>
-          <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm underline text-color">View certificate</a>
-        </div>
-
-        <div class="glass p-4 rounded-lg text-color">
-          <h4 class="font-semibold">RH124 — Red Hat</h4>
-          <p class="text-sm mt-2">Red Hat System Administration — Jan 2025</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACHIEVEMENTS -->
-    <section id="achievements" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Achievements</h2>
-      <ul class="mt-4 list-disc pl-5 text-color">
-        <li>Analyzed and triaged 50+ security alerts in SOC environment.</li>
-        <li>Created and responded to tickets in accordance with SOC SLA guidelines.</li>
-        <li>Designed promotional materials for a university Cyber Talk and supported awareness around cybersecurity (Technical & Graphics Coordinator).</li>
-      </ul>
-    </section>
-
-    <!-- WORK EXPERIENCE -->
-    <section id="experience" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Work Experience</h2>
-
-      <div class="mt-4 space-y-6">
-        <div class="glass p-5 rounded-lg text-color">
-          <div class="flex items-start justify-between">
-            <div>
-              <h3 class="text-xl font-semibold">SOC Intern — Asia Pacific University of Technology and Innovation (APU / APIIT)</h3>
-              <p class="text-sm mt-1">Jul 2025 - Present · Greater Kuala Lumpur</p>
-            </div>
-          </div>
-          <ul class="list-disc pl-5 mt-3 text-color/90">
-            <li>Participated in APU’s SIEM Elite Program, utilizing MSSGard to monitor security events and perform incident triage following documented runbooks.</li>
-            <li>Analyzed 50+ security alerts and created/responded to tickets via internal ticketing system in accordance with SOC SLA guidelines.</li>
-            <li>Performed basic investigation and initial containment procedures using Linux command line and documented all triage actions.</li>
-          </ul>
-        </div>
-
-        <div class="glass p-5 rounded-lg text-color">
-          <h3 class="text-xl font-semibold">Graphic Designer — MD Infotech</h3>
-          <p class="text-sm mt-1">Dec 2022 · Rajshahi, Bangladesh</p>
-          <ul class="list-disc pl-5 mt-3 text-color/90">
-            <li>Created an animated explanatory video for MD Infotech, visualizing a future company project.</li>
-            <li>Conceptualized company's future project and translated technical specifications into visuals — increased stakeholder engagement by ~30%.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- VOLUNTEER -->
-    <section id="volunteer" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Volunteer</h2>
-      <div class="mt-4 glass p-4 rounded-lg text-color">
-        <h4 class="font-semibold">Technical & Graphics Coordinator — Asia Pacific International University</h4>
-        <p class="text-sm mt-1">Jul 2025</p>
-        <p class="mt-2 text-color/90">Contributed to organizing a university Cyber Talk by designing promotional materials. Demonstrated teamwork, time management, and creativity while supporting awareness around cybersecurity.</p>
-      </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section id="education" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Education</h2>
-      <div class="mt-4 glass p-4 rounded-lg text-color">
-        <h4 class="font-semibold">Asia Pacific University of Technology and Innovation (APU / APIIT) / De Montfort University (UK)</h4>
-        <p class="text-sm mt-1">Nov 2023 - Nov 2026</p>
-        <p class="mt-2"><strong>Bachelor of Computer Science with Specialism in Cybersecurity</strong> — CGPA: 3.54</p>
-        <p class="mt-2 text-color/90">Courses: Network Security (Firewall, Web Proxy, IDS, IPS, IAM), Programming (Python Automation, C, Assembly), Red Hat Administration (Privileged Access Monitoring, Access Control).</p>
-      </div>
-    </section>
-
-    <!-- LANGUAGES -->
-    <section id="languages" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Languages</h2>
-      <p class="mt-3 text-color">English (Fluent), Bahasa Melayu (Basic)</p>
-    </section>
-
-    <!-- INTERESTS -->
-    <section id="interests" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Interests</h2>
-      <ul class="mt-3 list-disc pl-5 text-color">
-        <li>Coding & Low-Level Programming</li>
-        <li>Project Building</li>
-        <li>Fitness & Self-Improvement</li>
-        <li>Deep Thinking & Philosophy</li>
-        <li>Cybersecurity & Ethical Hacking</li>
-        <li>Creative Thinking & Design</li>
-      </ul>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="grad glass card-shadow p-8 rounded-2xl reveal">
-      <h2 class="text-3xl font-bold text-color">Contact</h2>
-      <div class="mt-4 md:flex md:gap-6">
-        <div class="md:flex-1 glass p-4 rounded-lg text-color">
-          <p><strong>Email:</strong> <span id="email2">asifmahir907@gmail.com</span></p>
-          <p class="mt-2"><strong>Phone:</strong> +60 133329115</p>
-          <p class="mt-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" class="underline">linkedin.com/in/mahir907</a></p>
-          <p class="mt-2"><strong>Address:</strong> Serdang Raya Utara, Selangor, 43300, Malaysia</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="grad text-color py-6">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <p>&copy; Developed by Mahir Asif . 2025</p>
-    </div>
-  </footer>
-
-  <!-- Modal placeholder (project details) -->
-  <div id="modal" class="fixed inset-0 hidden items-center justify-center z-60">
-    <div class="modal-backdrop absolute inset-0"></div>
-    <div class="relative z-50 max-w-3xl w-full p-6">
-      <div class="glass p-6 rounded-xl text-color card-shadow">
-        <button id="modalClose" class="absolute top-4 right-6 bg-white/10 px-3 py-1 rounded-md">Close</button>
-        <div id="modalContent"></div>
-      </div>
-    </div>
-  </div>
 
   <script>
     /* NAV TOGGLE (mobile) */
@@ -968,6 +1002,27 @@
                 animateCircularProgress(circle, text, percentage);
             }
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const telescopeBtn = document.getElementById('telescopeToggle');
+        const exitStarViewBtn = document.getElementById('exitStarView');
+        const pageContent = document.getElementById('pageContent');
+
+        function hidePageContent() {
+            pageContent.classList.add('hidden'); // Hides the main content
+            exitStarViewBtn.classList.remove('hidden'); // Shows the exit button
+            telescopeBtn.classList.add('hidden'); // Hides the telescope button
+        }
+
+        function showPageContent() {
+            pageContent.classList.remove('hidden'); // Shows the main content
+            exitStarViewBtn.classList.add('hidden'); // Hides the exit button
+            telescopeBtn.classList.remove('hidden'); // Shows the telescope button
+        }
+
+        telescopeBtn.addEventListener('click', hidePageContent);
+        exitStarViewBtn.addEventListener('click', showPageContent);
     });
 
   </script>
