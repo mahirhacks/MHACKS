@@ -9,6 +9,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+
+    #starsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* behind everything */
+    background: linear-gradient(180deg, #000000, #1a1a1a); /* your black/gray gradient */
+    }
+
     /* Core visuals */
     :root{
       --orange-1: #ff7e29; /* modern orange (not too bright) */
@@ -18,8 +29,8 @@
     }
 
     html { scroll-behavior: smooth; }
-    body { 
-    background: linear-gradient(180deg, #000000, #1a1a1a); 
+    body {
+    background: linear-gradient(180deg, #000000, #000000); 
     -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale; 
     }
@@ -31,16 +42,16 @@
 
     /* iOS-like glass */
     .glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(18px) saturate(120%);
-      -webkit-backdrop-filter: blur(18px) saturate(120%);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
+    background: rgba(0, 0, 0, 0.0); /* dark transparent overlay */
+    backdrop-filter: blur(4px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.08); /* softer border */
+    border-radius: 14px;
     }
 
     /* subtle card shadow */
     .card-shadow {
-      box-shadow: 0 8px 30px rgba(18,18,18,0.06);
+      box-shadow: 0 8px 30px rgba(18,18,18,0.0);
     }
 
     /* reveal animation helper */
@@ -59,8 +70,20 @@
     .btn-ghost { background: rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.14); padding:.5rem .9rem; border-radius:10px; }
 
     /* progress bar styling */
-    .skill-bar { background: rgba(255,255,255,0.08); height:10px; border-radius:999px; overflow:hidden; }
-    .skill-fill { height:100%; border-radius:999px; background: linear-gradient(90deg,var(--orange-1),var(--orange-2)); transition: width .9s ease; }
+    .skill-bar {
+    background: rgba(255, 255, 255, 0.1);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    }
+
+    .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff7e29, #ff9e53);
+    box-shadow: 0 0 10px rgba(255, 126, 41, 0.8), 0 0 20px rgba(255, 126, 41, 0.6);
+    transition: width 1.5s ease-in-out;
+    border-radius: 12px;
+    }
 
     /* modal */
     .modal-backdrop{ background: rgba(0,0,0,0.45); }
@@ -76,6 +99,7 @@
   </style>
 </head>
 <body class="text-gray-900">
+    <canvas id="starsCanvas"></canvas>
 
   <!-- NAVBAR -->
   <header class="fixed w-full z-50 top-0">
@@ -496,6 +520,82 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
+
+    const canvas = document.getElementById("starsCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let stars = [];
+    let mouse = { x: innerWidth / 2, y: innerHeight / 2 };
+    let numStars = 150;
+
+    // Resize handler
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Create stars with natural drift
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.15 + 0.05,
+            vx: (Math.random() - 0.5) * 0.2, // horizontal drift speed
+            vy: (Math.random() - 0.5) * 0.2  // vertical drift speed
+        });
+    }
+
+    // Track mouse movement
+    document.addEventListener("mousemove", e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+            // Natural drift
+            star.x += star.vx;
+            star.y += star.vy;
+
+            // Wrap around edges
+            if (star.x < 0) star.x = canvas.width;
+            if (star.x > canvas.width) star.x = 0;
+            if (star.y < 0) star.y = canvas.height;
+            if (star.y > canvas.height) star.y = 0;
+
+            // Cursor parallax offset
+            const dx = mouse.x - canvas.width / 2;
+            const dy = mouse.y - canvas.height / 2;
+
+            // Random twinkle (slight size and brightness change)
+            const twinkle = Math.sin(Date.now() / 200 + star.x * 0.05) * 0.5 + 0.5;
+            const glowSize = star.size + twinkle * 0.5;
+            const alpha = 0.7 + twinkle * 0.3; // varies between 0.7 and 1.0
+
+            ctx.beginPath();
+            ctx.arc(
+                star.x + dx / (20 / star.speed),
+                star.y + dy / (20 / star.speed),
+                glowSize,
+                0,
+                Math.PI * 2
+            );
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.shadowBlur = 8; // glowing effect
+            ctx.shadowColor = 'white';
+            ctx.fill();
+            ctx.shadowBlur = 0; // reset blur for next star
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
 
   </script>
 </body>
