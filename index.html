@@ -43,6 +43,7 @@
         --modal-backdrop: rgba(0,0,0,0.45);
 
         --star-color: 255, 255, 255;
+        --stoke-color: rgba(255, 255, 255, 0.1);
     }
 
     .light-theme {
@@ -54,6 +55,8 @@
         --glass-border: rgba(0, 0, 0, 0.2);
         --canvas-gradient: linear-gradient(135deg, #ffffff, #d3d3d3);
         --star-color: 255, 0, 0;
+        --stoke-color: rgba(0, 0, 0, 0.1);
+        --skill-bar-bg: rgba(0, 0, 0, 0.1);
     }
 
     .text-color {
@@ -216,6 +219,65 @@
         /* Show the main nav links on desktop */
         .nav-links { display: flex; }
     }
+
+/* Circular Progress Bar Styles */
+
+    .circular-progress-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .circular-progress-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+
+    .circular-progress-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg); /* Start at 12 o'clock */
+    }
+
+    .circular-progress-bg, .circular-progress-fill {
+        fill: none;
+        stroke-width: 10;
+    }
+
+    .circular-progress-bg {
+        stroke: var(--stoke-color);
+    }
+
+    .circular-progress-fill {
+        stroke: url(#gradientOrange);
+        stroke-linecap: round;
+        /* We'll use JavaScript to set the stroke-dashoffset to the correct value */
+        transition: stroke-dashoffset 1.5s ease-out; /* Animation duration */
+    }
+
+    /* The percentage text is absolutely centered over the SVG */
+    .circular-progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centering trick */
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text-color);
+    }
+
+    /* The label is a separate element, placed below the circle */
+    .circular-progress-label {
+        margin-top: 10px; /* Space between the circle and label */
+        font-size: 0.9rem;
+        text-align: center;
+        color: var(--text-color);
+    }
+
 </style>
 
 </head>
@@ -284,36 +346,55 @@
   </header>
 
   <!-- HERO (orange card on white bg) -->
-  <section class="pt-28 pb-20">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center gap-8">
-        <div class="flex-1 text-color">
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
-          <p class="mt-2 text-lg md:text-xl text-color/90">Intern SOC Analyst · Cybersecurity Student</p>
+    <section class="pt-28 pb-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-1 text-color">
+                    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
+                    <p class="mt-2 text-lg md:text-xl text-color">Intern SOC Analyst · Cybersecurity Student</p>
 
-            <div class="mt-6 flex flex-col sm:flex-row gap-3">
-            <a href="#contact" 
-                class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z"/>
-                </svg>
-                Email / Contact
-            </a>
+                    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <a href="#contact"
+                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z" />
+                            </svg>
+                            Email / Contact
+                        </a>
 
-            <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" 
-                class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z"/>
-                </svg>
-                LinkedIn
-            </a>
+                        <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer"
+                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+
+                        <a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer"
+                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.465-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.772.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.799 24 17.309 24 12c0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+
+                        <a href="Mahir_Asif_CV.pdf" download="Mahir_Asif_CV.pdf"
+                            class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Download CV
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-
-      </div>
-    </div>
-  </section>
+    </section>
 
   <main class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
 
@@ -410,7 +491,75 @@
           </div>
         </div>
       </div>
-    </section>
+
+<!-- PROGRAMMING PROFICIENCY -->
+    <h2 class="text-3xl font-bold text-color mt-6">Programming Proficiency</h2>
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:var(--orange-1);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--orange-2);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 justify-items-center">
+        <div class="circular-progress-item">
+            <div class="circular-progress-container">
+                <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="80"></circle>
+                </svg>
+                <div class="circular-progress-text">80%</div>
+            </div>
+            <div class="circular-progress-label text-color">Python</div>
+        </div>
+
+        <div class="circular-progress-item">
+            <div class="circular-progress-container">
+                <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="60"></circle>
+                </svg>
+                <div class="circular-progress-text">60%</div>
+            </div>
+            <div class="circular-progress-label text-color">C</div>
+        </div>
+
+        <div class="circular-progress-item">
+            <div class="circular-progress-container">
+                <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="75"></circle>
+                </svg>
+                <div class="circular-progress-text">75%</div>
+            </div>
+            <div class="circular-progress-label text-color">Java</div>
+        </div>
+
+        <div class="circular-progress-item">
+            <div class="circular-progress-container">
+                <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="50"></circle>
+                </svg>
+                <div class="circular-progress-text">50%</div>
+            </div>
+            <div class="circular-progress-label text-color">C++</div>
+        </div>
+
+        <div class="circular-progress-item">
+            <div class="circular-progress-container">
+                <svg class="circular-progress-svg" viewBox="0 0 100 100">
+                    <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="35"></circle>
+                </svg>
+                <div class="circular-progress-text">35%</div>
+            </div>
+            <div class="circular-progress-label text-color">Assembly x86</div>
+        </div>
+    </div>
+</section>
 
     <!-- PROJECTS -->
     <section id="projects" class="grad glass card-shadow p-8 rounded-2xl reveal">
@@ -667,10 +816,9 @@
 
     const canvas = document.getElementById("starsCanvas");
     const ctx = canvas.getContext("2d");
-
-    let stars = [];
-    let mouse = { x: innerWidth / 2, y: innerHeight / 2 };
-    let numStars = 500;
+    const stars = [];
+    const numStars = 500;
+    const mouse = { x: 0, y: 0 };
 
     // Resize handler
     function resizeCanvas() {
@@ -680,29 +828,38 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
-    // Create stars with natural drift
-    for (let i = 0; i < numStars; i++) {
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 0.25,
-            speed: Math.random() * 0.75 + 0.4,
-            vx: (Math.random() - 0.5) * 0.2, // horizontal drift speed
-            vy: (Math.random() - 0.5) * 0.2  // vertical drift speed
-        });
+    // Create stars (This part is still needed)
+    function createStars() {
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 0.25,
+                speed: Math.random() * 0.75 + 0.4,
+                vx: (Math.random() - 0.5) * 0.2,
+                vy: (Math.random() - 0.5) * 0.2
+            });
+        }
     }
+    createStars();
 
-    // Track mouse movement
+    // Track mouse movement (This is still needed)
     document.addEventListener("mousemove", e => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
     });
 
+    // Start the animation (This is still needed)
+    animate();
+
     // Animation loop
     function animate() {
+        // ⭐️ FIX: Always update canvas size at the start of the animation frame
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Get the color on every frame to ensure it's up-to-date
         const rootStyles = getComputedStyle(document.documentElement);
         const starColor = rootStyles.getPropertyValue('--star-color').trim();
 
@@ -721,10 +878,10 @@
             const dx = mouse.x - canvas.width / 2;
             const dy = mouse.y - canvas.height / 2;
 
-            // Random twinkle (slight size and brightness change)
+            // Random twinkle
             const twinkle = Math.sin(Date.now() / 400 + star.x * 0.1) * 0.5 + 0.5;
             const glowSize = star.size + twinkle * 1;
-            const alpha = 0.7 + twinkle * 0.3; // varies between 0.7 and 1.0
+            const alpha = 0.7 + twinkle * 0.3;
 
             ctx.beginPath();
             ctx.arc(
@@ -735,15 +892,14 @@
                 Math.PI * 2
             );
             ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
-            ctx.shadowBlur = 8; // glowing effect
+            ctx.shadowBlur = 8;
             ctx.shadowColor = `rgba(${starColor}, 1)`;
             ctx.fill();
-            ctx.shadowBlur = 0; // reset blur for next star
+            ctx.shadowBlur = 0;
         });
 
         requestAnimationFrame(animate);
     }
-    animate();
 
     const themeToggle = document.getElementById('themeToggle');
     const sunIcon = document.getElementById('sunIcon');
@@ -764,6 +920,54 @@
         moonIcon.classList.toggle('hidden', isLight);
 
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+/* Circular Progress Bar Animation */
+    const animateCircularProgress = (circleElement, textElement, percentage) => {
+        // Calculate circumference based on the radius (r=15.9155 for a total circumference of ~100)
+        const circumference = circleElement.r.baseVal.value * 2 * Math.PI;
+        circleElement.style.strokeDasharray = `${circumference} ${circumference}`;
+        circleElement.style.strokeDashoffset = circumference; // Start completely hidden
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Calculate the offset for the desired percentage
+                    const offset = circumference - (percentage / 100) * circumference;
+                    circleElement.style.strokeDashoffset = offset;
+
+                    // Animate percentage text from 0 to the target percentage
+                    let currentPercentage = 0;
+                    const interval = setInterval(() => {
+                        if (currentPercentage < percentage) {
+                            currentPercentage++;
+                            textElement.textContent = `${currentPercentage}%`;
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 20); // Adjust speed of text animation
+
+                    observer.unobserve(entry.target); // Stop observing once animation is done
+                }
+            });
+        }, { threshold: 0.7 }); // Trigger when 70% of the element is visible
+
+        observer.observe(circleElement); // Start observing the circular progress element
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // ... existing horizontal skill bar animation and other DOMContentLoaded code ...
+
+        // Animate circular progress bars
+        document.querySelectorAll('.circular-progress-container').forEach(container => {
+            const circle = container.querySelector('.circular-progress-fill');
+            const text = container.querySelector('.circular-progress-text');
+            const percentage = parseInt(circle.dataset.percentage, 10);
+            
+            if (circle && text && !isNaN(percentage)) {
+                animateCircularProgress(circle, text, percentage);
+            }
+        });
     });
 
   </script>
