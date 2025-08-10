@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mahir Asif — Cybersecurity Portfolio</title>
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
@@ -920,12 +918,22 @@
         mouse.y = e.clientY;
     });
 
+    // Track gyroscope movement
+    let gyroOffset = { x: 0, y: 0 };
+    window.addEventListener("deviceorientation", e => {
+        // gamma = left/right tilt (-90 to 90)
+        // beta = front/back tilt (-180 to 180)
+        // We'll map them to a reasonable range for parallax effect
+        const sensitivity = 20; // lower = more movement
+        gyroOffset.x = e.gamma / sensitivity; // tilt left/right
+        gyroOffset.y = e.beta / sensitivity;  // tilt front/back
+    }, true);
+
     // Start the animation (This is still needed)
     animate();
 
-    // Animation loop
+    // Modified animation loop
     function animate() {
-        // ⭐️ FIX: Always update canvas size at the start of the animation frame
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
@@ -935,29 +943,33 @@
         const starColor = rootStyles.getPropertyValue('--star-color').trim();
 
         stars.forEach(star => {
-            // Natural drift
+            // Drift
             star.x += star.vx;
             star.y += star.vy;
 
-            // Wrap around edges
+            // Wrap edges
             if (star.x < 0) star.x = canvas.width;
             if (star.x > canvas.width) star.x = 0;
             if (star.y < 0) star.y = canvas.height;
             if (star.y > canvas.height) star.y = 0;
 
-            // Cursor parallax offset
+            // Mouse parallax
             const dx = mouse.x - canvas.width / 2;
             const dy = mouse.y - canvas.height / 2;
 
-            // Random twinkle
+            // Gyroscope parallax
+            const gx = gyroOffset.x * 50; // scale gyroscope effect
+            const gy = gyroOffset.y * 50;
+
+            // Twinkle effect
             const twinkle = Math.sin(Date.now() / 400 + star.x * 0.1) * 0.5 + 0.5;
             const glowSize = star.size + twinkle * 1;
             const alpha = 0.7 + twinkle * 0.3;
 
             ctx.beginPath();
             ctx.arc(
-                star.x + dx / (20 / star.speed),
-                star.y + dy / (20 / star.speed),
+                star.x + (dx + gx) / (20 / star.speed),
+                star.y + (dy + gy) / (20 / star.speed),
                 glowSize,
                 0,
                 Math.PI * 2
