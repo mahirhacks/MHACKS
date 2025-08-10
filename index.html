@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mahir Asif — Cybersecurity Portfolio</title>
-
-  <!-- Tailwind CDN -->
+  <title>Mahir Asif</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/x-icon" href="icon.png">
 
 <style>
     #starsCanvas {
@@ -20,28 +19,22 @@
         transition: background 0.4s ease;
     }
 
+    * {
+        cursor: none !important;
+    }
+
     :root {
         --bg-color: #000000;
         --text-color: #ffffff;
-        --orange-1: #ff2929;
-        --orange-2: #ff5353;
-
-        /* Glass colors */
+        --orange-1: rgba(255, 41, 41, 0.75);
+        --orange-2: rgba(255, 83, 83, 0.75);
         --glass-bg: rgba(0, 0, 0, 0.16);
-        --glass-border: rgba(255, 255, 255, 0.2);
-
-        /* Navbar gradient */
+        --glass-border: rgba(255, 255, 255, 0.08);
         --navbar-gradient: linear-gradient(90deg, var(--orange-1), var(--orange-2));
-
-        /* Canvas gradient */
-        --canvas-gradient: linear-gradient(-135deg, #000000, #1a1a1a);
-
-        /* Skill bar background */
+        --hover-color: rgba(255,255,255,0.1);
+        --canvas-gradient: linear-gradient(-135deg, #000000, rgba(255, 41, 41, 0.1));
         --skill-bar-bg: rgba(255, 255, 255, 0.1);
-
-        /* Modal overlay */
         --modal-backdrop: rgba(0,0,0,0.45);
-
         --star-color: 255, 255, 255;
         --stoke-color: rgba(255, 255, 255, 0.1);
     }
@@ -52,8 +45,9 @@
         --orange-1: #ff2929;
         --orange-2: #ff5353;
         --glass-bg: rgba(255, 255, 255, 0.16);
-        --glass-border: rgba(0, 0, 0, 0.2);
+        --glass-border: rgba(0, 0, 0, 0.08);
         --canvas-gradient: linear-gradient(135deg, #ffffff, #d3d3d3);
+        --hover-color: rgba(0,0,0,0.1);
         --star-color: 255, 0, 0;
         --stoke-color: rgba(0, 0, 0, 0.1);
         --skill-bar-bg: rgba(0, 0, 0, 0.1);
@@ -70,6 +64,19 @@
         -moz-osx-font-smoothing: grayscale;
         background: var(--bg-color);
         color: var(--text-color);
+        cursor: none;
+    }
+
+    /* Custom cursor styling */
+    .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
     }
 
     /* navbar + section gradient */
@@ -85,6 +92,12 @@
         -webkit-backdrop-filter: blur(6px) saturate(120%);
         border-bottom: 1px solid var(--glass-border);
         transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .navbar-logo {
+        height: 32px;      /* Take 70% of the navbar height */
+        width: auto;      /* Maintain aspect ratio */
+        display: block;   /* Remove inline gap */
     }
 
     /* iOS-like glass */
@@ -283,15 +296,19 @@
 </head>
 <body class="text-gray-900">
     <canvas id="starsCanvas"></canvas>
+    <img src="cursor-dark.png" id="customCursor" class="custom-cursor">
 
     <!-- Door icon button initially hidden -->
     <button 
         id="exitStarView" 
         title="Exit star view"
         aria-label="Exit starry night view"
-        class="glass hidden fixed bottom-5 right-5 z-[9999] text-color rounded-3xl p-3 cursor-pointer backdrop-blur-sm border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-white/20 transition">
-        <!-- Sleek transparent door icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" 
+        class="glass hidden fixed bottom-5 right-5 z-[9999] text-color rounded-3xl p-3 backdrop-blur-sm border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-[var(--hover-color)] transition"
+        style="cursor: none;">
+        
+        <!-- Door icon -->
+        <svg 
+            xmlns="http://www.w3.org/2000/svg" 
             class="h-6 w-6" 
             fill="none" 
             stroke="currentColor" 
@@ -299,8 +316,10 @@
             viewBox="0 0 24 24" 
             stroke-linecap="round" 
             stroke-linejoin="round">
+            
             <!-- Door frame -->
             <rect x="7" y="2" width="10" height="20" rx="1" ry="1" />
+            
             <!-- Door knob -->
             <circle cx="15" cy="12" r="0.8" fill="currentColor" />
         </svg>
@@ -313,25 +332,28 @@
             <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <!-- Left section -->
             <div class="flex items-center gap-4">
-                <div title="Hi! It's me!" class="text-color rounded-md px-3 py-2 font-semibold text-lg">Mahir Asif</div>
+                <div title="Hi! It's me!" class="text-color rounded-md px-3 py-2 font-semibold text-lg">
+                    <img src="icon.png" alt="Logo" class="navbar-logo">
+                </div>
 
-                    <!-- Add this inside your navbar div after the nav-links -->
-                    <button title="Toggle Theme" id="themeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
-                        <!-- Sun icon (light mode) -->
-                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                <!-- Theme toggle button -->
+                <button title="Toggle Theme" id="themeToggle" class="text-color p-2 rounded-lg hover:bg-[var(--hover-color)]">
+                    <!-- Sun icon (light mode) -->
+                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8a4 4 0 100 8 4 4 0 000-8z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/>
-                        </svg>
+                    </svg>
 
-                        <!-- Moon icon (dark mode) -->
-                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-                        </svg>
-                    </button>
-                <button id="telescopeToggle" class="text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30 ml-2" title="View starry night">
+                    <!-- Moon icon (dark mode) -->
+                    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+                    </svg>
+                </button>
+                
+                <button id="telescopeToggle" class="text-color p-2 rounded-lg hover:bg-[var(--hover-color)] focus:outline-none focus:ring-2 focus:ring-white/30 ml-2" title="View starry night">
                 <!-- Telescope SVG icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 16V8a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v1"></path>
@@ -343,7 +365,7 @@
             </div>
 
             <!-- Hamburger button (mobile) -->
-            <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30">
+            <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-[var(--hover-color)] focus:outline-none focus:ring-2 focus:ring-white/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M4 6h16M4 12h16M4 18h16" />
@@ -728,19 +750,24 @@
             <!-- LANGUAGES -->
             <section id="languages" class="grad glass card-shadow p-8 rounded-2xl reveal">
                 <h2 class="text-3xl font-bold text-color">Languages</h2>
-                <p class="mt-3 text-color">English (Fluent), Bahasa Melayu (Basic)</p>
+                <p class="mt-3 text-color">01 | &emsp;Bangla (Native)</p>
+                <p class="mt-3 text-color">02 | &emsp;English (Fluent)</p>
+                <p class="mt-3 text-color">03 | &emsp;Hindi & Urdu (Basic)</p>
+                <p class="mt-3 text-color">04 | &emsp;Arabic (Basic)</p>
+                <p class="mt-3 text-color">05 | &emsp;Japanese (Basic)</p>
+                <p class="mt-3 text-color">06 | &emsp;Bahasa Malayu (Basic)</p>
             </section>
 
             <!-- INTERESTS -->
             <section id="interests" class="grad glass card-shadow p-8 rounded-2xl reveal">
                 <h2 class="text-3xl font-bold text-color">Interests</h2>
                 <ul class="mt-3 list-disc pl-5 text-color">
-                    <li>Coding & Low-Level Programming</li>
-                    <li>Project Building</li>
-                    <li>Fitness & Self-Improvement</li>
-                    <li>Deep Thinking & Philosophy</li>
-                    <li>Cybersecurity & Ethical Hacking</li>
-                    <li>Creative Thinking & Design</li>
+                    <li>&emsp;Coding & Low-Level Programming</li>
+                    <li>&emsp;Project Building & Side Hustles</li>
+                    <li>&emsp;Fitness & Self-Improvement</li>
+                    <li>&emsp;Brain Storming & Business Ideas</li>
+                    <li>&emsp;Cybersecurity & Ethical Hacking</li>
+                    <li>&emsp;Creative Thinking & Design</li>
                 </ul>
             </section>
 
@@ -779,6 +806,12 @@
     </div>
 
   <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
     /* NAV TOGGLE (mobile) */
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -851,12 +884,16 @@
     const canvas = document.getElementById("starsCanvas");
     const ctx = canvas.getContext("2d");
     const stars = [];
-    const numStars = 50;
-    const numStars2 = 100;
-    const numStars3 = 800;
-    const mouse = { x: 0, y: 0 };
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let gyroOffset = { x: 0, y: 0 };
 
-    // Resize handler
+    const numStarsLg = 10;
+    const numStarsMd = 50;
+    const numStarsSm = 400;
+
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // Resize canvas
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -864,66 +901,63 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
-    // Create stars (This part is still needed)
-    function createStars() {
-        for (let i = 0; i < numStars; i++) {
+    // Create stars
+    function createStars(count, sizeMax, speedRange) {
+        for (let i = 0; i < count; i++) {
             stars.push({
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
-                size: Math.random() * 2,
-                speed: Math.random() * 0.75 + 0.4,
+                size: Math.random() * sizeMax,
+                speed: Math.random() * speedRange.max + speedRange.min,
                 vx: (Math.random() - 0.5) * 0.2,
                 vy: (Math.random() - 0.5) * 0.2
             });
         }
     }
-    createStars();
+    createStars(numStarsLg, 2, { min: 0.4, max: 0.75 });
+    createStars(numStarsMd, 0.1, { min: 0.2, max: 0.5 });
+    createStars(numStarsSm, 0.5, { min: 0.1, max: 0.25 });
 
-    // Create stars (This part is still needed)
-    function createStarsMd() {
-        for (let i = 0; i < numStars; i++) {
-            stars.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 0.1,
-                speed: Math.random() * 0.5 + 0.2,
-                vx: (Math.random() - 0.5) * 0.2,
-                vy: (Math.random() - 0.5) * 0.2
-            });
+    // Mouse movement for desktop
+    if (!isMobile) {
+        document.addEventListener("mousemove", e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+    }
+
+    // Gyroscope for mobile
+    function enableGyro() {
+        if (typeof DeviceOrientationEvent.requestPermission === "function") {
+            // iOS Safari
+            DeviceOrientationEvent.requestPermission()
+                .then(state => {
+                    if (state === "granted") {
+                        window.addEventListener("deviceorientation", handleGyro, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // Android & others
+            window.addEventListener("deviceorientation", handleGyro, true);
         }
     }
-    createStarsMd();
 
-    // Create stars (This part is still needed)
-    function createStarsSm() {
-        for (let i = 0; i < numStars3; i++) {
-            stars.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 0.5,
-                speed: Math.random() * 0.25 + 0.1,
-                vx: (Math.random() - 0.5) * 0.2,
-                vy: (Math.random() - 0.5) * 0.2
-            });
-        }
+    function handleGyro(e) {
+        const sensitivity = 20;
+        gyroOffset.x = e.gamma / sensitivity; // left/right
+        gyroOffset.y = e.beta / sensitivity;  // forward/back
     }
-    createStarsSm();
 
-    // Track mouse movement (This is still needed)
-    document.addEventListener("mousemove", e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    // Start the animation (This is still needed)
-    animate();
+    if (isMobile) {
+        // On mobile, require tap for iOS
+        document.body.addEventListener("click", enableGyro, { once: true });
+    }
 
     // Animation loop
     function animate() {
-        // ⭐️ FIX: Always update canvas size at the start of the animation frame
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const rootStyles = getComputedStyle(document.documentElement);
@@ -940,13 +974,21 @@
             if (star.y < 0) star.y = canvas.height;
             if (star.y > canvas.height) star.y = 0;
 
-            // Cursor parallax offset
-            const dx = mouse.x - canvas.width / 2;
-            const dy = mouse.y - canvas.height / 2;
+            let dx, dy;
 
-            // Random twinkle
+            if (isMobile) {
+                // Gyroscope parallax
+                dx = gyroOffset.x * 50;
+                dy = gyroOffset.y * 50;
+            } else {
+                // Mouse parallax
+                dx = mouse.x - canvas.width / 2;
+                dy = mouse.y - canvas.height / 2;
+            }
+
+            // Twinkle effect
             const twinkle = Math.sin(Date.now() / 400 + star.x * 0.1) * 0.5 + 0.5;
-            const glowSize = star.size + twinkle * 1;
+            const glowSize = star.size + twinkle;
             const alpha = 0.7 + twinkle * 0.3;
 
             ctx.beginPath();
@@ -967,17 +1009,30 @@
         requestAnimationFrame(animate);
     }
 
+    animate();
+
     const themeToggle = document.getElementById('themeToggle');
     const sunIcon = document.getElementById('sunIcon');
     const moonIcon = document.getElementById('moonIcon');
+    const customCursor = document.getElementById('customCursor');
+
+    // Cursor follow effect
+    document.addEventListener('mousemove', (e) => {
+        customCursor.style.left = `${e.clientX}px`;
+        customCursor.style.top = `${e.clientY}px`;
+    });
 
     // Load saved theme
     if (localStorage.getItem('theme') === 'light') {
         document.documentElement.classList.add('light-theme');
         sunIcon.classList.remove('hidden');
         moonIcon.classList.add('hidden');
+        customCursor.src = 'cursor-dark.png';
+    } else {
+        customCursor.src = 'cursor-light.png';
     }
 
+    // Theme toggle
     themeToggle.addEventListener('click', () => {
         document.documentElement.classList.toggle('light-theme');
         const isLight = document.documentElement.classList.contains('light-theme');
@@ -985,7 +1040,10 @@
         sunIcon.classList.toggle('hidden', !isLight);
         moonIcon.classList.toggle('hidden', isLight);
 
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        // Switch cursor image
+        customCursor.src = isLight ? 'cursor-dark.png' : 'cursor-light.png';
+
+        localStorage.setItem('theme', isLight ? 'dark' : 'light');
     });
 
 /* Circular Progress Bar Animation */
