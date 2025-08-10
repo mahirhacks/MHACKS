@@ -233,6 +233,15 @@
         .nav-links { display: flex; }
     }
 
+    @media (max-width: 840px) { /* or whatever breakpoint you want */
+        body {
+            cursor: auto !important; /* fallback to default */
+        }
+        .custom-cursor {
+            display: none !important; /* hide your custom cursor element */
+        }
+    }
+
 /* Circular Progress Bar Styles */
 
     .circular-progress-item {
@@ -885,7 +894,6 @@
     const ctx = canvas.getContext("2d");
     const stars = [];
     let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    let gyroOffset = { x: 0, y: 0 };
 
     const numStarsLg = 10;
     const numStarsMd = 50;
@@ -926,34 +934,6 @@
         });
     }
 
-    // Gyroscope for mobile
-    function enableGyro() {
-        if (typeof DeviceOrientationEvent.requestPermission === "function") {
-            // iOS Safari
-            DeviceOrientationEvent.requestPermission()
-                .then(state => {
-                    if (state === "granted") {
-                        window.addEventListener("deviceorientation", handleGyro, true);
-                    }
-                })
-                .catch(console.error);
-        } else {
-            // Android & others
-            window.addEventListener("deviceorientation", handleGyro, true);
-        }
-    }
-
-    function handleGyro(e) {
-        const sensitivity = 20;
-        gyroOffset.x = e.gamma / sensitivity; // left/right
-        gyroOffset.y = e.beta / sensitivity;  // forward/back
-    }
-
-    if (isMobile) {
-        // On mobile, require tap for iOS
-        document.body.addEventListener("click", enableGyro, { once: true });
-    }
-
     // Animation loop
     function animate() {
         canvas.width = window.innerWidth;
@@ -974,13 +954,9 @@
             if (star.y < 0) star.y = canvas.height;
             if (star.y > canvas.height) star.y = 0;
 
-            let dx, dy;
+            let dx = 0, dy = 0;
 
-            if (isMobile) {
-                // Gyroscope parallax
-                dx = gyroOffset.x * 50;
-                dy = gyroOffset.y * 50;
-            } else {
+            if (!isMobile) {
                 // Mouse parallax
                 dx = mouse.x - canvas.width / 2;
                 dy = mouse.y - canvas.height / 2;
@@ -1011,6 +987,8 @@
 
     animate();
 
+    animate();
+
     const themeToggle = document.getElementById('themeToggle');
     const sunIcon = document.getElementById('sunIcon');
     const moonIcon = document.getElementById('moonIcon');
@@ -1022,13 +1000,17 @@
         customCursor.style.top = `${e.clientY}px`;
     });
 
-    // Load saved theme
-    if (localStorage.getItem('theme') === 'light') {
+    // Load saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+
+    if (savedTheme === 'light') {
         document.documentElement.classList.add('light-theme');
         sunIcon.classList.remove('hidden');
         moonIcon.classList.add('hidden');
         customCursor.src = 'cursor-dark.png';
     } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
         customCursor.src = 'cursor-light.png';
     }
 
@@ -1043,7 +1025,8 @@
         // Switch cursor image
         customCursor.src = isLight ? 'cursor-dark.png' : 'cursor-light.png';
 
-        localStorage.setItem('theme', isLight ? 'dark' : 'light');
+        // Save correct theme value
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
 
 /* Circular Progress Bar Animation */
