@@ -917,14 +917,14 @@
                 y: Math.random() * window.innerHeight,
                 size: Math.random() * sizeMax,
                 speed: Math.random() * speedRange.max + speedRange.min,
-                vx: (Math.random() - 0.5) * 0.2,
-                vy: (Math.random() - 0.5) * 0.2
+                vx: (Math.random() - 0.5) * 0.1,
+                vy: (Math.random() - 0.5) * 0.1
             });
         }
     }
-    createStars(numStarsLg, 2, { min: 0.1, max: 0.15 });
-    createStars(numStarsMd, 1, { min: 0.05, max: 0.08 });
-    createStars(numStarsSm, 0.5, { min: 0.025, max: 0.035 });
+    createStars(numStarsLg, 2, { min: 0.4, max: 0.75 });
+    createStars(numStarsMd, 0.1, { min: 0.2, max: 0.5 });
+    createStars(numStarsSm, 0.5, { min: 0.1, max: 0.25 });
 
     // Mouse movement for desktop
     if (!isMobile) {
@@ -984,8 +984,6 @@
 
         requestAnimationFrame(animate);
     }
-
-    animate();
 
     animate();
 
@@ -1101,5 +1099,3 @@
   </script>
 </body>
 </html>
-
-
