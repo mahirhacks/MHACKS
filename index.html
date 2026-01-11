@@ -19,8 +19,18 @@
         transition: background 0.4s ease;
     }
 
-    * {
-        cursor: none !important;
+    /* Hide cursor only on devices that actually have a cursor */
+    @media (hover: hover) and (pointer: fine) {
+        * {
+            cursor: none !important;
+        }
+    }
+
+    /* Restore default behavior on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        * {
+            cursor: auto !important;
+        }
     }
 
     :root {
@@ -79,6 +89,13 @@
         transform: translate(-50%, -50%);
     }
 
+    /* Completely disable custom cursor on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        .custom-cursor {
+            display: none !important;
+        }
+    }
+
     /* navbar + section gradient */
     .grad {
         background: var(--navbar-gradient);
@@ -102,12 +119,14 @@
 
     /* iOS-like glass */
     .glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px) saturate(120%);
-        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        background: color-mix(in srgb, var(--glass-bg) 92%, transparent);
+        backdrop-filter: blur(6px) saturate(115%);
         border: 1px solid var(--glass-border);
-        border-radius: 14px;
-        transition: background 0.4s ease, border-color 0.4s ease;
+        border-radius: 16px;
+    }
+
+    section {
+        scroll-margin-top: 90px; /* Fix navbar overlap */
     }
 
     /* subtle card shadow */
@@ -117,13 +136,16 @@
 
     /* reveal animation helper */
     .reveal {
-        opacity: 0;
-        transform: translateY(18px);
-        transition: opacity .6s ease, transform .6s ease;
+        transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
     }
+
     .reveal.show {
         opacity: 1;
         transform: translateY(0);
+    }
+
+    header nav {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     /* small UI niceties */
@@ -381,30 +403,22 @@
             </button>
 
                 <ul class="nav-links md:flex items-center gap-6 text-color font-medium">
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#certifications">Certifications</a></li>
-                <li><a href="#achievements">Achievements</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#contact">Contact</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#contact">Contact Me</a></li>
                 </ul>
             </div>
 
             <!-- mobile menu -->
-                <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
-                    <div class="px-6 py-4 flex flex-col gap-3 text-color">
-                        <a href="#about" class="py-2">About</a>
-                        <a href="#skills" class="py-2">Skills</a>
-                        <a href="#projects" class="py-2">Projects</a>
-                        <a href="#certifications" class="py-2">Certifications</a>
-                        <a href="#achievements" class="py-2">Achievements</a>
-                        <a href="#experience" class="py-2">Experience</a>
-                        <a href="#education" class="py-2">Education</a>
-                        <a href="#contact" class="py-2">Contact</a>
-                    </div>
+            <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
+                <div class="px-6 py-4 flex flex-col gap-3 text-color">
+                    <a href="#about" class="py-2">About</a>
+                    <a href="#skills" class="py-2">Skills</a>
+                    <a href="#experience" class="py-2">Experience</a>
+                    <a href="#contact" class="py-2">Contact Me</a>
                 </div>
+            </div>
             </nav>
         </header>
 
@@ -473,7 +487,7 @@
                     </p>
                     </div>
 
-                    <div class="md:w-1/4lpb03.nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn mt-6 md:mt-0">
+                    <div class="md:w-1/4 mt-6 md:mt-0">
                     <div class="glass p-4 rounded-lg text-color text-sm">
                         <h4 class="font-semibold">Core Summary</h4>
                         <ul class="mt-2 space-y-1">
@@ -684,7 +698,7 @@
                     <div class="glass p-4 rounded-lg text-color">
                         <h4 class="font-semibold">Cybersecurity for Students — LetsDefend</h4>
                         <p class="text-sm mt-2">Learning Path — Jan 2025</p>
-                        <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm underline text-color">View certificate</a>
+                        <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">View Certificate</b></a>
                     </div>
 
                     <div class="glass p-4 rounded-lg text-color">
@@ -695,7 +709,7 @@
                     <div class="glass p-4 rounded-lg text-color">
                         <h4 class="font-semibold">RH134 — Red Hat</h4>
                         <p class="text-sm mt-2">Red Hat System Administration — Dec 2025</p>
-                        <a target="_blank" rel="noreferrer" href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" class="mt-3 inline-block text-sm underline text-color">View certificate</a>
+                        <a target="_blank" rel="noreferrer" href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">View Certificate</b></a>
                     </div>
 
                 </div>
@@ -708,8 +722,8 @@
                     <li>Analyzed and triaged 50+ security alerts in SOC environment.</li>
                     <li>Created and responded to tickets in accordance with SOC SLA guidelines.</li>
                     <li>Designed promotional materials for a university Cyber Talk and supported awareness around cybersecurity (Technical & Graphics Coordinator).</li>
-                    <li>Worked with the first Cybersecurity-as-a-service Lisenced University Intern. More at
-                        <a target="_blank" rel="noreferrer" href="https://thesun.my/education/licensed-to-deliver-professional-cybersecurity/" class="mt-3 inline-block text-sm underline text-color">Here</a>
+                    <li>Worked with the first Cybersecurity-as-a-service Lisenced University Intern.
+                        <a target="_blank" rel="noreferrer" href="https://thesun.my/education/licensed-to-deliver-professional-cybersecurity/" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">Read here</b></a>
                     </li>
                 </ul>
             </section>
@@ -841,7 +855,7 @@
     </div>
 
   <script>
-    const cursor = document.getElementById('cursor');
+    const cursor = document.getElementById('customCursor');
     document.addEventListener('mousemove', e => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
@@ -852,6 +866,13 @@
     const mobileMenu = document.getElementById('mobileMenu');
     navToggle?.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
+    });
+
+    // Auto-close mobile menu on link click
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
     });
 
     /* COPY EMAIL */
@@ -962,8 +983,7 @@
 
     // Animation loop
     function animate() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // remove resize from animation loop (already handled by resizeCanvas)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const rootStyles = getComputedStyle(document.documentElement);
@@ -1125,3 +1145,4 @@
   </script>
 </body>
 </html>
+
