@@ -1,1148 +1,1527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mahir Asif</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Mahir Asif — root@kali:~</title>
   <link rel="icon" type="image/x-icon" href="icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
 <style>
-    #starsCanvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: var(--canvas-gradient);
-        transition: background 0.4s ease;
-    }
+:root {
+  --bg:         #0a0a0a;
+  --green:      #39ff6e;
+  --green-dim:  #1aaa44;
+  --green-dark: #0a3318;
+  --border:     #1a2e1e;
+  --hdr:        #0d150f;
+  --text:       #c8fcd8;
+  --text-strong:#ffffff;
+  --muted:      #4d7a5a;
+  --prompt:     #39ff6e;
+  --err:        #ff453a;
+  --warn:       #ffd60a;
+  --info:       #4cc2ff;
+  --orange:     #ff6b35;
+  --win-bg:     rgba(9,13,10,0.93);
+  --grid:       rgba(57,255,110,0.03);
+  --scan:       rgba(57,255,110,0.04);
+}
 
-    /* Hide cursor only on devices that actually have a cursor */
-    @media (hover: hover) and (pointer: fine) {
-        * {
-            cursor: none !important;
-        }
-    }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; scroll-padding-top:110px; }
 
-    /* Restore default behavior on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-        * {
-            cursor: auto !important;
-        }
-    }
+/* ── Light theme ── */
+html.light-theme {
+  --bg:         #f0f4f1;
+  --green:      #1a7a3a;
+  --green-dim:  #2a9a50;
+  --green-dark: #d4edd9;
+  --border:     #b0ccb8;
+  --hdr:        #e0ece3;
+  --text:       #1a3a24;
+  --text-strong:#0a1a10;
+  --muted:      #5a7a64;
+  --prompt:     #1a7a3a;
+  --err:        #cc2211;
+  --warn:       #a06000;
+  --info:       #1060aa;
+  --orange:     #c04010;
+  --win-bg:     rgba(240,248,242,0.97);
+  --grid:       rgba(26,122,58,0.04);
+  --scan:       rgba(26,122,58,0.05);
+}
+html.light-theme body { background:var(--bg); color:var(--text); }
+html.light-theme #starsCanvas { background:radial-gradient(ellipse at 20% 50%,rgba(150,220,170,0.15) 0%,transparent 55%), radial-gradient(ellipse at 80% 20%,rgba(100,200,130,0.1) 0%,transparent 55%), #e8f2ea; }
+html.light-theme nav.navbar { background:rgba(230,240,232,0.92); }
+html.light-theme #mobileMenu { background:rgba(230,240,232,.97); }
+html.light-theme .iterm-input { color:#111; }
+html.light-theme .iterm-inputrow { background:rgba(200,225,205,.4); }
+html.light-theme footer { background:transparent; }
 
-    :root {
-        --bg-color: #000000;
-        --text-color: #ffffff;
-        --orange-1: rgba(255, 41, 41, 0.75);
-        --orange-2: rgba(255, 83, 83, 0.75);
-        --glass-bg: rgba(0, 0, 0, 0.16);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --navbar-gradient: linear-gradient(90deg, var(--orange-1), var(--orange-2));
-        --hover-color: rgba(255,255,255,0.1);
-        --canvas-gradient: linear-gradient(-135deg, #000000, rgba(255, 41, 41, 0.1));
-        --skill-bar-bg: rgba(255, 255, 255, 0.1);
-        --modal-backdrop: rgba(0,0,0,0.45);
-        --star-color: 255, 255, 255;
-        --stoke-color: rgba(255, 255, 255, 0.1);
-    }
+body {
+  font-family:'JetBrains Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
 
-    .light-theme {
-        --bg-color: #ffffff;
-        --text-color: #000000;
-        --orange-1: #ff2929;
-        --orange-2: #ff5353;
-        --glass-bg: rgba(255, 255, 255, 0.16);
-        --glass-border: rgba(0, 0, 0, 0.08);
-        --canvas-gradient: linear-gradient(135deg, #ffffff, #d3d3d3);
-        --hover-color: rgba(0,0,0,0.1);
-        --star-color: 255, 0, 0;
-        --stoke-color: rgba(0, 0, 0, 0.1);
-        --skill-bar-bg: rgba(0, 0, 0, 0.1);
-    }
+/* CRT grid */
+body::before {
+  content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image: linear-gradient(var(--grid) 1px,transparent 1px),
+                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+/* Scanline */
+body::after {
+  content:''; position:fixed; top:-100%; left:0;
+  width:100%; height:35%; z-index:2; pointer-events:none;
+  background:linear-gradient(transparent,var(--scan),transparent);
+  animation:scanline 10s linear infinite;
+}
+body.star-view::before, body.star-view::after { display:none; }
+@keyframes scanline { to{ top:200%; } }
 
-    .text-color {
-        color: var(--text-color) !important;
-    }
+#starsCanvas {
+  position:fixed; top:0; left:0; width:100%; height:100%; z-index:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(0,80,30,0.08) 0%,transparent 55%),
+             radial-gradient(ellipse at 80% 20%,rgba(0,60,20,0.06) 0%,transparent 55%),
+             #070a07;
+}
 
-    html { scroll-behavior: smooth; }
+/* ── Navbar ── */
+header { position:fixed; width:100%; top:0; z-index:500; }
+nav.navbar {
+  background:rgba(7,10,7,0.85);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:.55rem 1.5rem;
+  position:relative; z-index:10;
+}
+.nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.nav-logo {
+  font-size:.82rem; font-weight:700; color:var(--green);
+  text-shadow:0 0 12px rgba(57,255,110,.5);
+  text-decoration:none; white-space:nowrap; letter-spacing:.04em;
+}
+.nav-logo .dot-red { color:var(--err); }
+.nav-links { display:flex; gap:1.8rem; list-style:none; }
+.nav-links a {
+  font-size:.72rem; color:var(--muted); text-decoration:none;
+  letter-spacing:.1em; text-transform:uppercase; transition:color .2s;
+}
+.nav-links a::before { content:'./'; color:var(--green); opacity:0; transition:opacity .2s; margin-right:2px; font-size:.68rem; }
+.nav-links a:hover { color:var(--green); }
+.nav-links a:hover::before { opacity:1; }
+.nav-controls { display:flex; gap:.4rem; align-items:center; }
+.icon-btn {
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); padding:.38rem; border-radius:4px;
+  line-height:0; transition:all .2s;
+}
+.icon-btn:hover { color:var(--green); border-color:var(--green-dim); box-shadow:0 0 8px rgba(57,255,110,.25); }
+.icon-btn svg { width:17px; height:17px; }
+.nav-mobile { display:none; }
+@media(max-width:840px){ .nav-links{ display:none; } .nav-mobile{ display:flex; } }
+@media(min-width:841px){ #mobileMenu{ display:none; } }
+#mobileMenu {
+  background:rgba(7,10,7,.97); border-top:1px solid var(--border);
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .4s ease,opacity .4s ease;
+  position:relative; z-index:10;
+}
+#mobileMenu.active { max-height:400px; opacity:1; }
+#mobileMenu a {
+  display:block; padding:.65rem 1.5rem;
+  font-size:.78rem; color:var(--muted); text-decoration:none;
+  border-bottom:1px solid rgba(57,255,110,.05); transition:color .2s,background .2s;
+}
+#mobileMenu a:hover { color:var(--green); background:rgba(57,255,110,.04); }
 
-    body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background: var(--bg-color);
-        color: var(--text-color);
-        cursor: none;
-    }
+#exitStarView {
+  position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999;
+  background:rgba(57,255,110,.05); border:1px solid var(--border);
+  color:var(--green); padding:.65rem; border-radius:50%;
+  backdrop-filter:blur(8px); transition:all .2s;
+}
+#exitStarView:hover { box-shadow:0 0 16px rgba(57,255,110,.4); }
+#exitStarView svg { width:22px; height:22px; display:block; }
 
-    /* Custom cursor styling */
-    .custom-cursor {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 24px;
-        height: 24px;
-        pointer-events: none;
-        z-index: 99999;
-        transform: translate(-50%, -50%);
-    }
+#pageContent { position:relative; z-index:10; }
 
-    /* Completely disable custom cursor on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-        .custom-cursor {
-            display: none !important;
-        }
-    }
+/* ── Terminal window ── */
+.term-win {
+  background:var(--win-bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 0 40px rgba(57,255,110,.04), 0 20px 50px rgba(0,0,0,.55);
+}
+.term-titlebar {
+  background:var(--hdr);
+  border-bottom:1px solid var(--border);
+  padding:.5rem 1rem;
+  display:flex; align-items:center; gap:.55rem;
+  flex-shrink:0;
+}
+.dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.dot-r { background:#ff5f57; box-shadow:0 0 4px rgba(255,95,87,.5); }
+.dot-y { background:#febc2e; box-shadow:0 0 4px rgba(254,188,46,.5); }
+.dot-g { background:#28c840; box-shadow:0 0 4px rgba(40,200,64,.5); }
+.term-tab { margin-left:.4rem; color:var(--muted); font-size:.7rem; font-weight:500; letter-spacing:.03em; }
+.term-body { padding:1.1rem 1.4rem; font-size:.78rem; line-height:1.75; }
 
-    /* navbar + section gradient */
-    .grad {
-        background: var(--navbar-gradient);
-        transition: background 0.4s ease;
-    }
+/* ── Terminal colours ── */
+.gc  { color:var(--green); }
+.gdc { color:var(--green-dim); }
+.muc { color:var(--muted); }
+.orc { color:var(--orange); font-weight:600; }
+.blc { color:var(--info); }
+.ywc { color:var(--warn); }
+.erc { color:var(--err); }
+.whc { color:var(--text-strong,#fff); font-weight:600; }
+.output-line { display:block; white-space:pre-wrap; }
+.blank { display:block; height:.85rem; }
+.prompt-label { color:var(--prompt); font-weight:700; }
 
-    /* iOS-like glass */
-    .glass-navbar {
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px) saturate(120%);
-        -webkit-backdrop-filter: blur(6px) saturate(120%);
-        border-bottom: 1px solid var(--glass-border);
-        transition: background 0.4s ease, border-color 0.4s ease;
-    }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .navbar-logo {
-        height: 32px;      /* Take 70% of the navbar height */
-        width: auto;      /* Maintain aspect ratio */
-        display: block;   /* Remove inline gap */
-    }
+/* ── INTERACTIVE TERMINAL ── */
+.iterm-wrap { display:flex; flex-direction:column; height:440px; }
+.iterm-output {
+  flex:1; overflow-y:auto; padding:1.1rem 1.4rem;
+  font-size:.78rem; line-height:1.75;
+  scrollbar-width:thin; scrollbar-color:var(--green-dim) transparent;
+}
+.iterm-output::-webkit-scrollbar { width:4px; }
+.iterm-output::-webkit-scrollbar-thumb { background:var(--green-dim); border-radius:2px; }
+.iterm-inputrow {
+  display:flex; align-items:center; gap:.4rem;
+  padding:.6rem 1.4rem;
+  border-top:1px solid var(--border);
+  background:rgba(0,0,0,.25);
+  flex-shrink:0;
+}
+.iterm-prompt-label { color:var(--prompt); font-size:.78rem; font-weight:700; white-space:nowrap; flex-shrink:0; line-height:1.4; }
+.iterm-input {
+  flex:1; background:transparent; border:none; outline:none;
+  font-family:'JetBrains Mono',monospace; font-size:.78rem; color:#fff;
+  caret-color:var(--green);
+}
+.iterm-hint { font-size:.68rem; color:var(--muted); padding:.3rem 1.4rem .5rem; flex-shrink:0; }
 
-    /* iOS-like glass */
-    .glass {
-        background: color-mix(in srgb, var(--glass-bg) 92%, transparent);
-        backdrop-filter: blur(6px) saturate(115%);
-        border: 1px solid var(--glass-border);
-        border-radius: 16px;
-    }
+/* ── Skill bars ── */
+.skill-row { display:flex; align-items:center; gap:.7rem; margin:.3rem 0; flex-wrap:wrap; }
+.skill-name { color:var(--text); min-width:11rem; font-size:.76rem; }
+.skill-track {
+  flex:1; min-width:100px; height:7px;
+  background:var(--green-dark); border:1px solid var(--green-dim);
+  position:relative; overflow:hidden;
+}
+.skill-fill {
+  height:100%; width:0;
+  background:linear-gradient(90deg,var(--green-dim),var(--green));
+  box-shadow:0 0 6px var(--green);
+  transition:width 1.4s cubic-bezier(.22,.61,.36,1);
+}
+.skill-pct { color:var(--green); font-size:.73rem; min-width:2.4rem; text-align:right; }
 
-    section {
-        scroll-margin-top: 90px; /* Fix navbar overlap */
-    }
+/* Skill tags */
+.tag-grid { display:flex; flex-wrap:wrap; gap:.4rem; margin:.5rem 0; }
+.stag { font-size:.68rem; padding:.28rem .65rem; border-radius:2px; letter-spacing:.04em; border:1px solid; }
+.stag.red  { border-color:rgba(255,107,53,.4); color:var(--orange); background:rgba(255,107,53,.06); }
+.stag.blue { border-color:rgba(76,194,255,.3);  color:var(--info);   background:rgba(76,194,255,.05); }
 
-    /* subtle card shadow */
-    .card-shadow {
-        box-shadow: 0 8px 30px rgba(18,18,18,0.0);
-    }
+/* ── ls-row project lines ── */
+.ls-row { display:flex; gap:.7rem; padding:.38rem .2rem; border-bottom:1px solid rgba(26,46,30,.5); flex-wrap:wrap; font-size:.76rem; }
+.ls-row:hover { background:rgba(57,255,110,.025); }
+.ls-perm { color:var(--muted); min-width:9rem; }
+.ls-date { color:var(--warn); min-width:5.5rem; }
+.ls-name { color:var(--info); flex:1; }
 
-    /* reveal animation helper */
-    .reveal {
-        transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
-    }
+/* ── whois contact ── */
+.whois-row { display:flex; gap:.8rem; margin:.2rem 0; font-size:.78rem; flex-wrap:wrap; }
+.wk { color:var(--muted); min-width:10rem; }
+.wv { color:var(--text); }
+.wv a { color:var(--green); text-decoration:none; }
+.wv a:hover { text-decoration:underline; }
 
-    .reveal.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* ── cert card ── */
+.cert-item {
+  border:1px solid var(--border); padding:.75rem 1rem;
+  margin:.45rem 0; background:rgba(57,255,110,.02);
+  font-size:.76rem; transition:border-color .2s,background .2s;
+}
+.cert-item:hover { border-color:var(--green-dim); background:rgba(57,255,110,.04); }
+.cert-item.featured { border-color:rgba(255,214,10,.4); background:rgba(255,214,10,.03); }
+.cert-badge { font-size:.65rem; color:var(--warn); letter-spacing:.08em; margin-bottom:.3rem; }
 
-    header nav {
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    }
+/* ── sep ── */
+.sep { border:none; border-top:1px solid var(--border); margin:.75rem 0; }
 
-    /* small UI niceties */
-    .nav-backdrop { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-    .btn-ghost {
-        background: rgba(255,255,255,0.12);
-        border: 1px solid rgba(255,255,255,0.14);
-        padding: .5rem .9rem;
-        border-radius: 10px;
-    }
+/* ── Circular progress ── */
+.prog-grid { display:flex; flex-wrap:wrap; gap:1.8rem; margin-top:1rem; }
+.circular-progress-item { display:flex; flex-direction:column; align-items:center; }
+.circular-progress-container { position:relative; width:90px; height:90px; }
+.circular-progress-svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
+.circular-progress-bg  { fill:none; stroke:var(--green-dark); stroke-width:8; }
+.circular-progress-fill { fill:none; stroke:url(#gradGreen); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset 1.5s ease-out; }
+.circular-progress-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1rem; font-weight:700; color:var(--green); }
+.circular-progress-label { margin-top:.5rem; font-size:.72rem; color:var(--text); text-align:center; }
 
-    .nav-mobile-menu {
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    }
+/* ── Reveal ── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s cubic-bezier(.22,.61,.36,1); }
+.reveal.show { opacity:1; transform:none; }
 
-    .nav-mobile-menu.active {
-        max-height: 500px; /* A value larger than the menu's actual height */
-        opacity: 1;
-    }
+/* ── Layout ── */
+.page-wrap { padding-top:76px; max-width:1200px; margin:0 auto; padding-left:1.25rem; padding-right:1.25rem; }
+.hero-sec { padding:2.5rem 0 2rem; }
+.sections { display:flex; flex-direction:column; gap:1.8rem; padding-bottom:5rem; }
 
-    .nav-links a {
-        position: relative; /* This is crucial for the ::after pseudo-element */
-        display: inline-block;
-        padding-bottom: 2px; /* This creates the space between the link and the underline */
-        overflow: hidden; /* This hides the line before it animates up */
-        text-decoration: none; /* Make sure to remove the default underline */
-    }
+.hero-cols { display:flex; gap:1.5rem; align-items:stretch; }
+.hero-left { flex:1; min-width:0; }
+.hero-right { flex-shrink:0; width:240px; display:flex; flex-direction:column; }
+@media(max-width:760px){ .hero-cols{ flex-direction:column; } .hero-right{ width:100%; min-height:280px; } }
 
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px; /* The thickness of the underline */
-        background: var(--text-color); /* The color of the underline */
-        transform: translateY(100%); /* Start position: below the link */
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        opacity: 0; /* Start with opacity 0 for a fade-in effect */
-    }
+/* Photo terminal panel */
+.photo-term { display:flex; flex-direction:column; height:100%; }
+.photo-img-wrap { flex:1; overflow:hidden; min-height:0; }
+.photo-img-wrap img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+.photo-img-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--muted); font-size:.65rem; letter-spacing:.08em; background:var(--green-dark); }
+.photo-img-placeholder svg { width:48px; height:48px; opacity:.35; }
+.status-badge { display:flex; align-items:center; gap:.45rem; font-size:.65rem; color:var(--green); letter-spacing:.12em; background:rgba(57,255,110,.05); border:1px solid rgba(57,255,110,.2); padding:.3rem .8rem; border-radius:3px; }
+.status-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 2s ease-in-out infinite; box-shadow:0 0 6px var(--green); }
+.photo-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--muted); font-size:.65rem; letter-spacing:.08em; }
+.photo-placeholder svg { width:48px; height:48px; opacity:.35; }
 
-    .nav-links a:hover::after,
-    .nav-links a:focus::after { /* Good practice for accessibility */
-        transform: translateY(0); /* End position: at the bottom of the link */
-        opacity: 1; /* Fade in the underline */
-    }
+/* ── Cyber Archive ── */
+.archive-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; margin-top:.75rem; }
+.archive-card {
+  border:1px solid var(--border); padding:1rem 1.1rem;
+  background:rgba(57,255,110,.02); position:relative;
+  transition:border-color .2s, background .2s, transform .2s;
+}
+.archive-card:hover { border-color:var(--green-dim); background:rgba(57,255,110,.045); transform:translateY(-2px); }
+.archive-card-tag { font-size:.62rem; color:var(--orange); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.4rem; }
+.archive-card-title { font-size:.82rem; color:#fff; font-weight:700; margin-bottom:.35rem; }
+.archive-card-desc { font-size:.73rem; color:var(--muted); line-height:1.6; margin-bottom:.7rem; }
+.archive-card-links { display:flex; gap:.5rem; flex-wrap:wrap; }
+.archive-link {
+  font-size:.68rem; color:var(--green); text-decoration:none;
+  border:1px solid rgba(57,255,110,.25); padding:.18rem .55rem;
+  background:rgba(57,255,110,.04); letter-spacing:.04em;
+  transition:all .2s;
+}
+.archive-link:hover { background:rgba(57,255,110,.12); border-color:var(--green); }
+.archive-link.dim { color:var(--info); border-color:rgba(76,194,255,.25); background:rgba(76,194,255,.04); }
+.archive-link.dim:hover { background:rgba(76,194,255,.12); border-color:var(--info); }
+.archive-num { position:absolute; top:.6rem; right:.8rem; font-size:.62rem; color:var(--border); letter-spacing:.05em; }
+footer span { color:var(--green); }
 
-    /* Ensure the hover effect works on the mobile links as well */
-    #mobileMenu a {
-        position: relative;
-        display: inline-block;
-        text-decoration: none;
-    }
-    #mobileMenu a::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--text-color);
-        transform: scaleX(0); /* A scaling effect looks good on mobile */
-        transition: transform 0.3s ease-in-out;
-    }
-    #mobileMenu a:hover::after,
-    #mobileMenu a:focus::after {
-        transform: scaleX(1);
-    }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:#050a06; }
+::-webkit-scrollbar-thumb { background:var(--green-dim); border-radius:2px; }
+::selection { background:var(--green); color:#000; }
 
-    /* progress bar styling */
-    .skill-bar {
-        background: var(--skill-bar-bg);
-        height: 8px;
-        border-radius: 4px;
-        overflow: hidden;
-        transition: background 0.4s ease;
-    }
+#modal { position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); }
+#modal.open { display:flex; }
+.modal-inner { max-width:640px; width:90%; }
+.modal-glass { background:var(--win-bg); border:1px solid var(--border); border-radius:10px; padding:2rem; position:relative; }
 
-    .skill-fill {
-        height: 100%;
-        background: linear-gradient(90deg, var(--orange-1), var(--orange-2));
-        box-shadow: 0 0 10px rgba(255, 126, 41, 0.8), 0 0 20px rgba(255, 126, 41, 0.6);
-        transition: width 1.5s ease-in-out;
-        border-radius: 12px;
-    }
+.hidden { display:none !important; }
 
-    /* modal */
-    .modal-backdrop {
-        background: var(--modal-backdrop);
-        transition: background 0.4s ease;
-    }
-
-    /* responsive tweaks */
-    @media (max-width: 840px){
-        /* The nav-links should still be hidden on mobile */
-        .nav-links { display: none; } 
-    }
-
-    @media (min-width: 700px){
-        .nav-mobile { display: none; }
-        /* The nav-mobile-menu should also be hidden on desktop */
-        .nav-mobile-menu { display: none; }
-        /* Show the main nav links on desktop */
-        .nav-links { display: flex; }
-    }
-
-/* Circular Progress Bar Styles */
-
-    .circular-progress-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .circular-progress-container {
-        position: relative;
-        width: 120px;
-        height: 120px;
-    }
-
-    .circular-progress-svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transform: rotate(-90deg); /* Start at 12 o'clock */
-    }
-
-    .circular-progress-bg, .circular-progress-fill {
-        fill: none;
-        stroke-width: 10;
-    }
-
-    .circular-progress-bg {
-        stroke: var(--stoke-color);
-    }
-
-    .circular-progress-fill {
-        stroke: url(#gradientOrange);
-        stroke-linecap: round;
-        /* We'll use JavaScript to set the stroke-dashoffset to the correct value */
-        transition: stroke-dashoffset 1.5s ease-out; /* Animation duration */
-    }
-
-    /* The percentage text is absolutely centered over the SVG */
-    .circular-progress-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); /* Centering trick */
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: var(--text-color);
-    }
-
-    /* The label is a separate element, placed below the circle */
-    .circular-progress-label {
-        margin-top: 10px; /* Space between the circle and label */
-        font-size: 0.9rem;
-        text-align: center;
-        color: var(--text-color);
-    }
-
+@media(max-width:600px){
+  .term-body { padding:.85rem .95rem; font-size:.73rem; }
+  .iterm-output { padding:.85rem .95rem; }
+  .iterm-inputrow { padding:.55rem .95rem; }
+  .iterm-hint { padding:.3rem .95rem .5rem; }
+  .skill-name { min-width:8rem; }
+  .wk { min-width:8rem; }
+  .ls-perm { display:none; }
+}
 </style>
-
 </head>
-<body class="text-gray-900">
-    <canvas id="starsCanvas"></canvas>
-    <img src="cursor-dark.png" id="customCursor" class="custom-cursor">
+<body>
 
-    <!-- Door icon button initially hidden -->
-    <button 
-        id="exitStarView" 
-        title="Exit star view"
-        aria-label="Exit starry night view"
-        class="glass hidden fixed bottom-5 right-5 z-[9999] text-color rounded-3xl p-3 backdrop-blur-sm border border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-[var(--hover-color)] transition"
-        style="cursor: none;">
-        
-        <!-- Door icon -->
-        <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            class="h-6 w-6" 
-            fill="none" 
-            stroke="currentColor" 
-            stroke-width="1.8" 
-            viewBox="0 0 24 24" 
-            stroke-linecap="round" 
-            stroke-linejoin="round">
-            
-            <!-- Door frame -->
-            <rect x="7" y="2" width="10" height="20" rx="1" ry="1" />
-            
-            <!-- Door knob -->
-            <circle cx="15" cy="12" r="0.8" fill="currentColor" />
-        </svg>
-    </button>
+<canvas id="starsCanvas"></canvas>
+<div id="customCursor" class="custom-cursor"><div class="custom-cursor-inner"></div></div>
 
-    <div class="main_div" id="pageContent">
-        <!-- NAVBAR -->
-        <header class="fixed w-full z-50 top-0">
-            <nav class="grad nav-backdrop py-3 glass-navbar card-shadow">
-            <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <!-- Left section -->
-            <div class="flex items-center gap-4">
-                <div title="Hi! It's me!" class="text-color rounded-md px-3 py-2 font-semibold text-lg">
-                    <img src="icon.png" alt="Logo" class="navbar-logo">
-                </div>
+<button id="exitStarView" title="Exit star view" class="hidden">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="7" y="2" width="10" height="20" rx="1"/>
+    <circle cx="15" cy="12" r="0.8" fill="currentColor"/>
+  </svg>
+</button>
 
-                <!-- Theme toggle button -->
-                <button title="Toggle Theme" id="themeToggle" class="text-color p-2 rounded-lg hover:bg-[var(--hover-color)]">
-                    <!-- Sun icon (light mode) -->
-                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/>
-                    </svg>
+<div id="pageContent">
 
-                    <!-- Moon icon (dark mode) -->
-                    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-                    </svg>
-                </button>
-                
-                <button id="telescopeToggle" 
-                    class="text-color p-2 rounded-lg hover:bg-[var(--hover-color)] focus:outline-none focus:ring-2 focus:ring-white/30 ml-2" 
-                    title="View starry night">
-                    <!-- Telescope SVG icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" 
-                        class="h-6 w-6" 
-                        fill="none" 
-                        viewBox="0 0 20 22" 
-                        stroke="currentColor" 
-                        stroke-width="1.5" 
-                        stroke-linecap="round" 
-                        stroke-linejoin="round">
-                        <path d="M14.2002 1.62099C15.0062 1.15299 15.4102 0.918989 15.8052 1.02499C16.2012 1.13199 16.4342 1.53699 16.9002 2.34799L18.3822 4.92799C18.8482 5.73899 19.0812 6.14499 18.9752 6.54199C18.8692 6.93999 18.4652 7.17399 17.6582 7.64199L14.2352 9.62799C13.4282 10.096 13.0252 10.331 12.6292 10.224C12.2342 10.117 12.0012 9.71199 11.5352 8.90099L10.0532 6.32099C9.58719 5.50999 9.35319 5.10399 9.46019 4.70699C9.56719 4.30999 9.97019 4.07599 10.7762 3.60699L14.2002 1.62099Z"/>
-                        <path d="M9.55956 5.45999L12.0296 9.76099L8.60656 11.748C7.79956 12.216 7.39656 12.45 7.00056 12.343C6.60556 12.237 6.37256 11.831 5.90656 11.021L5.41256 10.161C4.94656 9.34999 4.71256 8.94399 4.81956 8.54699C4.92556 8.14899 5.32956 7.91499 6.13556 7.44699L9.55956 5.45999Z"/>
-                        <path d="M5.5004 21L10.0004 11L14.5004 21M4.9184 9.29999L6.4004 11.88L3.4044 13.62C3.0064 13.851 2.8064 13.967 2.6114 13.993C2.35166 14.0254 2.08957 13.9547 1.8814 13.796C1.7254 13.676 1.6104 13.476 1.3794 13.074C1.1494 12.674 1.0344 12.474 1.0094 12.277C0.975346 12.0162 1.0454 11.7525 1.2044 11.543C1.3244 11.386 1.5244 11.271 1.9224 11.039L4.9184 9.29999Z"/>
-                    </svg>
-                </button>
+<header>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">M<span class="dot-red">.</span>ASIF <span style="animation:blink 1s step-end infinite;display:inline-block;width:7px;height:13px;background:var(--green);vertical-align:-1px;"></span></a>
+      <ul class="nav-links">
+        <li><a href="#about">about</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#certifications">certs</a></li>
+        <li><a href="#experience">experience</a></li>
+        <li><a href="#archive">archive</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button title="Toggle Theme" id="themeToggle" class="icon-btn">
+          <svg id="sunIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a4 4 0 100 8 4 4 0 000-8zM12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/></svg>
+          <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        </button>
+        <button id="telescopeToggle" class="icon-btn" title="View stars">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.2 1.62C15 1.15 15.41.92 15.81 1.03c.4.11.63.52 1.1 1.33l1.48 2.58c.47.81.7 1.22.59 1.62-.11.4-.51.63-1.32 1.1l-3.42 1.99c-.81.47-1.21.7-1.61.59-.39-.11-.63-.52-1.09-1.33L10.05 6.3c-.47-.81-.7-1.21-.59-1.61.11-.4.51-.63 1.32-1.1L14.2 1.62Z"/>
+            <path d="M9.56 5.46l2.47 4.3L8.61 11.75c-.81.47-1.21.7-1.61.59-.39-.11-.63-.52-1.09-1.33L5.41 10.16C4.94 9.35 4.71 8.94 4.82 8.55c.11-.4.51-.63 1.32-1.1L9.56 5.46Z"/>
+            <path d="M5.5 21L10 11l4.5 10M4.92 9.3l1.48 2.58-3 1.74c-.4.23-.6.35-.79.37-.26.03-.52-.04-.73-.2-.16-.12-.27-.32-.5-.72-.23-.4-.34-.6-.37-.79-.03-.26.04-.52.2-.73.12-.16.33-.28.72-.51L4.92 9.3Z"/>
+          </svg>
+        </button>
+        <button id="navToggle" class="icon-btn nav-mobile" title="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#certifications">certs</a>
+      <a href="#experience">experience</a>
+      <a href="#archive">archive</a>
+      <a href="#contact">contact</a>
+    </div>
+  </nav>
+</header>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section class="hero-sec">
+    <div class="hero-cols reveal">
+      <div class="hero-left">
+        <div class="term-win">
+          <div class="term-titlebar">
+            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+            <span class="term-tab">bash — root@kali: ~ — 120×36</span>
+          </div>
+          <div class="iterm-wrap">
+            <div class="iterm-output" id="itermOutput"></div>
+            <div class="iterm-hint" id="itermHint">type <span style="color:var(--green)">help</span> for available commands</div>
+            <div class="iterm-inputrow">
+              <span class="iterm-prompt-label">┌──(root㉿kali)-[~]<br>└─#&nbsp;</span>
+              <input class="iterm-input" id="itermInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type a command...">
             </div>
-
-            <!-- Hamburger button (mobile) -->
-            <button id="navToggle" class="nav-mobile text-color p-2 rounded-lg hover:bg-[var(--hover-color)] focus:outline-none focus:ring-2 focus:ring-white/30">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-
-                <ul class="nav-links md:flex items-center gap-6 text-color font-medium">
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#contact">Contact Me</a></li>
-                </ul>
-            </div>
-
-            <!-- mobile menu -->
-            <div id="mobileMenu" class="nav-mobile-menu md:hidden border-t border-white/10 mt-3">
-                <div class="px-6 py-4 flex flex-col gap-3 text-color">
-                    <a href="#about" class="py-2">About</a>
-                    <a href="#skills" class="py-2">Skills</a>
-                    <a href="#experience" class="py-2">Experience</a>
-                    <a href="#contact" class="py-2">Contact Me</a>
-                </div>
-            </div>
-            </nav>
-        </header>
-
-        <!-- HERO (orange card on white bg) -->
-            <section class="pt-28 pb-20">
-                <div class="max-w-6xl mx-auto px-6">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="flex-1 text-color">
-                            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Mahir Asif</h1>
-                            <p class="mt-2 text-lg md:text-xl text-color">Intern Penetration Tester | Cybersecurity Student</p>
-
-                            <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                                <a href="#contact"
-                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8L12 13 3 8v9a2 2 0 002 2z" />
-                                    </svg>
-                                    Email / Contact
-                                </a>
-
-                                <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer"
-                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.75 19h-2.5v-8h2.5v8zm-1.25-9.15c-.81 0-1.34-.56-1.34-1.26 0-.71.54-1.26 1.36-1.26.81 0 1.35.55 1.36 1.26 0 .7-.55 1.26-1.38 1.26zm12 9.15h-2.5v-4.25c0-1.07-.38-1.8-1.33-1.8-.73 0-1.16.49-1.35.96-.07.17-.09.4-.09.63v4.46h-2.5s.03-7.24 0-8h2.5v1.12c.33-.51.92-1.24 2.24-1.24 1.64 0 2.87 1.07 2.87 3.36v4.76z" />
-                                    </svg>
-                                    LinkedIn
-                                </a>
-
-                                <a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer"
-                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.465-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.772.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.799 24 17.309 24 12c0-6.627-5.373-12-12-12z" />
-                                    </svg>
-                                    GitHub
-                                </a>
-
-                                <a href="Mahir_Asif_CV.pdf" download="Mahir_Asif_CV.pdf"
-                                    class="glass inline-flex items-center gap-3 py-2 px-4 text-color hover:scale-105 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                    Download CV
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        <main class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
-
-            <!-- ABOUT -->
-            <section id="about" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <div class="md:flex md:gap-8">
-                    <div class="md:flex-1">
-                    <h2 class="text-3xl font-bold text-color">About Me</h2>
-                    <p class="mt-3 text-color leading-relaxed">
-                        Hi! I am Mahir Asif, a final year Cybersecurity student at Asia Pacific International University (APU), Malaysia.
-                        <br><br>
-                        An enthusiastic cybersecurity aspirant passionate about Penetration testing, specializing in webapplication based pentester. Actively learning through Labs simulating real world scenarios and persuing recognised certifications like CPTS, CWPT & CWEE.
-                    </p>
-                    </div>
-
-                    <div class="md:w-1/4 mt-6 md:mt-0">
-                    <div class="glass p-4 rounded-lg text-color text-sm">
-                        <h4 class="font-semibold">Core Summary</h4>
-                        <ul class="mt-2 space-y-1">
-                        <li>$ Hands-on Web application pentesting</li>
-                        <li>$ SIEM monitoring (MSSGard) & alert analysis</li>
-                        <li>$ Azure and AWS Configuration analysis</li>
-                        </ul>
-                    </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SKILLS -->
-            <section id="skills" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Core Skills</h2>
-                <div class="mt-6 grid md:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                    <div class="text-color">
-                        <h3 class="font-semibold">Technical Skills</h3>
-                        <ul class="mt-2 list-disc list-inside text-color/90">
-                        <li>Vulnerability Assessment</li>
-                        <li>Web Exploitation & Pentesting</li>
-                        <li>Bash Scrpting & Custom tool</li>
-                        <li>Linux & Windows Command Line</li>
-                        <li>IDS & IPS, Security Monitoring, IAM</li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4 text-color">
-                        <h3 class="font-semibold">Soft Skills</h3>
-                        <ul class="mt-2 list-disc list-inside text-color/90">
-                        <li>Teamwork & Communication</li>
-                        <li>Operational Efficiency, Research & Documentation</li>
-                        <li>Problem-solving, Creative & Analytical Thinking</li>
-                        </ul>
-                    </div>
-                    </div>
-
-                    <div class="space-y-4">
-                    <div>
-                        <div class="flex items-center justify-between text-color mb-2">
-                        <div class="font-medium">Linux Administration</div>
-                        <div class="text-sm">76%</div>
-                        </div>
-                        <div class="skill-bar">
-                        <div class="skill-fill" data-fill="76%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between text-color mb-2">
-                        <div class="font-medium">Security Tool Mastery</div>
-                        <div class="text-sm">60%</div>
-                        </div>
-                        <div class="skill-bar">
-                        <div class="skill-fill" data-fill="60%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between text-color mb-2">
-                        <div class="font-medium">Networking</div>
-                        <div class="text-sm">56%</div>
-                        </div>
-                        <div class="skill-bar">
-                        <div class="skill-fill" data-fill="56%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between text-color mb-2">
-                        <div class="font-medium">Programming & Scripting</div>
-                        <div class="text-sm">78%</div>
-                        </div>
-                        <div class="skill-bar">
-                        <div class="skill-fill" data-fill="78%"></div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-            <!-- PROGRAMMING PROFICIENCY -->
-                <h2 class="text-3xl font-bold text-color mt-6">Programming Proficiency</h2>
-                <svg width="0" height="0">
-                    <defs>
-                        <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:var(--orange-1);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:var(--orange-2);stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-
-                <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 justify-items-center">
-                    <div class="circular-progress-item">
-                        <div class="circular-progress-container">
-                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="80"></circle>
-                            </svg>
-                            <div class="circular-progress-text">0%</div>
-                        </div>
-                        <div class="circular-progress-label text-color">Python</div>
-                    </div>
-
-                    <div class="circular-progress-item">
-                        <div class="circular-progress-container">
-                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="60"></circle>
-                            </svg>
-                            <div class="circular-progress-text">0%</div>
-                        </div>
-                        <div class="circular-progress-label text-color">C</div>
-                    </div>
-
-                    <div class="circular-progress-item">
-                        <div class="circular-progress-container">
-                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="75"></circle>
-                            </svg>
-                            <div class="circular-progress-text">0%</div>
-                        </div>
-                        <div class="circular-progress-label text-color">Java</div>
-                    </div>
-
-                    <div class="circular-progress-item">
-                        <div class="circular-progress-container">
-                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="50"></circle>
-                            </svg>
-                            <div class="circular-progress-text">0%</div>
-                        </div>
-                        <div class="circular-progress-label text-color">C++</div>
-                    </div>
-
-                    <div class="circular-progress-item">
-                        <div class="circular-progress-container">
-                            <svg class="circular-progress-svg" viewBox="0 0 100 100">
-                                <circle class="circular-progress-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="circular-progress-fill" cx="50" cy="50" r="45" data-percentage="35"></circle>
-                            </svg>
-                            <div class="circular-progress-text">0%</div>
-                        </div>
-                        <div class="circular-progress-label text-color">Assembly x86</div>
-                    </div>
-                </div>
-        </section>
-
-            <!-- PROJECTS -->
-            <section id="projects" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Projects</h2>
-
-                <div class="mt-6 grid md:grid-cols-2 gap-6">
-                    <!-- Project Card -->
-                    <article class="glass p-5 rounded-lg text-color card-shadow">
-                    <h3 class="text-xl font-semibold">Secure Client-Server Network (Linux-based)</h3>
-                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
-                    <ul class="mt-3 list-disc pl-5 text-color/90">
-                        <li>Configured client-server network using Rocky Linux and Ubuntu with static IPs.</li>
-                        <li>Implemented NFS file sharing and Apache secured with SSL/TLS.</li>
-                        <li>Added Fail2Ban for brute-force protection and tested SSH login simulations.</li>
-                    </ul>
-                    </article>
-
-                    <article class="glass p-5 rounded-lg text-color card-shadow">
-                    <h3 class="text-xl font-semibold">Secure Mail Server with Spam Filtering</h3>
-                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Feb 2025</strong></p>
-                    <ul class="mt-3 list-disc pl-5 text-color/90">
-                        <li>Set up Postfix, Dovecot and SpamAssassin on Rocky Linux.</li>
-                        <li>Enabled SSL/TLS authentication and successful end-to-end testing via Thunderbird.</li>
-                    </ul>
-                    </article>
-
-                    <article class="glass p-5 rounded-lg text-color card-shadow">
-                    <h3 class="text-xl font-semibold">Implemented a Honeypot + IDS in lab environment</h3>
-                    <p class="mt-2 text-sm text-color/90"><strong>Jul 2025</strong></p>
-                    <ul class="mt-3 list-disc pl-5 text-color/90">
-                        <li>Deployed Snort IDS and a honeypot on Ubuntu to monitor suspicious traffic.</li>
-                        <li>Simulated attacks from Kali Linux to test detection and verify logs.</li>
-                    </ul>
-                    </article>
-
-                    <article class="glass p-5 rounded-lg text-color card-shadow">
-                    <h3 class="text-xl font-semibold">Engineered a Secure, Scalable Enterprise Network</h3>
-                    <p class="mt-2 text-sm text-color/90"><strong>Jan 2025 - Mar 2025</strong></p>
-                    <ul class="mt-3 list-disc pl-5 text-color/90">
-                        <li>Designed network across KL & Australia branches with VLANs, ACLs, EtherChannel and OSPF.</li>
-                        <li>Enforced strong security policies and ensured interconnectivity and performance.</li>
-                    </ul>
-                    </article>
-
-                    <article class="glass p-5 rounded-lg text-color card-shadow">
-                    <h3 class="text-xl font-semibold">Food Ordering Application</h3>
-                    <p class="mt-2 text-sm text-color/90"><strong>Dec 2024 - Mar 2025</strong></p>
-                    <ul class="mt-3 list-disc pl-5 text-color/90">
-                        <li>Built Java-based ordering app with role-based auth, payments, cart and order tracking.</li>
-                    </ul>
-                    </article>
-                </div>
-            </section>
-
-            <!-- CERTIFICATIONS -->
-            <section id="certifications" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Certifications</h2>
-                <div class="mt-4 grid md:grid-cols-2 gap-4">
-                    <div class="glass p-4 rounded-lg text-color">
-                        <h4 class="font-semibold">Cybersecurity for Students — LetsDefend</h4>
-                        <p class="text-sm mt-2">Learning Path — Jan 2025</p>
-                        <a target="_blank" rel="noreferrer" href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">View Certificate</b></a>
-                    </div>
-
-                    <div class="glass p-4 rounded-lg text-color">
-                        <h4 class="font-semibold">RH124 — Red Hat</h4>
-                        <p class="text-sm mt-2">Red Hat System Administration — Jan 2025</p>
-                    </div>
-
-                    <div class="glass p-4 rounded-lg text-color">
-                        <h4 class="font-semibold">RH134 — Red Hat</h4>
-                        <p class="text-sm mt-2">Red Hat System Administration — Dec 2025</p>
-                        <a target="_blank" rel="noreferrer" href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">View Certificate</b></a>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- ACHIEVEMENTS -->
-            <section id="achievements" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Achievements</h2>
-                <ul class="mt-4 list-disc pl-5 text-color">
-                    <li>Analyzed and triaged 50+ security alerts in SOC environment.</li>
-                    <li>Created and responded to tickets in accordance with SOC SLA guidelines.</li>
-                    <li>Designed promotional materials for a university Cyber Talk and supported awareness around cybersecurity (Technical & Graphics Coordinator).</li>
-                    <li>Worked with the first Cybersecurity-as-a-service Lisenced University Intern.
-                        <a target="_blank" rel="noreferrer" href="https://thesun.my/education/licensed-to-deliver-professional-cybersecurity/" class="mt-3 inline-block text-sm text-color"><b style="color: rgba(255, 41, 41, 0.75);">Read here</b></a>
-                    </li>
-                </ul>
-            </section>
-
-            <!-- WORK EXPERIENCE -->
-            <section id="experience" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Work Experience</h2>
-
-                <div class="mt-4 space-y-6">
-
-                    <div class="glass p-5 rounded-lg text-color">
-                    <h3 class="text-xl font-semibold">FSeC Asia Pacific University of Technology and Innovation (APU / APIIT)</h3>
-                    <p class="text-sm mt-1">Oct 2025 - Jan 2026 · Greater Kuala Lumpur, Malaysia</p>
-                    <ul class="list-disc pl-5 mt-3 text-color/90">
-                        <li>Conducted Real world Forensics Researches.</li>
-                        <li>Assisted with pentesting for Webapp and API for an Australian Company & Malaysian Government</li>
-                        <li>Assisted with AWS & AZURE based server configuration checkings.</li>
-                    </ul>
-                    </div>
-
-                    <div class="glass p-5 rounded-lg text-color">
-                    <div class="flex items-start justify-between">
-                        <div>
-                        <h3 class="text-xl font-semibold">SOC Intern — Asia Pacific University of Technology and Innovation (APU / APIIT)</h3>
-                        <p class="text-sm mt-1">Jul 2025 - Nov 2025 · Greater Kuala Lumpur, Malaysia</p>
-                        </div>
-                    </div>
-                    <ul class="list-disc pl-5 mt-3 text-color/90">
-                        <li>Participated in APU’s SIEM Elite Program, utilizing MSSGard to monitor security events and perform incident triage following documented runbooks.</li>
-                        <li>Analyzed 50+ security alerts and created/responded to tickets via internal ticketing system in accordance with SOC SLA guidelines.</li>
-                        <li>Performed basic investigation and initial containment procedures using Linux command line and documented all triage actions.</li>
-                    </ul>
-                    </div>
-
-                    <div class="glass p-5 rounded-lg text-color">
-                    <h3 class="text-xl font-semibold">Graphic Designer — MD Infotech</h3>
-                    <p class="text-sm mt-1">Dec 2022 · Rajshahi, Bangladesh</p>
-                    <ul class="list-disc pl-5 mt-3 text-color/90">
-                        <li>Created an animated explanatory video for MD Infotech, visualizing a future company project.</li>
-                        <li>Conceptualized company's future project and translated technical specifications into visuals — increased stakeholder engagement by ~30%.</li>
-                    </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- VOLUNTEER -->
-            <section id="volunteer" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Volunteer</h2>
-
-                <div class="mt-4 glass p-4 rounded-lg text-color">
-                    <h4 class="font-semibold">FSeC APU Student Open Day Organize and Management Assistant</h4>
-                    <p class="text-sm mt-1">Nov 2025</p>
-                    <p class="mt-2 text-color/90">Assisted and represented APU's FSeC Department in University Open day.</p>
-                </div>
-                <div class="mt-4 glass p-4 rounded-lg text-color">
-                    <h4 class="font-semibold">Technical & Graphics Coordinator — Asia Pacific International University</h4>
-                    <p class="text-sm mt-1">Jul 2025</p>
-                    <p class="mt-2 text-color/90">Contributed to organizing a university Cyber Talk by designing promotional materials. Demonstrated teamwork, time management, and creativity while supporting awareness around cybersecurity.</p>
-                </div>
-            </section>
-
-            <!-- EDUCATION -->
-            <section id="education" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Education</h2>
-                <div class="mt-4 glass p-4 rounded-lg text-color">
-                    <h4 class="font-semibold">Asia Pacific University of Technology and Innovation (APU / APIIT) / De Montfort University (UK)</h4>
-                    <p class="text-sm mt-1">Nov 2023 - Nov 2026</p>
-                    <p class="mt-2"><strong>Bachelor of Computer Science with Specialism in Cybersecurity</strong> — CGPA: 3.41</p>
-                    <p class="mt-2 text-color/90">Courses: Network Security (Firewall, Web Proxy, IDS, IPS, IAM), Programming (Python Automation, C, Assembly), Red Hat Administration (Privileged Access Monitoring, Access Control), Red Teaming (API Pentesting, Web Exploitation).</p>
-                </div>
-            </section>
-
-            <!-- LANGUAGES -->
-            <section id="languages" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Languages</h2>
-                <p class="mt-3 text-color">01 | &emsp;Bangla (Native)</p>
-                <p class="mt-3 text-color">02 | &emsp;English (Fluent)</p>
-                <p class="mt-3 text-color">03 | &emsp;Hindi & Urdu (Basic)</p>
-                <p class="mt-3 text-color">04 | &emsp;Arabic (Basic)</p>
-                <p class="mt-3 text-color">05 | &emsp;Japanese (Basic)</p>
-                <p class="mt-3 text-color">06 | &emsp;Bahasa Malayu (Basic)</p>
-            </section>
-
-            <!-- INTERESTS -->
-            <section id="interests" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Interests</h2>
-                <ul class="mt-3 list-disc pl-5 text-color">
-                    <li>&emsp;Coding & Low-Level Programming</li>
-                    <li>&emsp;Project Building & Side Hustles</li>
-                    <li>&emsp;Fitness & Self-Improvement</li>
-                    <li>&emsp;Brain Storming & Business Ideas</li>
-                    <li>&emsp;Cybersecurity & Ethical Hacking</li>
-                    <li>&emsp;Creative Thinking & Design</li>
-                </ul>
-            </section>
-
-            <!-- CONTACT -->
-            <section id="contact" class="grad glass card-shadow p-8 rounded-2xl reveal">
-                <h2 class="text-3xl font-bold text-color">Contact</h2>
-                <div class="mt-4 md:flex md:gap-6">
-                    <div class="md:flex-1 glass p-4 rounded-lg text-color">
-                    <p><strong>Email:</strong> <span id="email2">asifmahir907@gmail.com</span></p>
-                    <p class="mt-2"><strong>Phone:</strong> +60 133329115</p>
-                    <p class="mt-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer" class="underline">linkedin.com/in/mahir907</a></p>
-                    <p class="mt-2"><strong>Address:</strong> Serdang Raya Utara, Selangor, 43300, Malaysia</p>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="grad text-color py-6">
-            <div class="max-w-6xl mx-auto px-6 text-center">
-            <p>&copy; Developed by Mahir Asif . 2025</p>
-            </div>
-        </footer>
-
-        <!-- Modal placeholder (project details) -->
-        <div id="modal" class="fixed inset-0 hidden items-center justify-center z-60">
-            <div class="modal-backdrop absolute inset-0"></div>
-            <div class="relative z-50 max-w-3xl w-full p-6">
-            <div class="glass p-6 rounded-xl text-color card-shadow">
-                <button id="modalClose" class="absolute top-4 right-6 bg-white/10 px-3 py-1 rounded-md">Close</button>
-                <div id="modalContent"></div>
-            </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="hero-right">
+        <div class="term-win" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div class="term-titlebar">
+            <span class="dot dot-r" id="photoMinBtn" style="cursor:pointer;" title="Minimize"></span>
+            <span class="dot dot-y"></span>
+            <span class="dot dot-g" id="photoMaxBtn" style="cursor:pointer;" title="Restore"></span>
+            <span class="term-tab">bash — ~/profile.jpg</span>
+          </div>
+          <div class="photo-term" id="photoTermBody">
+            <div class="photo-img-wrap">
+              <img src="profile.jpeg" alt="Mahir Asif"
+                onerror="this.outerHTML='<div class=\'photo-img-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg><span>profile.jpg</span></div>'">
+            </div>
+            <div style="padding:.45rem 1rem;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted);display:flex;justify-content:space-between;flex-shrink:0;">
+              <span><span style="color:var(--green)">mahir@kali</span>:~/profile.jpg</span>
+              <span style="color:var(--green)">● OPEN TO WORK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sections">
+
+    <!-- ABOUT -->
+    <div class="term-win reveal" id="about">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/about — cat profile.txt</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/about$</span> <span class="whc">cat profile.txt</span></p>
+        <span class="blank"></span>
+        <p style="line-height:1.9;max-width:700px;font-size:.8rem;">
+          Hi, I'm <span class="whc">Mahir Asif</span> — a final-year <span class="gc">Cybersecurity student</span> at Asia Pacific University of Technology and Innovation (<span class="gc">APU</span>), Malaysia, pursuing a BSc dual-awarded with De Montfort University, UK.<br><br>
+          I'm a <span class="orc">certified eJPT penetration tester</span> specializing in <span class="gc">web application security, API testing, and network exploitation</span>. With real-world experience assisting engagements for an Australian company and Malaysian government clients, I bring a hands-on offensive security mindset backed by SOC operations exposure and Linux administration proficiency.<br><br>
+          I'm actively building toward <span class="blc">eCPPT / OSCP</span> and pursuing advanced offensive security certifications. My approach combines methodical reconnaissance, manual exploitation, and clear technical reporting.
+        </p>
+        <span class="blank"></span>
+        <hr class="sep">
+        <p><span class="prompt-label">root@kali:~/about$</span> <span class="whc">cat core_competencies.txt</span></p>
+        <span class="blank"></span>
+        <span class="output-line"><span class="gc">$</span> Web App &amp; API Penetration Testing</span>
+        <span class="output-line"><span class="gc">$</span> Network Vulnerability Assessment</span>
+        <span class="output-line"><span class="gc">$</span> SIEM Monitoring &amp; Incident Triage</span>
+        <span class="output-line"><span class="gc">$</span> Cloud Config Review (AWS / Azure)</span>
+        <span class="output-line"><span class="gc">$</span> Linux Privilege Escalation</span>
+        <span class="output-line"><span class="gc">$</span> Python &amp; Bash Tool Development</span>
+      </div>
     </div>
 
-  <script>
-    const cursor = document.getElementById('customCursor');
-    document.addEventListener('mousemove', e => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-    });
+    <!-- SKILLS -->
+    <div class="term-win reveal" id="skills">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/skills — nmap scan</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/skills$</span> <span class="whc">nmap -sV --script=proficiency-scan mahir.local</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-03-24 09:42 MYT</span>
+        <span class="output-line muc">Nmap scan report for mahir.local (192.168.69.1)</span>
+        <span class="output-line gc">[+] Host is up (0.0011s latency).</span>
+        <span class="blank"></span>
+        <span class="output-line muc">PORT      STATE  SERVICE             VERSION</span>
+        <span class="output-line muc">──────────────────────────────────────────────────────────────</span>
+        <div style="margin:.5rem 0 1rem;">
+          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">022/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">linux-administration</span><span class="skill-track"><div class="skill-fill" data-fill="76"></div></span><span class="skill-pct">76%</span></div>
+          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">080/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">web-app-pentesting</span><span class="skill-track"><div class="skill-fill" data-fill="72"></div></span><span class="skill-pct">72%</span></div>
+          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">443/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">security-tool-mastery</span><span class="skill-track"><div class="skill-fill" data-fill="65"></div></span><span class="skill-pct">65%</span></div>
+          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">8080/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">networking-protocols</span><span class="skill-track"><div class="skill-fill" data-fill="58"></div></span><span class="skill-pct">58%</span></div>
+          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">9090/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">python-bash-scripting</span><span class="skill-track"><div class="skill-fill" data-fill="78"></div></span><span class="skill-pct">78%</span></div>
+        </div>
+        <span class="output-line muc">Script results:</span>
+        <span class="blank"></span>
+        <span class="output-line"><span class="blc">|</span> <span class="orc">Offensive Security</span></span>
+        <div class="tag-grid" style="padding-left:1.2rem;">
+          <span class="stag red">Web App Pentesting</span><span class="stag red">API Security Testing</span>
+          <span class="stag red">OWASP Top 10</span><span class="stag red">SQL Injection</span>
+          <span class="stag red">XSS / CSRF</span><span class="stag red">Metasploit</span>
+          <span class="stag red">Burp Suite</span><span class="stag red">Nmap / Nessus</span>
+          <span class="stag red">Privilege Escalation</span><span class="stag red">Recon &amp; OSINT</span>
+        </div>
+        <span class="blank"></span>
+        <span class="output-line"><span class="blc">|</span> <span class="blc">Defensive / Infrastructure</span></span>
+        <div class="tag-grid" style="padding-left:1.2rem;">
+          <span class="stag blue">SIEM (MSSGard)</span><span class="stag blue">IDS/IPS (Snort)</span>
+          <span class="stag blue">Incident Response</span><span class="stag blue">Linux Administration</span>
+          <span class="stag blue">Firewall &amp; ACL</span><span class="stag blue">IAM / PAM</span>
+          <span class="stag blue">AWS / Azure Review</span><span class="stag blue">Network Forensics</span>
+          <span class="stag blue">SSL/TLS Hardening</span><span class="stag blue">Vulnerability Mgmt</span>
+        </div>
+        <span class="blank"></span>
+        <span class="output-line muc">Nmap done: 1 IP address (1 host up) scanned in 3.21 seconds</span>
+        <hr class="sep" style="margin-top:1.2rem;">
+        <p style="margin-top:.8rem;"><span class="prompt-label">root@kali:~/skills$</span> <span class="whc">python3 lang_profiler.py</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">[*] Scanning programming language proficiency...</span>
+        <span class="blank"></span>
+        <svg width="0" height="0">
+          <defs>
+            <linearGradient id="gradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#1aaa44;stop-opacity:1"/>
+              <stop offset="100%" style="stop-color:#39ff6e;stop-opacity:1"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="prog-grid">
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="80"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Python</div></div>
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="75"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Java</div></div>
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="70"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">JavaScript</div></div>
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="60"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">C</div></div>
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="50"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">C++</div></div>
+          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="35"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Assembly x86</div></div>
+        </div>
+        <span class="blank"></span>
+        <span class="output-line gc">[+] Scan complete. 6 languages enumerated.</span>
+      </div>
+    </div>
 
-    /* NAV TOGGLE (mobile) */
-    const navToggle = document.getElementById('navToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    navToggle?.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-    });
+    <!-- PROJECTS -->
+    <div class="term-win reveal" id="projects">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/projects — ls -la</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/projects$</span> <span class="whc">ls -la && cat */README.md</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">total 5 projects — drwxr-xr-x  mahir mahir</span>
+        <span class="blank"></span>
+        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">secure-client-server-network/</span></div>
+        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
+          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
+          <span class="output-line">├─ Rocky Linux + Ubuntu with static IPs and <span class="blc">NFS</span> file sharing</span>
+          <span class="output-line">├─ <span class="gc">Apache</span> secured with SSL/TLS · <span class="orc">Fail2Ban</span> for brute-force protection</span>
+          <span class="output-line">└─ Simulated SSH login attacks and validated detection controls</span>
+        </div>
+        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Feb 2025</span><span class="ls-name">secure-mail-server/</span></div>
+        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
+          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
+          <span class="output-line">├─ <span class="gc">Postfix</span>, <span class="gc">Dovecot</span> and <span class="gc">SpamAssassin</span> on Rocky Linux</span>
+          <span class="output-line">└─ SSL/TLS auth enforced · end-to-end validated via Thunderbird</span>
+        </div>
+        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Jul 2025</span><span class="ls-name">honeypot-ids-lab/</span></div>
+        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
+          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
+          <span class="output-line">├─ <span class="orc">Snort IDS</span> + honeypot on Ubuntu to monitor suspicious traffic</span>
+          <span class="output-line">└─ Launched <span class="erc">Kali Linux</span> attack simulations · verified alert generation and log integrity</span>
+        </div>
+        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">enterprise-network-design/</span></div>
+        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
+          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
+          <span class="output-line">├─ Multi-branch topology (KL &amp; Australia): <span class="blc">VLANs, ACLs, EtherChannel, OSPF</span></span>
+          <span class="output-line">└─ Enforced security policies ensuring inter-branch connectivity and performance SLAs</span>
+        </div>
+        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">food-ordering-app/</span></div>
+        <div style="padding:.45rem 1rem .6rem;font-size:.76rem;">
+          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
+          <span class="output-line">└─ Java app with <span class="gc">role-based auth</span>, payment processing, cart &amp; order tracking</span>
+        </div>
+      </div>
+    </div>
 
-    // Auto-close mobile menu on link click
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-        });
-    });
+    <!-- CERTIFICATIONS -->
+    <div class="term-win reveal" id="certifications">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/certs — verify --all</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/certs$</span> <span class="whc">ls -la /etc/credentials/ &amp;&amp; verify --all</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">-rw-r--r--  4 certifications found</span>
+        <span class="blank"></span>
+        <div class="cert-item featured">
+          <div class="cert-badge">★ LATEST CERT</div>
+          <span class="output-line"><span class="ywc">[ VERIFIED ]</span>  <span class="whc">eJPT — eLearnSecurity Junior Penetration Tester</span></span>
+          <span class="output-line muc" style="font-size:.72rem;">  INE Security · Issued 23 Mar 2026 · Credential ID: 177694517</span>
+          <a href="https://certs.ine.com/75ac322e-c9aa-4039-87a3-392d8b4cd999" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view certificate ↗</a>
+        </div>
+        <div class="cert-item">
+          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">RH134 — Red Hat System Administration II</span></span>
+          <span class="output-line muc" style="font-size:.72rem;">  Red Hat · Dec 2025</span>
+          <a href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view badge on Credly ↗</a>
+        </div>
+        <div class="cert-item">
+          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">RH124 — Red Hat System Administration I</span></span>
+          <span class="output-line muc" style="font-size:.72rem;">  Red Hat · Jan 2025</span>
+        </div>
+        <div class="cert-item">
+          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">Cybersecurity for Students — Learning Path</span></span>
+          <span class="output-line muc" style="font-size:.72rem;">  LetsDefend · Jan 2025</span>
+          <a href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view certificate ↗</a>
+        </div>
+        <span class="blank"></span>
+        <span class="output-line gc">[+] 4/4 credentials verified successfully.</span>
+      </div>
+    </div>
 
-    /* COPY EMAIL */
-    function copyToClipboard(text, btn) {
-      navigator.clipboard?.writeText(text).then(() => {
-        btn.textContent = 'Copied';
-        setTimeout(()=> btn.textContent = 'Copy', 1200);
-      }).catch(()=> {
-        // fallback
-        const el = document.createElement('textarea');
-        el.value = text; document.body.appendChild(el);
-        el.select(); document.execCommand('copy'); document.body.removeChild(el);
-        btn.textContent = 'Copied';
-        setTimeout(()=> btn.textContent = 'Copy', 1200);
-      });
+    <!-- ACHIEVEMENTS -->
+    <div class="term-win reveal" id="achievements">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/logs — grep ACHIEVEMENT</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/logs$</span> <span class="whc">grep -r "ACHIEVEMENT" mahir.log --color=always</span></p>
+        <span class="blank"></span>
+        <span class="output-line"><span class="muc">[2026-03-24]</span> <span class="orc">ACHIEVEMENT:</span> Earned <span class="ywc">eJPT</span> certification from INE Security (Credential #177694517)</span>
+        <span class="output-line"><span class="muc">[2025-11-01]</span> <span class="orc">ACHIEVEMENT:</span> Analyzed and triaged <span class="gc">50+</span> security alerts in live SOC under SLA constraints</span>
+        <span class="output-line"><span class="muc">[2025-10-15]</span> <span class="orc">ACHIEVEMENT:</span> Assisted real-world web app &amp; API pentesting for Australian firm and Malaysian govt</span>
+        <span class="output-line"><span class="muc">[2025-09-01]</span> <span class="orc">ACHIEVEMENT:</span> Part of APU FSeC — first licensed Cybersecurity-as-a-Service university intern program <a href="https://thesun.my/education/licensed-to-deliver-professional-cybersecurity/" target="_blank" rel="noreferrer" style="color:var(--orange);text-decoration:none;">[read article ↗]</a></span>
+        <span class="output-line"><span class="muc">[2025-07-22]</span> <span class="orc">ACHIEVEMENT:</span> Technical &amp; Graphics Coordinator for APU Cyber Talk awareness event</span>
+        <span class="blank"></span>
+        <span class="output-line muc">grep: 5 matches found in mahir.log</span>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="term-win reveal" id="experience">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/experience — ps aux</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/experience$</span> <span class="whc">ps aux --sort=-start | grep mahir</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc" style="font-size:.7rem;">USER     PID  %CPU  STARTED  COMPANY                              ROLE</span>
+        <span class="output-line muc" style="font-size:.7rem;">──────────────────────────────────────────────────────────────────────────</span>
+        <span class="blank"></span>
+        <div style="margin-bottom:1.2rem;">
+          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1001</span>  <span class="ywc">HIGH</span>  <span class="blc">Oct 2025</span>  FSeC @ APU / APIIT</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> Junior Penetration Tester / Security Researcher</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="muc">PERIOD :</span> Oct 2025 – Jan 2026  |  Greater Kuala Lumpur, Malaysia</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Conducted real-world digital forensics investigations and offensive security research</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Performed web application and API pentesting for Australian enterprise &amp; Malaysian govt client</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Executed cloud configuration reviews across AWS and Azure; identified and documented misconfigs</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Produced structured pentest reports with risk ratings, PoC evidence and remediation guidance</span>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:1.2rem;">
+          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1002</span>  <span class="ywc">MED </span>  <span class="blc">Jul 2025</span>  APU / APIIT — SIEM Elite Program</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> SOC Analyst Intern</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="muc">PERIOD :</span> Jul 2025 – Nov 2025  |  Greater Kuala Lumpur, Malaysia</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Monitored security events and performed alert triage using MSSGard SIEM per documented runbooks</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Analyzed <span class="ywc">50+</span> security alerts; created and resolved tickets within SOC SLA guidelines</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Performed initial containment and investigation via Linux CLI; documented all triage actions</span>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:1rem;">
+          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1003</span>  <span class="muc">LOW </span>  <span class="blc">Dec 2022</span>  MD Infotech</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> Graphic Designer  |  Rajshahi, Bangladesh</span>
+          <span class="blank"></span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Produced animated explainer video for a forward-looking company project</span>
+          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Translated technical specs into visual storytelling — improved stakeholder engagement <span class="gc">~30%</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VOLUNTEER -->
+    <div class="term-win reveal" id="volunteer">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/volunteer — tail -f volunteer.log</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/volunteer$</span> <span class="whc">tail -f /var/log/volunteer.log</span></p>
+        <span class="blank"></span>
+        <span class="output-line"><span class="muc">[Nov 2025]</span> <span class="blc">FSeC APU Open Day — Organization &amp; Management Assistant</span></span>
+        <span class="output-line" style="padding-left:1rem;">└─ Represented APU's Faculty of Security (FSeC) during University Open Day</span>
+        <span class="output-line" style="padding-left:1rem;">└─ Engaged prospective students on cybersecurity career paths</span>
+        <span class="blank"></span>
+        <span class="output-line"><span class="muc">[Jul 2025]</span> <span class="blc">Technical &amp; Graphics Coordinator — APU Cyber Talk</span></span>
+        <span class="output-line" style="padding-left:1rem;">└─ Designed promotional materials and handled technical coordination</span>
+        <span class="output-line" style="padding-left:1rem;">└─ Institutional cybersecurity awareness event — teamwork &amp; creative execution</span>
+        <span class="blank"></span>
+        <span class="output-line muc">--- Waiting for new entries ---</span>
+      </div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="term-win reveal" id="education">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/education — cat /etc/os-release</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/education$</span> <span class="whc">cat /etc/os-release &amp;&amp; uname -a</span></p>
+        <span class="blank"></span>
+        <span class="output-line"><span class="gc">Linux</span> mahir-kali 6.6.0-kali #1 SMP PREEMPT_DYNAMIC Debian 6.6 <span class="muc">x86_64 GNU/Linux</span></span>
+        <span class="blank"></span>
+        <span class="output-line"><span class="muc">INSTITUTION=</span>"<span class="gc">Asia Pacific University of Technology and Innovation (APU / APIIT)</span>"</span>
+        <span class="output-line"><span class="muc">PARTNER   =</span>"De Montfort University (UK)"</span>
+        <span class="output-line"><span class="muc">DEGREE    =</span>"<span class="whc">BSc (Hons) Computer Science — Specialism in Cybersecurity</span>"</span>
+        <span class="output-line"><span class="muc">PERIOD    =</span>"Nov 2023 – Nov 2026"</span>
+        <span class="output-line"><span class="muc">CGPA      =</span>"<span class="ywc">3.41</span>"</span>
+        <span class="blank"></span>
+        <span class="output-line muc">RELEVANT_COURSES:</span>
+        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Network Security (Firewall, Web Proxy, IDS/IPS, IAM)</span>
+        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Python Automation, C &amp; Assembly Programming</span>
+        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Red Hat Linux Administration (PAM, Access Control)</span>
+        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Red Team Operations (API Pentesting, Web Exploitation)</span>
+      </div>
+    </div>
+
+    <!-- LANGUAGES -->
+    <div class="term-win reveal" id="languages">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — cat ~/.languages</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">cat ~/.languages</span></p>
+        <span class="blank"></span>
+        <span class="output-line"><span class="whc">LANG_1</span>=<span class="gc">"Bangla"</span>         <span class="muc"># NATIVE — primary language</span></span>
+        <span class="output-line"><span class="whc">LANG_2</span>=<span class="gc">"English"</span>        <span class="muc"># FLUENT — professional proficiency</span></span>
+        <span class="output-line"><span class="whc">LANG_3</span>=<span class="blc">"Hindi &amp; Urdu"</span>   <span class="muc"># BASIC — conversational</span></span>
+        <span class="output-line"><span class="whc">LANG_4</span>=<span class="blc">"Arabic"</span>         <span class="muc"># BASIC — conversational</span></span>
+        <span class="output-line"><span class="whc">LANG_5</span>=<span class="blc">"Japanese"</span>       <span class="muc"># BASIC — learning</span></span>
+        <span class="output-line"><span class="whc">LANG_6</span>=<span class="blc">"Bahasa Melayu"</span>  <span class="muc"># BASIC — conversational</span></span>
+      </div>
+    </div>
+
+    <!-- INTERESTS -->
+    <div class="term-win reveal" id="interests">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — cat interests.json</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">cat ~/.config/interests.json | python3 -m json.tool</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">{</span>
+        <span class="output-line">  <span class="blc">"interests"</span>: <span class="muc">[</span></span>
+        <span class="output-line">    <span class="gc">"Penetration Testing &amp; CTFs"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Low-Level Programming"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Red Team Research"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Project Building &amp; Side Hustles"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Fitness &amp; Self-Improvement"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Business Ideas &amp; Entrepreneurship"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Creative Design"</span><span class="muc">,</span></span>
+        <span class="output-line">    <span class="gc">"Cybersecurity News"</span></span>
+        <span class="output-line">  <span class="muc">]</span></span>
+        <span class="output-line muc">}</span>
+      </div>
+    </div>
+
+    <!-- CYBER ARCHIVE -->
+    <div class="term-win reveal" id="archive">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/archive — ls -la</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~/archive$</span> <span class="whc">find . -type f -name "*.url" | sort | xargs cat</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">[*] Enumerating cyber archive entries...</span>
+        <span class="blank"></span>
+        <div class="archive-grid">
+
+          <div class="archive-card">
+            <span class="archive-num">001</span>
+            <div class="archive-card-tag">// webapp · discipline</div>
+            <div class="archive-card-title">Trackable</div>
+            <div class="archive-card-desc">Trackable — Personal Life Manager
+
+A fully offline, zero-dependency personal life tracking web app. One HTML file. No installs, no accounts, no cloud. Just open it and start.</div>
+            <div class="archive-card-links">
+              <a href="https://github.com/mahirhacks/Discipline-Tracker" class="archive-link dim">→ github</a>
+            </div>
+          </div>
+
+        </div>
+        <span class="blank"></span>
+        <span class="output-line gc">[+] Archive loaded.</span>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="term-win reveal" id="contact">
+      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — whois mahir.local</span></div>
+      <div class="term-body">
+        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">whois mahir.local &amp;&amp; netstat -an | grep LISTEN</span></p>
+        <span class="blank"></span>
+        <span class="output-line muc">% WHOIS lookup for mahir.local</span>
+        <span class="blank"></span>
+        <div class="whois-row"><span class="wk">registrant-name:</span><span class="wv whc">Mahir Asif</span></div>
+        <div class="whois-row"><span class="wk">email:</span><span class="wv"><a href="/cdn-cgi/l/email-protection#b1d0c2d8d7dcd0d9d8c3888186f1d6dcd0d8dd9fd2dedc"><span class="__cf_email__" data-cfemail="eb8a98828d868a838299d2dbdcab8c868a8287c5888486">[email&#160;protected]</span></a> &nbsp;<button id="copyBtn" onclick="copyEmail(this)" style="background:rgba(57,255,110,.08);border:1px solid var(--green-dim);color:var(--green);font-family:inherit;font-size:.68rem;padding:.12rem .38rem;">[copy]</button></span></div>
+        <div class="whois-row"><span class="wk">phone:</span><span class="wv">+60 133329115</span></div>
+        <div class="whois-row"><span class="wk">linkedin:</span><span class="wv"><a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer">linkedin.com/in/mahir907 ↗</a></span></div>
+        <div class="whois-row"><span class="wk">github:</span><span class="wv"><a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer">github.com/mahirhacks ↗</a></span></div>
+        <div class="whois-row"><span class="wk">address:</span><span class="wv">Serdang Raya Utara, Selangor 43300, Malaysia</span></div>
+        <span class="blank"></span>
+        <span class="output-line muc">% End of WHOIS data.</span>
+        <span class="blank"></span>
+        <span class="output-line muc">Active connections:</span>
+        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">22</span>   0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># ssh — always reachable</span></span>
+        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">80</span>   0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># open to opportunities</span></span>
+        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">443</span>  0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># secure comms preferred</span></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>&copy; <span>Mahir Asif</span> · Designed &amp; Developed with <span>■</span> 2026</p>
+  <p style="margin-top:.3rem;"><span style="color:var(--muted)">root@kali:~$</span> <span style="animation:blink 1s step-end infinite;display:inline-block;width:7px;height:12px;background:var(--green);vertical-align:-1px;"></span></p>
+</footer>
+
+</div><!-- /#pageContent -->
+
+<div id="modal">
+  <div class="modal-inner">
+    <div class="modal-glass">
+      <button id="modalClose" style="position:absolute;top:1rem;right:1rem;background:rgba(57,255,110,.08);border:1px solid var(--border);color:var(--green);padding:.3rem .8rem;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.7rem;">[ CLOSE ]</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── Cursor ── */
+const customCursor = document.getElementById('customCursor');
+document.addEventListener('mousemove', e => {
+  customCursor.style.left = e.clientX + 'px';
+  customCursor.style.top  = e.clientY + 'px';
+});
+
+/* ── Theme ── */
+const themeToggle = document.getElementById('themeToggle');
+const sunIcon = document.getElementById('sunIcon');
+const moonIcon = document.getElementById('moonIcon');
+const saved = localStorage.getItem('theme') || 'dark';
+if (saved === 'light') {
+  document.documentElement.classList.add('light-theme');
+  sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden');
+}
+themeToggle.addEventListener('click', () => {
+  document.documentElement.classList.toggle('light-theme');
+  const isLight = document.documentElement.classList.contains('light-theme');
+  sunIcon.classList.toggle('hidden', !isLight);
+  moonIcon.classList.toggle('hidden', isLight);
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  /* update star colours for theme */
+  stars.forEach(s => {
+    if (isLight) { s.hue = Math.random() > 0.5 ? 135 : 150; s.lightMode = true; }
+    else         { s.hue = Math.random() > 0.88 ? 180 : 140; s.lightMode = false; }
+  });
+});
+
+/* ── Mobile nav ── */
+document.getElementById('navToggle')?.addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('active'));
+document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('active')));
+
+/* ── Telescope ── */
+const telescopeBtn    = document.getElementById('telescopeToggle');
+const exitStarViewBtn = document.getElementById('exitStarView');
+const pageContent     = document.getElementById('pageContent');
+telescopeBtn?.addEventListener('click', () => {
+  pageContent.classList.add('hidden');
+  exitStarViewBtn.classList.remove('hidden');
+  telescopeBtn.classList.add('hidden');
+  document.body.classList.add('star-view');
+});
+exitStarViewBtn?.addEventListener('click', () => {
+  pageContent.classList.remove('hidden');
+  exitStarViewBtn.classList.add('hidden');
+  telescopeBtn.classList.remove('hidden');
+  document.body.classList.remove('star-view');
+});
+
+/* ── Minimize / Restore terminal windows ── */
+document.querySelectorAll('.term-win').forEach(win => {
+  const titlebar = win.querySelector('.term-titlebar');
+  if (!titlebar) return;
+  const dotY = titlebar.querySelector('.dot-y');
+  const dotG = titlebar.querySelector('.dot-g');
+  const body  = win.querySelector('.term-body, .iterm-wrap, .photo-term');
+  if (!dotY || !body) return;
+
+  let collapsed = false;
+
+  dotY.style.cursor = 'pointer';
+  dotY.title = 'Minimize';
+  if (dotG) { dotG.style.cursor = 'pointer'; dotG.title = 'Restore'; }
+
+  dotY.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!collapsed) {
+      body.style.display = 'none';
+      win.style.transition = 'all .2s';
+      collapsed = true;
+      dotY.style.opacity = '.5';
     }
-    document.getElementById('copyBtn')?.addEventListener('click', () => copyToClipboard('asifmahir907@gmail.com', document.getElementById('copyBtn')));
-    document.getElementById('copyBtn2')?.addEventListener('click', () => copyToClipboard('asifmahir907@gmail.com', document.getElementById('copyBtn2')));
+  });
 
-    /* skills fill animation */
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.skill-fill').forEach(el => {
-        const w = el.dataset.fill || '70%';
-        // small delay for nicer animation
-        setTimeout(()=> el.style.width = w, 220);
-      });
+  if (dotG) {
+    dotG.addEventListener('click', e => {
+      e.stopPropagation();
+      if (collapsed) {
+        body.style.display = '';
+        collapsed = false;
+        dotY.style.opacity = '';
+      }
     });
+  }
+});
 
-    /* reveal on scroll */
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if(e.isIntersecting) {
-          e.target.classList.add('show');
-        }
-      });
-    }, { threshold: 0.12 });
+/* ── Reveal ── */
+const revealIo = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => revealIo.observe(el));
 
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-    /* simple modal logic (for future project expansion) */
-    const modal = document.getElementById('modal');
-    const modalClose = document.getElementById('modalClose');
-    const modalContent = document.getElementById('modalContent');
-
-    function openModal(html) {
-      modalContent.innerHTML = html;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+/* ── Skill bars ── */
+const skillIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-fill').forEach(el => setTimeout(() => el.style.width = (el.dataset.fill||0)+'%', 200));
+      skillIo.unobserve(e.target);
     }
-    function closeModal() {
-      modal.classList.remove('flex');
-      modal.classList.add('hidden');
-      modalContent.innerHTML = '';
-    }
-    modalClose?.addEventListener('click', closeModal);
-    modal?.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.term-win').forEach(el => skillIo.observe(el));
+
+/* ── Circular progress ── */
+function animateCircle(circle, text, pct) {
+  const r = circle.r.baseVal.value;
+  const circ = r * 2 * Math.PI;
+  circle.style.strokeDasharray  = `${circ} ${circ}`;
+  circle.style.strokeDashoffset = circ;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        circle.style.strokeDashoffset = circ - (pct/100)*circ;
+        let cur = 0;
+        const iv = setInterval(() => { if (cur < pct) { cur++; text.textContent = cur+'%'; } else clearInterval(iv); }, 16);
+        obs.unobserve(entry.target);
+      }
     });
+  }, { threshold: 0.4 });
+  obs.observe(circle);
+}
+document.querySelectorAll('.circular-progress-container').forEach(c => {
+  const circle = c.querySelector('.circular-progress-fill');
+  const text   = c.querySelector('.circular-progress-text');
+  const pct    = parseInt(circle?.dataset?.percentage, 10);
+  if (circle && text && !isNaN(pct)) animateCircle(circle, text, pct);
+});
 
-    /* accessibility: keyboard close */
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
+/* ── Copy email ── */
+function copyEmail(btn) {
+  navigator.clipboard?.writeText('asifmahir907@gmail.com').then(() => {
+    btn.textContent = '[copied!]'; setTimeout(() => btn.textContent = '[copy]', 1500);
+  });
+}
 
-    const canvas = document.getElementById("starsCanvas");
-    const ctx = canvas.getContext("2d");
-    const stars = [];
-    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+/* ── Modal ── */
+const modal       = document.getElementById('modal');
+const modalClose  = document.getElementById('modalClose');
+const modalContent= document.getElementById('modalContent');
+function closeModal() { modal.classList.remove('open'); modalContent.innerHTML = ''; }
+modalClose?.addEventListener('click', closeModal);
+modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    const numStarsLg = 10;
-    const numStarsMd = 50;
-    const numStarsSm = 400;
-
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    // Resize canvas
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    // Create stars
-    function createStars(count, sizeMax, speedRange) {
-        for (let i = 0; i < count; i++) {
-            stars.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * sizeMax,
-                speed: Math.random() * speedRange.max + speedRange.min,
-                vx: (Math.random() - 0.5) * 0.1,
-                vy: (Math.random() - 0.5) * 0.1
-            });
-        }
-    }
-    createStars(numStarsLg, 2, { min: 0.4, max: 0.75 });
-    createStars(numStarsMd, 0.1, { min: 0.2, max: 0.5 });
-    createStars(numStarsSm, 0.5, { min: 0.1, max: 0.25 });
-
-    // Mouse movement for desktop
-    if (!isMobile) {
-        document.addEventListener("mousemove", e => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-    }
-
-    // Animation loop
-    function animate() {
-        // remove resize from animation loop (already handled by resizeCanvas)
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const rootStyles = getComputedStyle(document.documentElement);
-        const starColor = rootStyles.getPropertyValue('--star-color').trim();
-
-        stars.forEach(star => {
-            // Natural drift
-            star.x += star.vx;
-            star.y += star.vy;
-
-            // Wrap around edges
-            if (star.x < 0) star.x = canvas.width;
-            if (star.x > canvas.width) star.x = 0;
-            if (star.y < 0) star.y = canvas.height;
-            if (star.y > canvas.height) star.y = 0;
-
-            let dx = 0, dy = 0;
-
-            if (!isMobile) {
-                // Mouse parallax
-                dx = mouse.x - canvas.width / 2;
-                dy = mouse.y - canvas.height / 2;
-            }
-
-            // Twinkle effect
-            const twinkle = Math.sin(Date.now() / 400 + star.x * 0.1) * 0.5 + 0.5;
-            const glowSize = star.size + twinkle;
-            const alpha = 0.7 + twinkle * 0.3;
-
-            ctx.beginPath();
-            ctx.arc(
-                star.x + dx / (20 / star.speed),
-                star.y + dy / (20 / star.speed),
-                glowSize,
-                0,
-                Math.PI * 2
-            );
-            ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = `rgba(${starColor}, 1)`;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        });
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    const themeToggle = document.getElementById('themeToggle');
-    const sunIcon = document.getElementById('sunIcon');
-    const moonIcon = document.getElementById('moonIcon');
-    const customCursor = document.getElementById('customCursor');
-
-    // Cursor follow effect
-    document.addEventListener('mousemove', (e) => {
-        customCursor.style.left = `${e.clientX}px`;
-        customCursor.style.top = `${e.clientY}px`;
-    });
-
-    // Load saved theme or default to dark
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-
-    if (savedTheme === 'light') {
-        document.documentElement.classList.add('light-theme');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-        customCursor.src = 'cursor-dark.png';
+/* ── Stars ── */
+const canvas = document.getElementById('starsCanvas');
+const ctx = canvas.getContext('2d');
+const stars = [];
+let mouse = { x: innerWidth/2, y: innerHeight/2 };
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
+if (!isMobile) document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+for (let i = 0; i < 700; i++) {
+  stars.push({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: Math.random()*1.1+0.2,
+    vx: (Math.random()-.5)*.08, vy: (Math.random()-.5)*.08, speed: Math.random()*.4+.1,
+    hue: Math.random()>.88?180:140, lightMode: false });
+}
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const dx = isMobile?0:mouse.x-canvas.width/2, dy = isMobile?0:mouse.y-canvas.height/2;
+  const isLight = document.documentElement.classList.contains('light-theme');
+  stars.forEach(s => {
+    s.x += s.vx; s.y += s.vy;
+    if (s.x<0) s.x=canvas.width; if (s.x>canvas.width) s.x=0;
+    if (s.y<0) s.y=canvas.height; if (s.y>canvas.height) s.y=0;
+    const tw = Math.sin(Date.now()/600+s.x*.15)*.4+.6;
+    ctx.beginPath(); ctx.arc(s.x+dx/(25/s.speed),s.y+dy/(25/s.speed),s.r*tw,0,Math.PI*2);
+    if (isLight) {
+      /* deep forest green tones for light mode */
+      const lightness = 28 + Math.floor(Math.random()*4) * 0;
+      ctx.fillStyle=`hsla(${s.hue},80%,${25+tw*15}%,${tw*.85})`;
+      if(s.r>.8){ctx.shadowBlur=5;ctx.shadowColor=`hsl(${s.hue},70%,30%)`;}
     } else {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-        customCursor.src = 'cursor-light.png';
+      ctx.fillStyle=`hsla(${s.hue},100%,65%,${tw*.7})`;
+      if(s.r>.8){ctx.shadowBlur=6;ctx.shadowColor=`hsl(${s.hue},100%,60%)`;}
     }
+    ctx.fill(); ctx.shadowBlur=0;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
 
-    // Theme toggle
-    themeToggle.addEventListener('click', () => {
-        document.documentElement.classList.toggle('light-theme');
-        const isLight = document.documentElement.classList.contains('light-theme');
+/* ══════════════════════════════════════════════
+   INTERACTIVE TERMINAL
+══════════════════════════════════════════════ */
+const itermOutput = document.getElementById('itermOutput');
+const itermInput  = document.getElementById('itermInput');
+const itermHint   = document.getElementById('itermHint');
+const cmdHistory  = [];
+let histIdx = -1;
 
-        sunIcon.classList.toggle('hidden', !isLight);
-        moonIcon.classList.toggle('hidden', isLight);
+const g  = s => `<span style="color:#39ff6e">${s}</span>`;
+const mu = s => `<span style="color:#4d7a5a">${s}</span>`;
+const bl = s => `<span style="color:#4cc2ff">${s}</span>`;
+const yw = s => `<span style="color:#ffd60a">${s}</span>`;
+const or = s => `<span style="color:#ff6b35;font-weight:600">${s}</span>`;
+const er = s => `<span style="color:#ff453a">${s}</span>`;
+const wh = s => `<span style="color:var(--text-strong,#fff);font-weight:600">${s}</span>`;
 
-        // Switch cursor image
-        customCursor.src = isLight ? 'cursor-dark.png' : 'cursor-light.png';
+const CMDS = {
+  help: () => `
+${g('Available commands:')}
+  ${g('whoami')}         — identity profile
+  ${g('about')}          — about Mahir
+  ${g('skills')}         — skills overview
+  ${g('certs')}          — certifications
+  ${g('experience')}     — work history
+  ${g('projects')}       — project list
+  ${g('archive')}        — cyber archive &amp; links
+  ${g('contact')}        — contact info
+  ${g('nmap')}           — run a recon scan
+  ${g('neofetch')}       — system info
+  ${g('ls')}             — list directory
+  ${g('cat cv')}         — view CV summary
+  ${g('education')}      — academic background
+  ${g('languages')}      — spoken languages
+  ${g('interests')}      — hobbies &amp; interests
+  ${g('achievements')}   — notable achievements
+  ${g('volunteer')}      — volunteer experience
+  ${g('ctf')}            — CTF &amp; hacking stats
+  ${g('status')}         — current availability
+  ${g('ping mahir')}     — test connection
+  ${g('hack')}           — launch an attack 👀
+  ${g('matrix')}         — you know why
+  ${g('uname -a')}       — kernel info
+  ${g('uptime')}         — system uptime
+  ${g('fortune')}        — random hacker quote
+  ${g('date')}           — current date/time
+  ${g('clear')}          — clear the terminal
+  ${mu('────────────────────────────────────────────────')}
+  ${mu('tip:')} try ${g('nmap -sV mahir.local')} or ${g('ping mahir')}!`,
 
-        // Save correct theme value
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
+  whoami: () => `
+${wh('MAHIR ASIF')}
+${mu('──────────────────────────────────────────────')}
+${mu('role    :')} ${g('Junior Penetration Tester / eJPT Certified')}
+${mu('domain  :')} Cybersecurity Student @ APU, Malaysia
+${mu('os      :')} ${bl('Kali Linux')} / Windows 11 Pro
+${mu('focus   :')} Web App Pentesting · SOC · Red Teaming
+${mu('cert    :')} ${yw('eJPT')} — INE Security (Issued Mar 2026 · #177694517)
+${mu('status  :')} ${g('● ONLINE')} — open to opportunities`,
 
-/* Circular Progress Bar Animation */
-    const animateCircularProgress = (circleElement, textElement, percentage) => {
-        // Calculate circumference based on the radius (r=15.9155 for a total circumference of ~100)
-        const circumference = circleElement.r.baseVal.value * 2 * Math.PI;
-        circleElement.style.strokeDasharray = `${circumference} ${circumference}`;
-        circleElement.style.strokeDashoffset = circumference; // Start completely hidden
+  about: () => `
+${g('[*] Loading profile...')}
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Calculate the offset for the desired percentage
-                    const offset = circumference - (percentage / 100) * circumference;
-                    circleElement.style.strokeDashoffset = offset;
+Hi, I'm ${wh('Mahir Asif')} — a final-year ${g('Cybersecurity student')} at APU, Malaysia.
+Dual-awarded BSc with De Montfort University (UK).
 
-                    // Animate percentage text from 0 to the target percentage
-                    let currentPercentage = 0;
-                    const interval = setInterval(() => {
-                        if (currentPercentage < percentage) {
-                            currentPercentage++;
-                            textElement.textContent = `${currentPercentage}%`;
-                        } else {
-                            clearInterval(interval);
-                        }
-                    }, 20); // Adjust speed of text animation
+I'm a ${or('certified eJPT penetration tester')} specializing in web
+application security, API testing, and network exploitation.
 
-                    observer.unobserve(entry.target); // Stop observing once animation is done
-                }
-            });
-        }, { threshold: 0.7 }); // Trigger when 70% of the element is visible
+Real-world experience with Australian enterprise clients and
+Malaysian government engagements. Building toward ${bl('eCPPT / OSCP')}.
 
-        observer.observe(circleElement); // Start observing the circular progress element
-    };
+${g('[+] Profile loaded successfully.')}`,
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // ... existing horizontal skill bar animation and other DOMContentLoaded code ...
+  skills: () => `
+${g('[*] Enumerating capabilities...')}
 
-        // Animate circular progress bars
-        document.querySelectorAll('.circular-progress-container').forEach(container => {
-            const circle = container.querySelector('.circular-progress-fill');
-            const text = container.querySelector('.circular-progress-text');
-            const percentage = parseInt(circle.dataset.percentage, 10);
-            
-            if (circle && text && !isNaN(percentage)) {
-                animateCircularProgress(circle, text, percentage);
-            }
-        });
-    });
+${or('// Offensive')}
+  Web App Pentesting · API Security · OWASP Top 10
+  Burp Suite · Metasploit · Nmap/Nessus · SQLi · XSS/CSRF
+  Privilege Escalation · Recon &amp; OSINT
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const telescopeBtn = document.getElementById('telescopeToggle');
-        const exitStarViewBtn = document.getElementById('exitStarView');
-        const pageContent = document.getElementById('pageContent');
+${bl('// Defensive / Infrastructure')}
+  SIEM (MSSGard) · IDS/IPS (Snort) · Incident Response
+  Linux Administration · Firewall/ACL · IAM/PAM
+  AWS/Azure Review · SSL/TLS Hardening
 
-        function hidePageContent() {
-            pageContent.classList.add('hidden'); // Hides the main content
-            exitStarViewBtn.classList.remove('hidden'); // Shows the exit button
-            telescopeBtn.classList.add('hidden'); // Hides the telescope button
-        }
+${g('// Proficiency Bars')}
+  Linux Admin        [${g('███████░░░')}] 76%
+  Web Pentesting     [${g('███████░░░')}] 72%
+  Security Tools     [${g('██████░░░░')}] 65%
+  Networking         [${g('█████░░░░░')}] 58%
+  Python/Bash        [${g('███████░░░')}] 78%`,
 
-        function showPageContent() {
-            pageContent.classList.remove('hidden'); // Shows the main content
-            exitStarViewBtn.classList.add('hidden'); // Hides the exit button
-            telescopeBtn.classList.remove('hidden'); // Shows the telescope button
-        }
+  certs: () => `
+${g('[*] Verifying credentials...')}
 
-        telescopeBtn.addEventListener('click', hidePageContent);
-        exitStarViewBtn.addEventListener('click', showPageContent);
-    });
+${yw('★ LATEST')}  ${wh('eJPT')} — eLearnSecurity Junior Penetration Tester
+         INE Security · Issued 23 Mar 2026 · #177694517
 
-  </script>
+${g('[ OK ]')}  ${wh('RH134')} — Red Hat System Administration II
+         Red Hat · Dec 2025
+
+${g('[ OK ]')}  ${wh('RH124')} — Red Hat System Administration I
+         Red Hat · Jan 2025
+
+${g('[ OK ]')}  ${wh('Cybersecurity for Students')} — LetsDefend
+         Learning Path · Jan 2025
+
+${g('[+] 4/4 credentials verified.')}`,
+
+  experience: () => `
+${g('[*] Fetching work history...')}
+
+${yw('[ OCT 2025 – JAN 2026 ]')}
+  ${wh('Junior Penetration Tester / Security Researcher')}
+  FSeC @ APU / APIIT · Greater Kuala Lumpur
+  ${mu('$')} Real-world web app &amp; API pentesting (AU + MY govt)
+  ${mu('$')} Cloud config reviews (AWS &amp; Azure)
+  ${mu('$')} Pentest reports with risk ratings &amp; PoC evidence
+
+${yw('[ JUL 2025 – NOV 2025 ]')}
+  ${wh('SOC Analyst Intern')}
+  APU / APIIT SIEM Elite Program · Kuala Lumpur
+  ${mu('$')} Alert triage with MSSGard SIEM
+  ${mu('$')} Analyzed ${g('50+')} alerts within SOC SLA guidelines
+
+${yw('[ DEC 2022 ]')}
+  ${wh('Graphic Designer')} — MD Infotech · Rajshahi, Bangladesh
+  ${mu('$')} Stakeholder engagement improved ~30%`,
+
+  projects: () => `
+${g('[*] Loading project directory...')}
+
+${bl('secure-client-server-network/')}  [Dec 2024 – Mar 2025]
+  Rocky Linux + Ubuntu · NFS · SSL/TLS Apache · Fail2Ban
+
+${bl('secure-mail-server/')}            [Dec 2024 – Feb 2025]
+  Postfix + Dovecot + SpamAssassin · SSL/TLS · Thunderbird
+
+${bl('honeypot-ids-lab/')}              [Jul 2025]
+  Snort IDS + honeypot · Kali attack simulations
+
+${bl('enterprise-network-design/')}     [Jan – Mar 2025]
+  VLANs · ACLs · EtherChannel · OSPF · KL &amp; AU branches
+
+${bl('food-ordering-app/')}             [Dec 2024 – Mar 2025]
+  Java · Role-based auth · Payments · Cart
+
+${g('[+] 5 projects found.')}`,
+
+  contact: () => `
+${g('[*] Running whois lookup...')}
+
+${mu('email   :')} asifmahir907@gmail.com
+${mu('phone   :')} +60 133329115
+${mu('linkedin:')} ${g('linkedin.com/in/mahir907')}
+${mu('github  :')} ${g('github.com/mahirhacks')}
+${mu('location:')} Serdang Raya Utara, Selangor, Malaysia
+
+${g('[+] All contact vectors reachable.')}`,
+
+  nmap: () => `
+${mu('Starting Nmap 7.94SVN ( https://nmap.org )')}
+${mu('Nmap scan report for mahir.local (192.168.69.1)')}
+${g('[+] Host is up (0.0011s latency).')}
+
+${mu('PORT      STATE  SERVICE         VERSION')}
+${mu('──────────────────────────────────────────────────────')}
+${yw('022/tcp')}   ${g('open')}   ssh             OpenSSH 9.3p1
+${yw('080/tcp')}   ${g('open')}   http            Apache/2.4.57
+${yw('443/tcp')}   ${g('open')}   ssl/https       Apache/2.4.57
+${yw('8080/tcp')}  ${g('open')}   pentesting      WebApp Engine 1.0
+
+${g('|')} OS Guess: ${bl('Kali Linux 2025.x')} (100%)
+${g('|')} Cert: ${yw('eJPT')} (INE Security, Mar 2026)
+${g('|')} Status: OPEN TO WORK
+${g('|_')} Available for hire: ${g('YES')}
+
+${mu('Nmap done: 1 IP scanned in 2.47 seconds')}`,
+
+  neofetch: () => `
+${g('           .          .      ')}   ${wh('root@kali')}
+${g('          ,8,        ,8.     ')}   ${mu('──────────────────────────────')}
+${g('         ,888,      ,888.    ')}   ${mu('OS:')} Kali Linux Rolling x86_64
+${g('        .8\'\'88,    ,88\'\'8.  ')}   ${mu('Kernel:')} 6.6.0-kali1-amd64
+${g('       .8\'  \'88,,88\'  \'8.  ')}   ${mu('Shell:')} zsh 5.9
+${g('      .8\'    \'8888\'    \'8. ')}   ${mu('Terminal:')} Portfolio v2.0
+${g('     .8\'      \'88\'      \'8.')}   ${mu('Role:')} ${g('Penetration Tester')}
+${g('    .8\'        \'\'        \'8.')}  ${mu('Cert:')} ${yw('eJPT')} (Mar 2026)
+${g('   ,88888888888888888888888. ')}   ${mu('CGPA:')} ${yw('3.41')}
+${g('  .8\'                      \'8.')}  ${mu('Status:')} ${g('● Open to Work')}`,
+
+  ls: () => `
+${mu('total 12')}
+${g('drwxr-xr-x')}  mahir  about/
+${g('drwxr-xr-x')}  mahir  skills/
+${g('drwxr-xr-x')}  mahir  projects/
+${g('drwxr-xr-x')}  mahir  certifications/
+${g('drwxr-xr-x')}  mahir  experience/
+${g('drwxr-xr-x')}  mahir  education/
+${g('drwxr-xr-x')}  mahir  archive/
+${g('drwxr-xr-x')}  mahir  contact/
+${bl('-rw-r--r--')}  mahir  profile.jpg
+${bl('-rw-r--r--')}  mahir  Mahir_Asif_CV.pdf
+${bl('-rw-r--r--')}  mahir  about.txt
+${bl('-rw-r--r--')}  mahir  .secrets  ${mu('# permission denied 😏')}`,
+
+  'cat cv': () => `
+${g('[*] Reading Mahir_Asif_CV.pdf...')}
+
+${wh('MAHIR ASIF')}  —  Junior Penetration Tester
+${mu('─────────────────────────────────────────────────')}
+${mu('email   :')} asifmahir907@gmail.com
+${mu('phone   :')} +60 133329115
+${mu('github  :')} ${g('github.com/mahirhacks')}
+${mu('linkedin:')} ${g('linkedin.com/in/mahir907')}
+
+${yw('EDUCATION')}
+  BSc (Hons) CS — Cybersecurity · APU + De Montfort UK
+  CGPA: ${yw('3.41')} · Nov 2023 – Nov 2026
+
+${yw('CERTIFICATIONS')}
+  ${yw('★')} eJPT — INE Security (Mar 2026)
+  ✓ RH134 — Red Hat Sys Admin II (Dec 2025)
+  ✓ RH124 — Red Hat Sys Admin I  (Jan 2025)
+
+${yw('LATEST EXPERIENCE')}
+  Junior Pentester @ FSeC APU  (Oct 2025 – Jan 2026)
+  SOC Analyst Intern @ APU SIEM Elite (Jul – Nov 2025)
+
+${g('[+] For full CV, use the contact section or reach out via LinkedIn.')}`,
+
+  education: () => `
+${g('[*] Fetching academic records...')}
+
+${wh('INSTITUTION')} : Asia Pacific University (APU / APIIT)
+${wh('PARTNER')}     : De Montfort University, UK
+${wh('DEGREE')}      : BSc (Hons) CS — Cybersecurity
+${wh('PERIOD')}      : Nov 2023 – Nov 2026
+${wh('CGPA')}        : ${yw('3.41')}
+
+${bl('RELEVANT COURSES:')}
+  + Network Security (Firewall, Web Proxy, IDS/IPS, IAM)
+  + Python Automation, C &amp; Assembly Programming
+  + Red Hat Linux Administration (PAM, Access Control)
+  + Red Team Operations (API Pentesting, Web Exploitation)
+
+${g('[+] Academic records loaded.')}`,
+
+  languages: () => `
+${g('[*] Loading language environment...')}
+
+${wh('LANG_1')} = ${g('"Bangla"')}        ${mu('# NATIVE — primary')}
+${wh('LANG_2')} = ${g('"English"')}       ${mu('# FLUENT — professional')}
+${wh('LANG_3')} = ${bl('"Hindi & Urdu"')} ${mu('# BASIC — conversational')}
+${wh('LANG_4')} = ${bl('"Arabic"')}       ${mu('# BASIC — conversational')}
+${wh('LANG_5')} = ${bl('"Japanese"')}     ${mu('# BASIC — learning')}
+${wh('LANG_6')} = ${bl('"Bahasa Melayu"')}${mu('# BASIC — conversational')}
+
+${g('[+] 6 language modules loaded.')}`,
+
+  interests: () => `
+${g('[*] Parsing ~/.config/interests.json...')}
+
+  ${g('●')} Penetration Testing &amp; CTFs
+  ${g('●')} Low-Level Programming
+  ${g('●')} Red Team Research
+  ${g('●')} Project Building &amp; Side Hustles
+  ${g('●')} Fitness &amp; Self-Improvement
+  ${g('●')} Business Ideas &amp; Entrepreneurship
+  ${g('●')} Creative Design
+  ${g('●')} Cybersecurity News
+
+${g('[+] 8 interests loaded successfully.')}`,
+
+  achievements: () => `
+${g('[*] Running grep on achievement log...')}
+
+${yw('[2026-03-24]')} ${or('ACHIEVEMENT:')} Earned ${yw('eJPT')} — INE Security (#177694517)
+${yw('[2025-11-01]')} ${or('ACHIEVEMENT:')} Triaged ${g('50+')} live alerts within SOC SLAs
+${yw('[2025-10-15]')} ${or('ACHIEVEMENT:')} Real-world pentesting for AU firm &amp; MY govt
+${yw('[2025-09-01]')} ${or('ACHIEVEMENT:')} Part of APU FSeC — 1st licensed CaaS university program
+${yw('[2025-07-22]')} ${or('ACHIEVEMENT:')} Tech &amp; Graphics Coordinator · APU Cyber Talk event
+
+${mu('grep: 5 matches found in mahir.log')}`,
+
+  volunteer: () => `
+${g('[*] Tailing volunteer.log...')}
+
+${mu('[Nov 2025]')} ${bl('FSeC APU Open Day — Organization &amp; Management')}
+  └─ Represented APU FSeC during University Open Day
+  └─ Engaged prospective students on cybersecurity paths
+
+${mu('[Jul 2025]')} ${bl('Technical &amp; Graphics Coordinator — APU Cyber Talk')}
+  └─ Designed promo materials &amp; handled tech coordination
+  └─ Institutional cybersecurity awareness event
+
+${mu('--- Waiting for new log entries ---')}`,
+
+  archive: () => `
+${g('[*] Opening cyber archive...')}
+
+${bl('001')}  ${wh('CTF Writeup')}          — coming soon
+${bl('002')}  ${wh('Security Tool')}        — coming soon
+${bl('003')}  ${wh('Research Article')}     — coming soon
+${bl('004')}  ${wh('Homelab Docs')}         — coming soon
+${bl('005')}  ${wh('Web Project')}          — coming soon
+${bl('006')}  ${wh('Design Work')}          — coming soon
+
+${mu('→')} Scroll down to the ${g('Cyber Archive')} section for links &amp; details.
+${g('[+] Archive index loaded.')}`,
+
+  ctf: () => `
+${g('[*] Querying CTF database...')}
+
+${wh('Platform')}        ${wh('Status')}     ${wh('Notes')}
+${mu('─────────────────────────────────────────────────')}
+${bl('TryHackMe')}       ${g('Active')}     Building path
+${bl('HackTheBox')}      ${yw('Starting')}   Machines queue loaded
+${bl('PicoCTF')}         ${g('Active')}     Web + forensics focus
+${bl('CTFtime')}         ${yw('Watching')}   Team lookout
+
+${or('ACTIVE LEARNING PATH:')}
+  → eJPT ${g('✓ DONE')} → eCPPT → OSCP (target: 2027)
+  → Currently focusing on Active Directory attacks
+
+${g('[+] Keep grinding. Every box is a lesson.')}`,
+
+  status: () => `
+${g('[*] Fetching availability status...')}
+
+${wh('AVAILABILITY')}  : ${g('● OPEN TO WORK')}
+${wh('ROLE TARGET')}   : Junior Penetration Tester / SOC Analyst
+${wh('LOCATION')}      : Selangor, Malaysia (Hybrid/Remote OK)
+${wh('NOTICE')}        : Immediate availability
+${wh('CERT')}          : ${yw('eJPT')} certified (INE Security, Mar 2026)
+${wh('NEXT TARGET')}   : ${bl('eCPPT → OSCP')}
+
+${g('[+] Open to full-time, internship, and freelance gigs.')}`,
+
+  'ping mahir': () => {
+    const target = 'mahir.local';
+    const ip = '192.168.69.1';
+    const container = document.createElement('div');
+    container.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
+    container.innerHTML = `<span style="color:#4d7a5a">PING ${target} (${ip}): 56 bytes of data</span>`;
+    itermOutput.appendChild(container);
+    itermOutput.scrollTop = itermOutput.scrollHeight;
+
+    let seq = 0;
+    const times = [];
+    const maxPings = 4;
+
+    const interval = setInterval(() => {
+      const ms = (Math.random() * 0.3 + 0.28).toFixed(2);
+      times.push(parseFloat(ms));
+      const line = document.createElement('div');
+      line.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
+      line.innerHTML = `64 bytes from ${ip}: icmp_seq=${seq} ttl=64 <span style="color:#39ff6e">time=${ms} ms</span>`;
+      itermOutput.appendChild(line);
+      itermOutput.scrollTop = itermOutput.scrollHeight;
+      seq++;
+      if (seq >= maxPings) {
+        clearInterval(interval);
+        const min = Math.min(...times).toFixed(3);
+        const max = Math.max(...times).toFixed(3);
+        const avg = (times.reduce((a,b)=>a+b,0)/times.length).toFixed(3);
+        const summary = document.createElement('div');
+        summary.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
+        summary.innerHTML = `\n<span style="color:#4d7a5a">--- ${target} ping statistics ---</span>\n${maxPings} packets transmitted, ${maxPings} received, <span style="color:#39ff6e">0% packet loss</span>\nround-trip min/avg/max = <span style="color:#ffd60a">${min}/${avg}/${max} ms</span>\n<span style="color:#39ff6e">[+] Connection established. Mahir is reachable 👋</span>`;
+        itermOutput.appendChild(summary);
+        itermOutput.scrollTop = itermOutput.scrollHeight;
+      }
+    }, 600);
+    return '';
+  },
+
+  'uname -a': () => `
+${g('Linux')} mahir-kali 6.6.0-kali1-amd64 #1 SMP PREEMPT_DYNAMIC
+Debian 6.6.15-2kali1 x86_64 GNU/Linux
+${mu('Built for:')} ${bl('Offensive Security · Red Teaming · eJPT')}`,
+
+  uptime: () => {
+    const d = new Date();
+    const yr = d.getFullYear() - 2001;
+    return `
+${g(' 09:42:13 up')} ${yw(yr + ' years, 3 months')} ${g('— 1 user')}
+${mu('load average: 0.61 (learning), 0.84 (hacking), 0.99 (grinding)')}
+${g('[+] System has been running strong since 2001.')}`;
+  },
+
+  date: () => {
+    const now = new Date();
+    return `${g(now.toString())}\n${mu('Timezone: Asia/Kuala_Lumpur (MYT +0800)')}`;
+  },
+
+  fortune: () => {
+    const quotes = [
+      `${g('"The quieter you become, the more you are able to hear."')}\n${mu('  — Kali Linux motto')}`,
+      `${g('"Offense informs defense. Defense informs offense."')}\n${mu('  — Every good hacker, ever')}`,
+      `${g('"Root is not a destination. It\'s a mindset."')}\n${mu('  — Unknown CTF player')}`,
+      `${g('"If you know the enemy and know yourself, you need not fear."')}\n${mu('  — Sun Tzu (also a pentester)')}`,
+      `${g('"The best exploit is one that was never needed."')}\n${mu('  — Every CISO\'s dream')}`,
+      `${g('"In cybersecurity, curiosity is your best weapon."')}\n${mu('  — Mahir Asif, probably')}`,
+    ];
+    return `\n${quotes[Math.floor(Math.random() * quotes.length)]}\n\n${mu('Run')} <span style="color:#39ff6e">fortune</span> ${mu('again for another.')}`;
+  },
+
+  hack: () => `
+${g('[*] Initializing exploit framework...')}
+${mu('Loading modules... ████████████████ 100%')}
+
+${yw('[!] Target identified: mahir.local')}
+${bl('[>] Attempting privilege escalation...')}
+${g('[+] Access granted. Welcome, you.')}
+
+${wh('But honestly? The real hack is building something great.')}
+${mu('Close this terminal and scroll down — the work speaks louder.')}
+${g('[+] Have fun. Stay curious. Stay ethical.')}`,
+
+  matrix: () => `
+${g('Wake up, Neo...')}
+${g('The Matrix has you...')}
+${g('Follow the white rabbit 🐇')}
+
+${mu('(There is no spoon.)')}
+${mu('But there IS an eJPT cert.')}
+${g('[+] Red pill chosen. Reality loaded.')}`,
+  'sudo rm -rf /':     () => er('\nNice try. I\'ve seen that one before.'),
+  'sudo su':           () => er('\n[sudo] password for mahir: \nSorry, you are not allowed to be root here. Nice try 😏'),
+  'rm -rf /':          () => er('\nPermission denied. Also, really? 🙄'),
+  'cat /etc/passwd':   () => `${mu('root:x:0:0:root:/root:/bin/zsh')}\n${g('mahir:x:1000:1000:Mahir Asif:/home/mahir:/bin/zsh')}\n${mu('[+] Only one user matters here.')}`,
+  'cat .secrets':      () => er('\nbash: .secrets: Permission denied\n\n[!] Nice try though 😏'),
+  'pwd':               () => g('/home/mahir'),
+  'id':                () => `${g('uid=1000(mahir)')} ${yw('gid=1000(mahir)')} ${bl('groups=1000(mahir),27(sudo),1337(pentesters)')}`,
+  'ifconfig':          () => `${bl('eth0:')} flags=4163\n        inet ${g('192.168.69.1')}  netmask 255.255.255.0\n${bl('lo:')}   inet ${g('127.0.0.1')}  netmask 255.0.0.0`,
+  'nmap -sv mahir.local': () => CMDS['nmap'](),
+  'nmap -sv':          () => CMDS['nmap'](),
+  'cat about.txt':     () => CMDS['about'](),
+  'cat profile.txt':   () => CMDS['about'](),
+  'cat cv.pdf':        () => CMDS['cat cv'](),
+  'man mahir':         () => CMDS['whoami'](),
+  exit:                () => mu('\nlogout\nConnection to mahir.local closed.'),
+};
+
+function appendLine(html) {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  div.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
+  itermOutput.appendChild(div);
+  itermOutput.scrollTop = itermOutput.scrollHeight;
+}
+
+function promptHTML() {
+  return `<span style="color:#39ff6e;font-weight:700">┌──(root㉿kali)-[~]\n└─# </span>`;
+}
+
+function runCommand(cmd) {
+  appendLine(`${promptHTML()}${wh(cmd)}`);
+  const trimmed = cmd.trim().toLowerCase();
+  if (!trimmed) return;
+  cmdHistory.unshift(cmd);
+  histIdx = -1;
+  if (trimmed === 'clear') { itermOutput.innerHTML = ''; return; }
+  const fn = CMDS[trimmed];
+  if (fn) {
+    const result = fn();
+    if (result) appendLine(result);
+  } else {
+    appendLine(`${er('bash: ' + cmd + ': command not found')}\n${mu('type')} <span style="color:#39ff6e">help</span> ${mu('for a list of commands')}`);
+  }
+}
+
+/* Boot sequence */
+const boot = [
+  { t:   0, h: mu('Kali GNU/Linux Rolling · tty1') },
+  { t: 200, h: mu('mahir-kali login: ') + wh('root') },
+  { t: 500, h: mu('Password: ') + wh('••••••••••') },
+  { t: 900, h: g('[  OK  ] Started session 1 of user root.') },
+  { t:1100, h: '' },
+  { t:1200, h: g('┌──(root㉿kali)-[~]') },
+  { t:1300, h: g('└─# ') + mu('./recon.sh --target mahir.local') },
+  { t:1600, h: '' },
+  { t:1700, h: mu('[*] Starting reconnaissance...') },
+  { t:2000, h: g('[+] Host is up · Identity profile located') },
+  { t:2100, h: '' },
+  { t:2200, h: mu('┌──────────────────────────────────────────────────┐') },
+  { t:2260, h: mu('│') + `  ${wh('TARGET')}  :  ${wh('MAHIR ASIF')}                              ` + mu('│') },
+  { t:2310, h: mu('│') + `  ${mu('ROLE')}    :  ${g('Junior Penetration Tester / eJPT')}        ` + mu('│') },
+  { t:2360, h: mu('│') + `  ${mu('CERT')}    :  ${yw('eJPT')} — INE Security (Mar 2026)          ` + mu('│') },
+  { t:2410, h: mu('│') + `  ${mu('DOMAIN')}  :  Cybersecurity Student @ APU, Malaysia      ` + mu('│') },
+  { t:2460, h: mu('│') + `  ${mu('STATUS')}  :  ${g('● ONLINE')} — ${g('open to opportunities')}            ` + mu('│') },
+  { t:2510, h: mu('└──────────────────────────────────────────────────┘') },
+  { t:2620, h: '' },
+  { t:2720, h: g('[+] Recon complete. Type ') + wh('help') + g(' to explore.') },
+];
+boot.forEach(({ t, h }) => setTimeout(() => appendLine(h === '' ? '&nbsp;' : h), t));
+setTimeout(() => { itermHint.innerHTML = `type <span style="color:var(--green)">help</span> for commands · ↑↓ for history · tab to autocomplete`; }, 3000);
+
+/* Input events */
+itermInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    runCommand(itermInput.value);
+    itermInput.value = '';
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (histIdx < cmdHistory.length - 1) { histIdx++; itermInput.value = cmdHistory[histIdx]; }
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (histIdx > 0) { histIdx--; itermInput.value = cmdHistory[histIdx]; }
+    else { histIdx = -1; itermInput.value = ''; }
+  } else if (e.key === 'Tab') {
+    e.preventDefault();
+    const partial = itermInput.value.trim().toLowerCase();
+    if (!partial) return;
+    const matches = Object.keys(CMDS).filter(c => c.startsWith(partial));
+    if (matches.length === 1) { itermInput.value = matches[0]; }
+    else if (matches.length > 1) { appendLine(`${mu('Possible completions: ')}${matches.map(m => `<span style="color:#39ff6e">${m}</span>`).join('  ')}`); }
+  }
+});
+
+itermInput.addEventListener('click', () => itermInput.focus());
+document.querySelector('.iterm-wrap')?.addEventListener('click', () => itermInput.focus());
+
+</script>
 </body>
 </html>
-
