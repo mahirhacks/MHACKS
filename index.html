@@ -3,351 +3,706 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Mahir Asif — root@kali:~</title>
+  <title>Mahir Asif — Exhibition</title>
   <link rel="icon" type="image/x-icon" href="icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg:         #0a0a0a;
-  --green:      #39ff6e;
-  --green-dim:  #1aaa44;
-  --green-dark: #0a3318;
-  --border:     #1a2e1e;
-  --hdr:        #0d150f;
-  --text:       #c8fcd8;
-  --text-strong:#ffffff;
-  --muted:      #4d7a5a;
-  --prompt:     #39ff6e;
-  --err:        #ff453a;
-  --warn:       #ffd60a;
-  --info:       #4cc2ff;
-  --orange:     #ff6b35;
-  --win-bg:     rgba(9,13,10,0.93);
-  --grid:       rgba(57,255,110,0.03);
-  --scan:       rgba(57,255,110,0.04);
+  --base:    #fafafa;
+  --ink:     #0a0a0a;
+  --red:     #8B0000;
+  --red-lit: #A01020;
+  --red-glow:rgba(139,0,0,0.15);
+  --red-soft:rgba(139,0,0,0.06);
+  --faint:   rgba(10,10,10,0.45);
+  --line:    rgba(10,10,10,0.12);
+  --frame:   rgba(10,10,10,0.08);
+  --nav-bg:  rgba(250,250,250,0.82);
+  --spot:    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,0,0,0.07) 0%, transparent 70%);
+}
+
+html.dark-theme {
+  --base:    #080808;
+  --ink:     #f2f0ec;
+  --red:     #DC143C;
+  --red-lit: #FF3355;
+  --red-glow:rgba(220,20,60,0.22);
+  --red-soft:rgba(220,20,60,0.08);
+  --faint:   rgba(242,240,236,0.42);
+  --line:    rgba(242,240,236,0.1);
+  --frame:   rgba(242,240,236,0.06);
+  --nav-bg:  rgba(8,8,8,0.85);
+  --spot:    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(220,20,60,0.12) 0%, transparent 70%);
 }
 
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; scroll-padding-top:110px; }
-
-/* ── Light theme ── */
-html.light-theme {
-  --bg:         #f0f4f1;
-  --green:      #1a7a3a;
-  --green-dim:  #2a9a50;
-  --green-dark: #d4edd9;
-  --border:     #b0ccb8;
-  --hdr:        #e0ece3;
-  --text:       #1a3a24;
-  --text-strong:#0a1a10;
-  --muted:      #5a7a64;
-  --prompt:     #1a7a3a;
-  --err:        #cc2211;
-  --warn:       #a06000;
-  --info:       #1060aa;
-  --orange:     #c04010;
-  --win-bg:     rgba(240,248,242,0.97);
-  --grid:       rgba(26,122,58,0.04);
-  --scan:       rgba(26,122,58,0.05);
-}
-html.light-theme body { background:var(--bg); color:var(--text); }
-html.light-theme #starsCanvas { background:radial-gradient(ellipse at 20% 50%,rgba(150,220,170,0.15) 0%,transparent 55%), radial-gradient(ellipse at 80% 20%,rgba(100,200,130,0.1) 0%,transparent 55%), #e8f2ea; }
-html.light-theme nav.navbar { background:rgba(230,240,232,0.92); }
-html.light-theme #mobileMenu { background:rgba(230,240,232,.97); }
-html.light-theme .iterm-input { color:#111; }
-html.light-theme .iterm-inputrow { background:rgba(200,225,205,.4); }
-html.light-theme footer { background:transparent; }
+html { scroll-behavior:smooth; scroll-padding-top:100px; }
 
 body {
-  font-family:'JetBrains Mono',monospace;
-  background:var(--bg);
-  color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--base);
+  color:var(--ink);
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  transition:background .6s ease,color .6s ease;
+}
+body.custom-cursor { cursor:none; }
+body.custom-cursor a,
+body.custom-cursor button,
+body.custom-cursor [role="button"] { cursor:none; }
+
+/* Gallery cursor */
+#galleryCursor {
+  position:fixed; top:0; left:0; z-index:100000;
+  pointer-events:none; opacity:0;
+  transition:opacity .35s ease;
+  will-change:transform;
+}
+body.custom-cursor #galleryCursor { opacity:1; }
+
+.cursor-dot {
+  position:absolute; top:0; left:0;
+  width:5px; height:5px;
+  background:var(--ink); border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:background .35s ease, transform .35s ease, width .35s ease, height .35s ease;
+}
+.cursor-trail {
+  position:absolute; top:0; left:0;
+  width:10px; height:10px;
+  border:1px solid var(--ink);
+  border-radius:50%; opacity:.25;
+  transform:translate(-50%,-50%);
+  transition:border-color .35s ease, opacity .35s ease, width .35s ease, height .35s ease;
 }
 
-/* CRT grid */
-body::before {
-  content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
-  background-image: linear-gradient(var(--grid) 1px,transparent 1px),
-                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:50px 50px;
+#galleryCursor.is-hover .cursor-dot {
+  background:var(--red); width:6px; height:6px;
 }
-/* Scanline */
-body::after {
-  content:''; position:fixed; top:-100%; left:0;
-  width:100%; height:35%; z-index:2; pointer-events:none;
-  background:linear-gradient(transparent,var(--scan),transparent);
-  animation:scanline 10s linear infinite;
+#galleryCursor.is-hover .cursor-trail {
+  width:18px; height:18px; border-color:var(--red); opacity:.5;
 }
-body.star-view::before, body.star-view::after { display:none; }
-@keyframes scanline { to{ top:200%; } }
+#galleryCursor.is-click .cursor-dot { transform:translate(-50%,-50%) scale(.6); }
+#galleryCursor.is-click .cursor-trail { width:8px; height:8px; opacity:.35; }
 
 #starsCanvas {
-  position:fixed; top:0; left:0; width:100%; height:100%; z-index:0;
-  background:radial-gradient(ellipse at 20% 50%,rgba(0,80,30,0.08) 0%,transparent 55%),
-             radial-gradient(ellipse at 80% 20%,rgba(0,60,20,0.06) 0%,transparent 55%),
-             #070a07;
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:var(--base);
+  transition:background .6s ease;
+}
+html.dark-theme #starsCanvas { background:#050505; }
+
+#spotlight {
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:var(--spot);
+  transition:background .6s ease;
 }
 
-/* ── Navbar ── */
 header { position:fixed; width:100%; top:0; z-index:500; }
 nav.navbar {
-  background:rgba(7,10,7,0.85);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);
-  padding:.55rem 1.5rem;
-  position:relative; z-index:10;
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+  padding:1rem 2rem;
+  transition:background .6s,border-color .6s;
 }
-.nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.nav-inner {
+  max-width:1100px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+}
 .nav-logo {
-  font-size:.82rem; font-weight:700; color:var(--green);
-  text-shadow:0 0 12px rgba(57,255,110,.5);
-  text-decoration:none; white-space:nowrap; letter-spacing:.04em;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem; font-weight:600; letter-spacing:.06em;
+  color:var(--ink); text-decoration:none; text-transform:uppercase;
 }
-.nav-logo .dot-red { color:var(--err); }
-.nav-links { display:flex; gap:1.8rem; list-style:none; }
+.nav-logo em { font-style:normal; color:var(--red); }
+.nav-links { display:flex; gap:2rem; list-style:none; }
 .nav-links a {
-  font-size:.72rem; color:var(--muted); text-decoration:none;
-  letter-spacing:.1em; text-transform:uppercase; transition:color .2s;
+  font-size:.68rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--faint); text-decoration:none; font-weight:400;
+  position:relative; transition:color .3s;
 }
-.nav-links a::before { content:'./'; color:var(--green); opacity:0; transition:opacity .2s; margin-right:2px; font-size:.68rem; }
-.nav-links a:hover { color:var(--green); }
-.nav-links a:hover::before { opacity:1; }
-.nav-controls { display:flex; gap:.4rem; align-items:center; }
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px;
+  background:var(--red); transition:width .35s ease;
+}
+.nav-links a:hover { color:var(--red); }
+.nav-links a:hover::after { width:100%; }
+.nav-controls { display:flex; gap:.5rem; align-items:center; }
 .icon-btn {
-  background:transparent; border:1px solid var(--border);
-  color:var(--muted); padding:.38rem; border-radius:4px;
-  line-height:0; transition:all .2s;
+  background:transparent; border:1px solid var(--line);
+  color:var(--faint); padding:.42rem; border-radius:0;
+  line-height:0; cursor:pointer; transition:all .3s;
 }
-.icon-btn:hover { color:var(--green); border-color:var(--green-dim); box-shadow:0 0 8px rgba(57,255,110,.25); }
-.icon-btn svg { width:17px; height:17px; }
+.icon-btn:hover { color:var(--red); border-color:var(--red); }
+.icon-btn svg { width:16px; height:16px; }
 .nav-mobile { display:none; }
-@media(max-width:840px){ .nav-links{ display:none; } .nav-mobile{ display:flex; } }
-@media(min-width:841px){ #mobileMenu{ display:none; } }
+@media(max-width:760px){ .nav-links{ display:none; } .nav-mobile{ display:flex; } }
+@media(min-width:761px){ #mobileMenu{ display:none; } }
 #mobileMenu {
-  background:rgba(7,10,7,.97); border-top:1px solid var(--border);
+  background:var(--nav-bg); border-top:1px solid var(--line);
   max-height:0; overflow:hidden; opacity:0;
   transition:max-height .4s ease,opacity .4s ease;
-  position:relative; z-index:10;
 }
-#mobileMenu.active { max-height:400px; opacity:1; }
+#mobileMenu.active { max-height:300px; opacity:1; }
 #mobileMenu a {
-  display:block; padding:.65rem 1.5rem;
-  font-size:.78rem; color:var(--muted); text-decoration:none;
-  border-bottom:1px solid rgba(57,255,110,.05); transition:color .2s,background .2s;
+  display:block; padding:.85rem 2rem;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--faint); text-decoration:none;
+  border-bottom:1px solid var(--line); transition:color .3s;
 }
-#mobileMenu a:hover { color:var(--green); background:rgba(57,255,110,.04); }
+#mobileMenu a:hover { color:var(--red); }
 
 #exitStarView {
-  position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999;
-  background:rgba(57,255,110,.05); border:1px solid var(--border);
-  color:var(--green); padding:.65rem; border-radius:50%;
-  backdrop-filter:blur(8px); transition:all .2s;
+  position:fixed; bottom:2rem; right:2rem; z-index:9999;
+  background:var(--base); border:1px solid var(--line);
+  color:var(--red); padding:.7rem; cursor:pointer;
+  transition:all .3s;
 }
-#exitStarView:hover { box-shadow:0 0 16px rgba(57,255,110,.4); }
-#exitStarView svg { width:22px; height:22px; display:block; }
+#exitStarView:hover { box-shadow:0 0 30px var(--red-glow); border-color:var(--red); }
+#exitStarView svg { width:20px; height:20px; display:block; }
 
 #pageContent { position:relative; z-index:10; }
 
-/* ── Terminal window ── */
-.term-win {
-  background:var(--win-bg);
-  border:1px solid var(--border);
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 0 40px rgba(57,255,110,.04), 0 20px 50px rgba(0,0,0,.55);
-}
-.term-titlebar {
-  background:var(--hdr);
-  border-bottom:1px solid var(--border);
-  padding:.5rem 1rem;
-  display:flex; align-items:center; gap:.55rem;
-  flex-shrink:0;
-}
-.dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
-.dot-r { background:#ff5f57; box-shadow:0 0 4px rgba(255,95,87,.5); }
-.dot-y { background:#febc2e; box-shadow:0 0 4px rgba(254,188,46,.5); }
-.dot-g { background:#28c840; box-shadow:0 0 4px rgba(40,200,64,.5); }
-.term-tab { margin-left:.4rem; color:var(--muted); font-size:.7rem; font-weight:500; letter-spacing:.03em; }
-.term-body { padding:1.1rem 1.4rem; font-size:.78rem; line-height:1.75; }
-
-/* ── Terminal colours ── */
-.gc  { color:var(--green); }
-.gdc { color:var(--green-dim); }
-.muc { color:var(--muted); }
-.orc { color:var(--orange); font-weight:600; }
-.blc { color:var(--info); }
-.ywc { color:var(--warn); }
-.erc { color:var(--err); }
-.whc { color:var(--text-strong,#fff); font-weight:600; }
-.output-line { display:block; white-space:pre-wrap; }
-.blank { display:block; height:.85rem; }
-.prompt-label { color:var(--prompt); font-weight:700; }
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* ── INTERACTIVE TERMINAL ── */
-.iterm-wrap { display:flex; flex-direction:column; height:440px; }
-.iterm-output {
-  flex:1; overflow-y:auto; padding:1.1rem 1.4rem;
-  font-size:.78rem; line-height:1.75;
-  scrollbar-width:thin; scrollbar-color:var(--green-dim) transparent;
-}
-.iterm-output::-webkit-scrollbar { width:4px; }
-.iterm-output::-webkit-scrollbar-thumb { background:var(--green-dim); border-radius:2px; }
-.iterm-inputrow {
-  display:flex; align-items:center; gap:.4rem;
-  padding:.6rem 1.4rem;
-  border-top:1px solid var(--border);
-  background:rgba(0,0,0,.25);
-  flex-shrink:0;
-}
-.iterm-prompt-label { color:var(--prompt); font-size:.78rem; font-weight:700; white-space:nowrap; flex-shrink:0; line-height:1.4; }
-.iterm-input {
-  flex:1; background:transparent; border:none; outline:none;
-  font-family:'JetBrains Mono',monospace; font-size:.78rem; color:#fff;
-  caret-color:var(--green);
-}
-.iterm-hint { font-size:.68rem; color:var(--muted); padding:.3rem 1.4rem .5rem; flex-shrink:0; }
-
-/* ── Skill bars ── */
-.skill-row { display:flex; align-items:center; gap:.7rem; margin:.3rem 0; flex-wrap:wrap; }
-.skill-name { color:var(--text); min-width:11rem; font-size:.76rem; }
-.skill-track {
-  flex:1; min-width:100px; height:7px;
-  background:var(--green-dark); border:1px solid var(--green-dim);
+/* ── Museum entrance / hero ── */
+.entrance {
+  min-height:100vh; min-height:100dvh;
+  height:100vh; height:100dvh;
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  text-align:center; padding:0;
   position:relative; overflow:hidden;
 }
-.skill-fill {
-  height:100%; width:0;
-  background:linear-gradient(90deg,var(--green-dim),var(--green));
-  box-shadow:0 0 6px var(--green);
-  transition:width 1.4s cubic-bezier(.22,.61,.36,1);
+.hero-panel {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  border:none;
+  border-bottom:1px solid var(--line);
+  background:var(--base);
+  z-index:0; pointer-events:none; overflow:hidden;
 }
-.skill-pct { color:var(--green); font-size:.73rem; min-width:2.4rem; text-align:right; }
-
-/* Skill tags */
-.tag-grid { display:flex; flex-wrap:wrap; gap:.4rem; margin:.5rem 0; }
-.stag { font-size:.68rem; padding:.28rem .65rem; border-radius:2px; letter-spacing:.04em; border:1px solid; }
-.stag.red  { border-color:rgba(255,107,53,.4); color:var(--orange); background:rgba(255,107,53,.06); }
-.stag.blue { border-color:rgba(76,194,255,.3);  color:var(--info);   background:rgba(76,194,255,.05); }
-
-/* ── ls-row project lines ── */
-.ls-row { display:flex; gap:.7rem; padding:.38rem .2rem; border-bottom:1px solid rgba(26,46,30,.5); flex-wrap:wrap; font-size:.76rem; }
-.ls-row:hover { background:rgba(57,255,110,.025); }
-.ls-perm { color:var(--muted); min-width:9rem; }
-.ls-date { color:var(--warn); min-width:5.5rem; }
-.ls-name { color:var(--info); flex:1; }
-
-/* ── whois contact ── */
-.whois-row { display:flex; gap:.8rem; margin:.2rem 0; font-size:.78rem; flex-wrap:wrap; }
-.wk { color:var(--muted); min-width:10rem; }
-.wv { color:var(--text); }
-.wv a { color:var(--green); text-decoration:none; }
-.wv a:hover { text-decoration:underline; }
-
-/* ── cert card ── */
-.cert-item {
-  border:1px solid var(--border); padding:.75rem 1rem;
-  margin:.45rem 0; background:rgba(57,255,110,.02);
-  font-size:.76rem; transition:border-color .2s,background .2s;
+.hero-fiber-flow {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  display:block; opacity:.92;
 }
-.cert-item:hover { border-color:var(--green-dim); background:rgba(57,255,110,.04); }
-.cert-item.featured { border-color:rgba(255,214,10,.4); background:rgba(255,214,10,.03); }
-.cert-badge { font-size:.65rem; color:var(--warn); letter-spacing:.08em; margin-bottom:.3rem; }
+@media (prefers-reduced-motion:reduce) {
+  .hero-fiber-flow { display:none; }
+}
+.entrance-content {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center;
+  width:100%; max-width:min(96vw,1100px);
+  padding:8rem 2rem 6rem;
+}
+.entrance-rule {
+  width:1px; height:80px; background:var(--red);
+  margin:0 auto 2.5rem;
+  animation:ruleGrow 1.2s ease forwards;
+  transform-origin:top; transform:scaleY(0);
+}
+@keyframes ruleGrow { to { transform:scaleY(1); } }
 
-/* ── sep ── */
-.sep { border:none; border-top:1px solid var(--border); margin:.75rem 0; }
+.museum-tag {
+  font-size:.62rem; letter-spacing:.35em; text-transform:uppercase;
+  color:var(--red); margin-bottom:1.5rem;
+  opacity:0; animation:fadeUp .8s .3s ease forwards;
+  display:inline-flex; align-items:center; gap:.55rem;
+}
+.museum-tag .ico { width:13px; height:13px; opacity:.85; }
 
-/* ── Circular progress ── */
-.prog-grid { display:flex; flex-wrap:wrap; gap:1.8rem; margin-top:1rem; }
-.circular-progress-item { display:flex; flex-direction:column; align-items:center; }
-.circular-progress-container { position:relative; width:90px; height:90px; }
-.circular-progress-svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
-.circular-progress-bg  { fill:none; stroke:var(--green-dark); stroke-width:8; }
-.circular-progress-fill { fill:none; stroke:url(#gradGreen); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset 1.5s ease-out; }
-.circular-progress-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1rem; font-weight:700; color:var(--green); }
-.circular-progress-label { margin-top:.5rem; font-size:.72rem; color:var(--text); text-align:center; }
+.hero-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.6rem,15vw,9rem);
+  font-weight:300; line-height:.95;
+  letter-spacing:.12em;
+  color:var(--ink);
+  margin:0;
+  opacity:0; animation:fadeUp 1s .5s ease forwards;
+}
+.hero-name em {
+  font-style:italic; color:var(--red); font-weight:300;
+}
 
-/* ── Reveal ── */
-.reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s cubic-bezier(.22,.61,.36,1); }
+/* Shared inline icons */
+.ico {
+  display:inline-block; vertical-align:middle; flex-shrink:0;
+  width:14px; height:14px;
+  stroke:currentColor; fill:none;
+}
+.ico--sm { width:12px; height:12px; }
+.ico--md { width:16px; height:16px; }
+.label-ico {
+  display:inline-flex; align-items:center; justify-content:center;
+  color:var(--red); line-height:0;
+}
+.label-ico .ico { width:15px; height:15px; }
+
+.entrance-sub {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,2.5vw,1.35rem);
+  font-weight:400; font-style:italic;
+  color:var(--faint); max-width:480px;
+  margin:2rem auto 0; line-height:1.6;
+  opacity:0; animation:fadeUp 1s .7s ease forwards;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:none; }
+}
+
+.scroll-cue {
+  position:absolute; bottom:3rem; left:0; right:0;
+  width:max-content; margin:0 auto;
+  display:flex; flex-direction:column; align-items:center; gap:.5rem;
+  color:var(--red); z-index:2;
+  opacity:0;
+  animation:fadeUpCue 1s 1.2s ease forwards, bob 2.5s 2.2s ease-in-out infinite;
+}
+.scroll-cue .ico { width:18px; height:18px; stroke-width:1.5; }
+.scroll-cue::after {
+  content:''; width:1px; height:36px;
+  background:linear-gradient(var(--red), transparent);
+}
+@keyframes fadeUpCue {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes bob { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(6px); } }
+
+/* ── Gallery layout ── */
+.gallery {
+  max-width:1100px; margin:0 auto;
+  padding:0 2rem 8rem;
+}
+.gallery-hall {
+  padding:6rem 0;
+  border-top:1px solid var(--line);
+  position:relative;
+}
+.gallery-hall:first-child { border-top:none; }
+
+.exhibit-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(5rem,14vw,9rem);
+  font-weight:300; color:var(--frame);
+  position:absolute; top:3rem; right:0;
+  line-height:1; pointer-events:none; user-select:none;
+  transition:color .6s;
+}
+
+.exhibit-label {
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--red); margin-bottom:1rem;
+  display:flex; align-items:center; gap:.65rem;
+}
+.exhibit-label::before { display:none; }
+
+.exhibit-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:400; color:var(--ink);
+  line-height:1.1; margin-bottom:2.5rem;
+  max-width:600px;
+}
+
+/* Portrait frame — museum piece */
+.portrait-hall {
+  display:grid; grid-template-columns:1fr 1fr; gap:4rem;
+  align-items:center; padding-top:2rem;
+}
+@media(max-width:800px){ .portrait-hall{ grid-template-columns:1fr; gap:3rem; } }
+
+.frame {
+  position:relative; padding:1.5rem;
+  border:1px solid var(--line);
+  background:var(--base);
+  transition:border-color .4s, box-shadow .4s;
+}
+.frame::before, .frame::after {
+  content:''; position:absolute; width:24px; height:24px;
+  border-color:var(--red); border-style:solid; transition:border-color .4s;
+}
+.frame::before { top:-1px; left:-1px; border-width:2px 0 0 2px; }
+.frame::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+.frame:hover { border-color:var(--red); box-shadow:0 0 60px var(--red-glow); }
+
+.frame-inner { aspect-ratio:3/4; overflow:hidden; position:relative; }
+.frame-inner img {
+  width:100%; height:100%; object-fit:cover; object-position:center top;
+  display:block; filter:grayscale(20%);
+  transition:filter .6s ease, transform .8s cubic-bezier(.22,.61,.36,1);
+}
+.frame:hover .frame-inner img { filter:grayscale(0%); transform:scale(1.03); }
+
+.plaque {
+  margin-top:1.25rem; padding-top:1rem;
+  border-top:1px solid var(--line);
+}
+.plaque-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem; font-weight:500; color:var(--ink);
+}
+.plaque-meta {
+  font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--faint); margin-top:.3rem;
+}
+
+.portrait-text { font-size:.95rem; line-height:1.85; color:var(--faint); }
+.portrait-text + .portrait-text { margin-top:1.1rem; }
+.portrait-text strong { color:var(--ink); font-weight:500; }
+.status-row { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:2rem; }
+.status-chip {
+  font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
+  padding:.45rem .85rem; border:1px solid var(--line);
+  color:var(--faint); transition:all .3s;
+  display:inline-flex; align-items:center; gap:.4rem;
+}
+.status-chip .ico { width:11px; height:11px; opacity:.75; }
+.status-chip.live { border-color:var(--red); color:var(--red); }
+
+/* Work exhibits — staggered */
+.exhibit-grid { display:flex; flex-direction:column; gap:0; }
+.work-piece {
+  position:relative;
+  display:grid; grid-template-columns:120px 1fr; gap:2rem;
+  padding:2.5rem 1.25rem 2.5rem 1.75rem;
+  margin:0 -1.25rem;
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+  transition:
+    transform .55s cubic-bezier(.22,.61,.36,1),
+    background .55s ease,
+    border-color .45s ease,
+    box-shadow .55s ease;
+}
+.work-piece::before {
+  content:''; position:absolute; left:0; top:50%;
+  width:2px; height:0; background:var(--red);
+  transform:translateY(-50%);
+  transition:height .55s cubic-bezier(.22,.61,.36,1);
+}
+.work-piece::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, var(--red-soft) 0%, transparent 55%);
+  opacity:0; transition:opacity .55s ease;
+  pointer-events:none;
+}
+.work-piece:first-child { border-top:1px solid var(--line); }
+.work-piece:hover {
+  transform:translateX(14px);
+  border-color:transparent;
+  box-shadow:-12px 0 32px var(--red-glow);
+}
+.work-piece:hover::before { height:55%; }
+.work-piece:hover::after { opacity:1; }
+@media(max-width:600px){ .work-piece{ grid-template-columns:1fr; gap:.75rem; padding:2rem 1rem; margin:0 -.5rem; } }
+
+.work-year {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem; font-weight:300; color:var(--red);
+  line-height:1.2;
+  transition:transform .55s cubic-bezier(.22,.61,.36,1), color .4s ease;
+}
+.work-piece:hover .work-year { transform:translateX(4px); color:var(--red-lit); }
+.work-year span {
+  display:block; font-size:.65rem; letter-spacing:.1em; color:var(--faint);
+  font-family:'DM Sans',sans-serif; margin-top:.2rem;
+  transition:letter-spacing .5s ease, color .4s ease;
+}
+.work-piece:hover .work-year span { letter-spacing:.14em; color:var(--ink); opacity:.7; }
+.work-role {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem; font-weight:500; color:var(--ink);
+  margin-bottom:.35rem;
+  transition:color .45s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.work-piece:hover .work-role { color:var(--red); transform:translateX(6px); }
+.work-org {
+  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--faint); margin-bottom:1rem;
+  transition:color .45s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.work-piece:hover .work-org { transform:translateX(6px); color:var(--ink); opacity:.65; }
+.work-points { list-style:none; display:flex; flex-direction:column; gap:.5rem; }
+.work-points li {
+  font-size:.88rem; line-height:1.65; color:var(--faint);
+  padding-left:1.2rem; position:relative;
+  transition:
+    transform .5s cubic-bezier(.22,.61,.36,1),
+    color .45s ease,
+    opacity .45s ease;
+}
+.work-piece:hover .work-points li { color:var(--ink); transform:translateX(8px); }
+.work-piece:hover .work-points li:nth-child(1) { transition-delay:.04s; }
+.work-piece:hover .work-points li:nth-child(2) { transition-delay:.09s; }
+.work-piece:hover .work-points li:nth-child(3) { transition-delay:.14s; }
+.work-points li::before {
+  content:'—'; position:absolute; left:0; color:var(--red);
+  transition:transform .45s ease, color .45s ease;
+}
+.work-piece:hover .work-points li::before { transform:translateX(3px); color:var(--red-lit); }
+
+/* Skills — typographic installation */
+.skill-installation {
+  display:grid; grid-template-columns:1fr 1fr; gap:3rem;
+}
+@media(max-width:700px){ .skill-installation{ grid-template-columns:1fr; } }
+.skill-wing-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem; font-style:italic; color:var(--red);
+  margin-bottom:1.25rem; padding-bottom:.75rem;
+  border-bottom:1px solid var(--line);
+}
+.skill-word {
+  display:inline-block; font-size:.78rem; letter-spacing:.06em;
+  padding:.5rem 0; margin-right:1.2rem; color:var(--faint);
+  border-bottom:1px solid transparent;
+  transition:color .3s, border-color .3s;
+  cursor:default;
+}
+.skill-word:hover { color:var(--red); border-bottom-color:var(--red); }
+
+/* Credentials — wall labels */
+.cred-wall { display:flex; flex-direction:column; }
+.cred-plate {
+  position:relative;
+  display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:baseline;
+  padding:1.5rem 1.25rem;
+  margin:0 -1.25rem;
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+  transition:
+    transform .5s cubic-bezier(.22,.61,.36,1),
+    background .5s ease,
+    border-color .45s ease,
+    box-shadow .5s ease;
+}
+.cred-plate::before {
+  content:''; position:absolute; left:0; top:50%;
+  width:2px; height:0; background:var(--red);
+  transform:translateY(-50%);
+  transition:height .5s cubic-bezier(.22,.61,.36,1);
+}
+.cred-plate::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, var(--red-soft) 0%, transparent 50%);
+  opacity:0; transition:opacity .5s ease;
+  pointer-events:none;
+}
+.cred-plate:first-child { border-top:1px solid var(--line); }
+.cred-plate:hover {
+  transform:translateX(12px);
+  border-color:transparent;
+  box-shadow:-10px 0 28px var(--red-glow);
+}
+.cred-plate:hover::before { height:50%; }
+.cred-plate:hover::after { opacity:1; }
+.cred-plate > div {
+  position:relative; z-index:1;
+  transition:transform .5s cubic-bezier(.22,.61,.36,1);
+}
+.cred-plate:hover > div { transform:translateX(4px); }
+.cred-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem; font-weight:500; color:var(--ink);
+  transition:color .45s ease;
+}
+.cred-plate:hover .cred-name { color:var(--red); }
+.cred-meta {
+  font-size:.72rem; color:var(--faint); margin-top:.2rem; letter-spacing:.04em;
+  transition:color .45s ease, letter-spacing .5s ease;
+}
+.cred-plate:hover .cred-meta { color:var(--ink); letter-spacing:.06em; opacity:.7; }
+.cred-link {
+  position:relative; z-index:1;
+  display:inline-flex; align-items:center; gap:.35rem;
+  font-size:.62rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--red); text-decoration:none; white-space:nowrap;
+  border-bottom:1px solid transparent;
+  transition:color .4s ease, border-color .4s ease, transform .5s cubic-bezier(.22,.61,.36,1);
+}
+.cred-link .ico { width:13px; height:13px; }
+.cred-plate:hover .cred-link { border-bottom-color:var(--red); transform:translateX(3px); }
+
+/* Projects — masterpiece portraits */
+.masterpiece-wall {
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:3rem 2.5rem;
+}
+@media(max-width:720px){ .masterpiece-wall{ grid-template-columns:1fr; gap:2.5rem; } }
+
+.masterpiece-frame {
+  position:relative; padding:1.15rem;
+  border:1px solid var(--line);
+  background:var(--base);
+  transition:border-color .45s ease, box-shadow .45s ease;
+}
+.masterpiece-frame::before,
+.masterpiece-frame::after {
+  content:''; position:absolute; width:20px; height:20px;
+  border-color:var(--red); border-style:solid;
+  opacity:.55; transition:opacity .45s ease, width .45s ease, height .45s ease;
+  pointer-events:none;
+}
+.masterpiece-frame::before { top:-1px; left:-1px; border-width:1px 0 0 1px; }
+.masterpiece-frame::after  { bottom:-1px; right:-1px; border-width:0 1px 1px 0; }
+.masterpiece-frame:hover {
+  border-color:var(--red);
+  box-shadow:0 0 48px var(--red-glow);
+}
+.masterpiece-frame:hover::before,
+.masterpiece-frame:hover::after { opacity:1; width:26px; height:26px; }
+
+.masterpiece-emblem {
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  padding:2rem 1rem 1.75rem;
+  border-bottom:1px solid var(--line);
+}
+.masterpiece-index { display:none; }
+
+.masterpiece-link {
+  display:inline-flex; align-items:center; gap:.35rem;
+  margin-top:.85rem;
+  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--red); text-decoration:none;
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.masterpiece-link .ico { width:12px; height:12px; }
+.masterpiece-link:hover { border-bottom-color:var(--red); }
+.masterpiece-icon {
+  width:48px; height:48px; color:var(--red);
+  opacity:.65;
+  transition:opacity .45s ease, transform .5s cubic-bezier(.22,.61,.36,1);
+}
+.masterpiece-icon svg { width:100%; height:100%; display:block; }
+.masterpiece-frame:hover .masterpiece-icon {
+  opacity:1; transform:scale(1.08);
+}
+
+.masterpiece-plaque {
+  margin-top:1rem;
+}
+.masterpiece-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem; font-weight:500; color:var(--ink);
+  line-height:1.25;
+}
+.masterpiece-meta {
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--red); margin-top:.35rem;
+}
+.masterpiece-desc {
+  font-size:.84rem; line-height:1.7; color:var(--faint);
+  margin-top:.65rem;
+}
+
+/* Archive single piece */
+.archive-piece {
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end;
+  gap:2rem; padding:2.5rem; border:1px solid var(--line);
+  transition:border-color .4s, box-shadow .4s;
+}
+.archive-piece:hover { border-color:var(--red); box-shadow:0 0 50px var(--red-glow); }
+.archive-piece h3 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem; font-weight:400; color:var(--ink);
+}
+.archive-piece p { font-size:.88rem; color:var(--faint); margin-top:.5rem; max-width:400px; line-height:1.7; }
+.archive-piece a {
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--red); text-decoration:none;
+  border:1px solid var(--red); padding:.65rem .85rem;
+  transition:background .3s,color .3s; line-height:0;
+}
+.archive-piece a .ico { width:16px; height:16px; }
+.archive-piece a:hover { background:var(--red); color:var(--base); }
+
+/* Contact — closing gallery */
+.contact-hall { text-align:center; padding-bottom:2rem; }
+.contact-hall .exhibit-title { margin-left:auto; margin-right:auto; }
+.contact-links {
+  display:flex; flex-wrap:wrap; justify-content:center; gap:2.5rem 3.5rem;
+  margin-top:1rem;
+}
+.contact-item { text-align:center; }
+.contact-item-label {
+  display:flex; align-items:center; justify-content:center;
+  color:var(--red); margin-bottom:.6rem; line-height:0;
+}
+.contact-item-label .ico { width:16px; height:16px; }
+.contact-item a, .contact-item span {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem; color:var(--ink); text-decoration:none;
+  transition:color .3s;
+}
+.contact-item a:hover { color:var(--red); }
+.contact-email-row {
+  display:inline-flex; align-items:center; gap:.55rem;
+}
+.copy-icon-btn {
+  background:transparent; border:1px solid var(--line);
+  color:var(--faint); padding:.35rem; line-height:0;
+  transition:color .3s, border-color .3s, background .3s;
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.copy-icon-btn:hover { border-color:var(--red); color:var(--red); }
+.copy-icon-btn.copied { border-color:var(--red); color:var(--red); background:var(--red-soft); }
+.copy-icon-btn svg { width:14px; height:14px; display:block; }
+.copy-icon-btn .icon-check { display:none; }
+.copy-icon-btn.copied .icon-copy { display:none; }
+.copy-icon-btn.copied .icon-check { display:block; }
+
+/* Reveal animations */
+.reveal {
+  opacity:0; transform:translateY(40px);
+  transition:opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1);
+}
 .reveal.show { opacity:1; transform:none; }
+.reveal-d1 { transition-delay:.1s; }
+.reveal-d2 { transition-delay:.2s; }
+.reveal-d3 { transition-delay:.3s; }
 
-/* ── Layout ── */
-.page-wrap { padding-top:76px; max-width:1200px; margin:0 auto; padding-left:1.25rem; padding-right:1.25rem; }
-.hero-sec { padding:2.5rem 0 2rem; }
-.sections { display:flex; flex-direction:column; gap:1.8rem; padding-bottom:5rem; }
-
-.hero-cols { display:flex; gap:1.5rem; align-items:stretch; }
-.hero-left { flex:1; min-width:0; }
-.hero-right { flex-shrink:0; width:240px; display:flex; flex-direction:column; }
-@media(max-width:760px){ .hero-cols{ flex-direction:column; } .hero-right{ width:100%; min-height:280px; } }
-
-/* Photo terminal panel */
-.photo-term { display:flex; flex-direction:column; height:100%; }
-.photo-img-wrap { flex:1; overflow:hidden; min-height:0; }
-.photo-img-wrap img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
-.photo-img-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--muted); font-size:.65rem; letter-spacing:.08em; background:var(--green-dark); }
-.photo-img-placeholder svg { width:48px; height:48px; opacity:.35; }
-.status-badge { display:flex; align-items:center; gap:.45rem; font-size:.65rem; color:var(--green); letter-spacing:.12em; background:rgba(57,255,110,.05); border:1px solid rgba(57,255,110,.2); padding:.3rem .8rem; border-radius:3px; }
-.status-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 2s ease-in-out infinite; box-shadow:0 0 6px var(--green); }
-.photo-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--muted); font-size:.65rem; letter-spacing:.08em; }
-.photo-placeholder svg { width:48px; height:48px; opacity:.35; }
-
-/* ── Cyber Archive ── */
-.archive-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; margin-top:.75rem; }
-.archive-card {
-  border:1px solid var(--border); padding:1rem 1.1rem;
-  background:rgba(57,255,110,.02); position:relative;
-  transition:border-color .2s, background .2s, transform .2s;
+/* Footer */
+footer {
+  text-align:center; padding:3rem 2rem 4rem;
+  border-top:1px solid var(--line);
+  position:relative; z-index:10;
 }
-.archive-card:hover { border-color:var(--green-dim); background:rgba(57,255,110,.045); transform:translateY(-2px); }
-.archive-card-tag { font-size:.62rem; color:var(--orange); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.4rem; }
-.archive-card-title { font-size:.82rem; color:#fff; font-weight:700; margin-bottom:.35rem; }
-.archive-card-desc { font-size:.73rem; color:var(--muted); line-height:1.6; margin-bottom:.7rem; }
-.archive-card-links { display:flex; gap:.5rem; flex-wrap:wrap; }
-.archive-link {
-  font-size:.68rem; color:var(--green); text-decoration:none;
-  border:1px solid rgba(57,255,110,.25); padding:.18rem .55rem;
-  background:rgba(57,255,110,.04); letter-spacing:.04em;
-  transition:all .2s;
+footer p {
+  font-family:'Cormorant Garamond',serif;
+  font-size:.9rem; font-style:italic; color:var(--faint);
 }
-.archive-link:hover { background:rgba(57,255,110,.12); border-color:var(--green); }
-.archive-link.dim { color:var(--info); border-color:rgba(76,194,255,.25); background:rgba(76,194,255,.04); }
-.archive-link.dim:hover { background:rgba(76,194,255,.12); border-color:var(--info); }
-.archive-num { position:absolute; top:.6rem; right:.8rem; font-size:.62rem; color:var(--border); letter-spacing:.05em; }
-footer span { color:var(--green); }
-
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:#050a06; }
-::-webkit-scrollbar-thumb { background:var(--green-dim); border-radius:2px; }
-::selection { background:var(--green); color:#000; }
-
-#modal { position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); }
-#modal.open { display:flex; }
-.modal-inner { max-width:640px; width:90%; }
-.modal-glass { background:var(--win-bg); border:1px solid var(--border); border-radius:10px; padding:2rem; position:relative; }
+footer em { font-style:normal; color:var(--red); }
 
 .hidden { display:none !important; }
+::selection { background:var(--red); color:var(--base); }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:var(--red); }
 
 @media(max-width:600px){
-  .term-body { padding:.85rem .95rem; font-size:.73rem; }
-  .iterm-output { padding:.85rem .95rem; }
-  .iterm-inputrow { padding:.55rem .95rem; }
-  .iterm-hint { padding:.3rem .95rem .5rem; }
-  .skill-name { min-width:8rem; }
-  .wk { min-width:8rem; }
-  .ls-perm { display:none; }
+  nav.navbar { padding:.85rem 1.25rem; }
+  .gallery { padding:0 1.25rem 5rem; }
+  .gallery-hall { padding:4rem 0; }
+  .entrance-content { padding:7rem 1.25rem 5rem; }
+  .hero-name { letter-spacing:.08em; }
 }
 </style>
 </head>
 <body>
 
 <canvas id="starsCanvas"></canvas>
-<div id="customCursor" class="custom-cursor"><div class="custom-cursor-inner"></div></div>
+<div id="spotlight"></div>
+
+<div id="galleryCursor" aria-hidden="true">
+  <div class="cursor-trail"></div>
+  <div class="cursor-dot"></div>
+</div>
 
 <button id="exitStarView" title="Exit star view" class="hidden">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -361,19 +716,17 @@ footer span { color:var(--green); }
 <header>
   <nav class="navbar">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">M<span class="dot-red">.</span>HACKS</a>
+      <a href="#" class="nav-logo">Mahir <em>Asif</em></a>
       <ul class="nav-links">
-        <li><a href="#about">about</a></li>
-        <li><a href="#skills">skills</a></li>
-        <li><a href="#certifications">certs</a></li>
-        <li><a href="#experience">experience</a></li>
-        <li><a href="#archive">archive</a></li>
-        <li><a href="#contact">contact</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
       <div class="nav-controls">
-        <button title="Toggle Theme" id="themeToggle" class="icon-btn">
-          <svg id="sunIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a4 4 0 100 8 4 4 0 000-8zM12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/></svg>
+        <button title="Toggle dark mode" id="themeToggle" class="icon-btn">
           <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sunIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a4 4 0 100 8 4 4 0 000-8zM12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.343 6.343l-.01.01M17.657 17.657l-.01.01M6.343 17.657l-.01.01M17.657 6.343l-.01.01"/></svg>
         </button>
         <button id="telescopeToggle" class="icon-btn" title="View stars">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -388,1138 +741,591 @@ footer span { color:var(--green); }
       </div>
     </div>
     <div id="mobileMenu">
-      <a href="#about">about</a>
-      <a href="#skills">skills</a>
-      <a href="#certifications">certs</a>
-      <a href="#experience">experience</a>
-      <a href="#archive">archive</a>
-      <a href="#contact">contact</a>
+      <a href="#about">About</a>
+      <a href="#experience">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
     </div>
   </nav>
 </header>
 
-<div class="page-wrap">
+<!-- Museum entrance -->
+<section class="entrance" id="top">
+  <div class="hero-panel" id="heroPanel" aria-hidden="true">
+    <canvas class="hero-fiber-flow" id="heroFlow"></canvas>
+  </div>
+  <div class="entrance-content">
+  <div class="entrance-rule"></div>
+  <p class="museum-tag">
+    <svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="1"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+    Permanent Collection · 2026
+  </p>
+  <h1 class="hero-name" id="heroName">Mahir <em>Asif</em></h1>
+  <p class="entrance-sub">A curated exhibition of cybersecurity research, offensive security practice, and the systems built along the way.</p>
+  </div>
+  <div class="scroll-cue" aria-label="Scroll down">
+    <svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero-sec">
-    <div class="hero-cols reveal">
-      <div class="hero-left">
-        <div class="term-win">
-          <div class="term-titlebar">
-            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-            <span class="term-tab">bash — root@kali: Overview</span>
-          </div>
-          <div class="iterm-wrap">
-            <div class="iterm-output" id="itermOutput"></div>
-            <div class="iterm-hint" id="itermHint">type <span style="color:var(--green)">help</span> for available commands</div>
-            <div class="iterm-inputrow">
-              <span class="iterm-prompt-label">┌──(root㉿kali)-[~]<br>└─#&nbsp;</span>
-              <input class="iterm-input" id="itermInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type a command...">
-            </div>
-          </div>
+<main class="gallery">
+
+  <!-- Hall I: Portrait -->
+  <section class="gallery-hall reveal" id="about">
+    <span class="exhibit-num">I</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span> Portrait</p>
+    <h2 class="exhibit-title">Portrait &amp; Statement</h2>
+    <div class="portrait-hall">
+      <div class="frame reveal reveal-d1">
+        <div class="frame-inner">
+          <img src="profile.jpeg" alt="Mahir Asif" onerror="this.parentElement.style.background='var(--line)'">
+        </div>
+        <div class="plaque">
+          <p class="plaque-title">Mahir Asif</p>
+          <p class="plaque-meta">Cybersecurity Researcher · b. Bangladesh</p>
         </div>
       </div>
-      <div class="hero-right">
-        <div class="term-win" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-          <div class="term-titlebar">
-            <span class="dot dot-r" id="photoMinBtn" style="cursor:pointer;" title="Minimize"></span>
-            <span class="dot dot-y"></span>
-            <span class="dot dot-g" id="photoMaxBtn" style="cursor:pointer;" title="Restore"></span>
-            <span class="term-tab">bash — ~/profile.jpeg</span>
-          </div>
-          <div class="photo-term" id="photoTermBody">
-            <div class="photo-img-wrap">
-              <img src="profile.jpeg" alt="Mahir Asif"
-                onerror="this.outerHTML='<div class=\'photo-img-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg><span>profile.jpg</span></div>'">
-            </div>
-            <div style="padding:.45rem 1rem;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted);display:flex;justify-content:space-between;flex-shrink:0;">
-              <span><span style="color:var(--green)">mahir@kali</span>:~/profile.jpeg</span>
-            </div>
-          </div>
+      <div class="reveal reveal-d2">
+        <p class="portrait-text">Hey. I'm Mahir. I break things for a living... ethically ofcourse... mostly.</p>
+        <p class="portrait-text">I'm the kind of person who sees a system and immediately starts wondering how it works and what could bend it, Not because someone told me to... it's just how my brain works. Always has.</p>
+        <p class="portrait-text">I move fast, I figure things out, and when something's outside my wheelhouse... I learn it. Fast. That's not a flex, that's just how I've had to operate.</p>
+        <p class="portrait-text">I don't do slow. I don't do vague. Give me a clear objective and I'm already three steps into it before the briefing's done.</p>
+        <p class="portrait-text">The work? Methodical. The approach? Clean. The communication? Crystal.</p>
+        <p class="portrait-text">If you need someone who's going to show up, dig in, adapt fast and actually get it... that's me. No cape though. Just a terminal and a curious mind.</p>
+        <div class="status-row">
+          <span class="status-chip live"><svg class="ico" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="4"/></svg> Open to work</span>
+          <span class="status-chip"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5 7-11a7 7 0 1 0-14 0c0 6 7 11 7 11z"/><circle cx="12" cy="10" r="2"/></svg> Kuala Lumpur</span>
+          <span class="status-chip"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 14.5 10 22h4l1.5-7.5"/></svg> eJPT · AWS</span>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="sections">
+  <!-- Hall II: Experience -->
+  <section class="gallery-hall reveal" id="experience">
+    <span class="exhibit-num">II</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span> Experience</p>
+    <h2 class="exhibit-title">Chronology of Practice</h2>
+    <div class="exhibit-grid">
+      <article class="work-piece reveal reveal-d1">
+        <div class="work-year">2025 – 2026<span>Oct – Jan</span></div>
+        <div>
+          <h3 class="work-role">Junior Penetration Tester</h3>
+          <p class="work-org">FSeC @ APU / APIIT · Kuala Lumpur</p>
+          <ul class="work-points">
+            <li>Web application &amp; API penetration testing for Australian enterprise and Malaysian government clients</li>
+            <li>Cloud configuration reviews across AWS and Azure environments</li>
+            <li>Delivered structured pentest reports with CVSS-rated findings and remediation guidance</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
 
-    <!-- ABOUT -->
-    <div class="term-win reveal" id="about">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/about — cat profile.txt</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/about$</span> <span class="whc">cat profile.txt</span></p>
-        <span class="blank"></span>
-        <p style="line-height:1.9;max-width:700px;font-size:.8rem;">
-          Hi, I'm <span class="whc">Mahir Asif</span> — a final-year <span class="gc">Cybersecurity student</span> at Asia Pacific University of Technology and Innovation (<span class="gc">APU</span>), Malaysia, pursuing a BSc dual-awarded with De Montfort University, UK.<br><br>
-          I'm a <span class="orc">certified eJPT penetration tester</span> specializing in <span class="gc">web application security, API testing, and network exploitation</span>. With real-world experience assisting engagements for an Australian company and Malaysian government clients, I bring a hands-on offensive security mindset backed by SOC operations exposure and Linux administration proficiency.<br><br>
-          I'm actively building toward <span class="blc">eCPPT, eWPTX, OSCP+</span> and pursuing advanced offensive security certifications. My approach combines methodical reconnaissance, manual exploitation, and clear technical reporting.
-        </p>
-        <span class="blank"></span>
-        <hr class="sep">
-        <p><span class="prompt-label">root@kali:~/about$</span> <span class="whc">cat core_competencies.txt</span></p>
-        <span class="blank"></span>
-        <span class="output-line"><span class="gc">$</span> Web App &amp; API Penetration Testing</span>
-        <span class="output-line"><span class="gc">$</span> Network Vulnerability Assessment</span>
-        <span class="output-line"><span class="gc">$</span> SIEM Monitoring &amp; Incident Triage</span>
-        <span class="output-line"><span class="gc">$</span> Cloud Config Review (AWS / Azure)</span>
-        <span class="output-line"><span class="gc">$</span> Linux Privilege Escalation</span>
-        <span class="output-line"><span class="gc">$</span> Python &amp; Bash Tool Development</span>
+  <!-- Hall III: Skills -->
+  <section class="gallery-hall reveal" id="skills">
+    <span class="exhibit-num">III</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span> Skills</p>
+    <h2 class="exhibit-title">Installed Capabilities</h2>
+    <div class="skill-installation">
+      <div class="reveal reveal-d1">
+        <p class="skill-wing-title">Offensive Wing</p>
+        <span class="skill-word">Web Pentesting</span>
+        <span class="skill-word">API Security</span>
+        <span class="skill-word">Burp Suite</span>
+        <span class="skill-word">Metasploit</span>
+        <span class="skill-word">Nmap</span>
+        <span class="skill-word">Privilege Escalation</span>
+        <span class="skill-word">OSINT</span>
+        <span class="skill-word">VAPT Reporting</span>
+      </div>
+      <div class="reveal reveal-d2">
+        <p class="skill-wing-title">Research &amp; Engineering Wing</p>
+        <span class="skill-word">Transformer Models & LLMs</span>
+        <span class="skill-word">PyTorch</span>
+        <span class="skill-word">Python</span>
+        <span class="skill-word">ML Pipeline Design</span>
+        <span class="skill-word">Probability Calibration</span>
+        <span class="skill-word">Linux Administration</span>
+        <span class="skill-word">AWS Cloud</span>
+        <span class="skill-word">Bash</span>
       </div>
     </div>
+  </section>
 
-    <!-- SKILLS -->
-    <div class="term-win reveal" id="skills">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/skills — nmap scan</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/skills$</span> <span class="whc">nmap -sV --script=proficiency-scan mahir.local</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-03-24 09:42 MYT</span>
-        <span class="output-line muc">Nmap scan report for mahir.local (192.168.69.1)</span>
-        <span class="output-line gc">[+] Host is up (0.0011s latency).</span>
-        <span class="blank"></span>
-        <span class="output-line muc">PORT      STATE  SERVICE             VERSION</span>
-        <span class="output-line muc">──────────────────────────────────────────────────────────────</span>
-        <div style="margin:.5rem 0 1rem;">
-          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">022/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">linux-administration</span><span class="skill-track"><div class="skill-fill" data-fill="55"></div></span><span class="skill-pct">55%</span></div>
-          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">080/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">web-app-pentesting</span><span class="skill-track"><div class="skill-fill" data-fill="55"></div></span><span class="skill-pct">55%</span></div>
-          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">443/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">security-tool-mastery</span><span class="skill-track"><div class="skill-fill" data-fill="65"></div></span><span class="skill-pct">65%</span></div>
-          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">8080/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">networking-protocols</span><span class="skill-track"><div class="skill-fill" data-fill="55"></div></span><span class="skill-pct">55%</span></div>
-          <div class="skill-row"><span class="ywc" style="min-width:4.5rem;font-size:.72rem;">9090/tcp</span><span class="gc" style="min-width:3rem;font-size:.72rem;">open</span><span class="skill-name">python-bash-scripting</span><span class="skill-track"><div class="skill-fill" data-fill="45"></div></span><span class="skill-pct">45%</span></div>
+  <!-- Hall IV: Credentials -->
+  <section class="gallery-hall reveal" id="certifications">
+    <span class="exhibit-num">IV</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 14.5 10 22h4l1.5-7.5"/></svg></span> Credentials</p>
+    <h2 class="exhibit-title">Verified Credentials</h2>
+    <div class="cred-wall">
+      <div class="cred-plate reveal reveal-d1">
+        <div>
+          <p class="cred-name">AWS Certified AI Practitioner</p>
+          <p class="cred-meta">Amazon Web Services · 2026</p>
         </div>
-        <span class="output-line muc">Script results:</span>
-        <span class="blank"></span>
-        <span class="output-line"><span class="blc">|</span> <span class="orc">Offensive Security</span></span>
-        <div class="tag-grid" style="padding-left:1.2rem;">
-          <span class="stag red">Web App Pentesting</span><span class="stag red">API Security Testing</span>
-          <span class="stag red">OWASP Top 10</span><span class="stag red">SQL Injection</span>
-          <span class="stag red">XSS / CSRF</span><span class="stag red">Metasploit</span>
-          <span class="stag red">Burp Suite</span><span class="stag red">Nmap / Nessus</span>
-          <span class="stag red">Privilege Escalation</span><span class="stag red">Recon &amp; OSINT</span>
-        </div>
-        <span class="blank"></span>
-        <span class="output-line"><span class="blc">|</span> <span class="blc">Defensive / Infrastructure</span></span>
-        <div class="tag-grid" style="padding-left:1.2rem;">
-          <span class="stag blue">SIEM (MSSGard)</span><span class="stag blue">IDS/IPS (Snort)</span>
-          <span class="stag blue">Incident Response</span><span class="stag blue">Linux Administration</span>
-          <span class="stag blue">Firewall &amp; ACL</span><span class="stag blue">IAM / PAM</span>
-          <span class="stag blue">AWS / Azure Review</span><span class="stag blue">Network Forensics</span>
-          <span class="stag blue">SSL/TLS Hardening</span><span class="stag blue">Vulnerability Mgmt</span>
-        </div>
-        <span class="blank"></span>
-        <span class="output-line muc">Nmap done: 1 IP address (1 host up) scanned in 3.21 seconds</span>
-        <hr class="sep" style="margin-top:1.2rem;">
-        <p style="margin-top:.8rem;"><span class="prompt-label">root@kali:~/skills$</span> <span class="whc">python3 lang_profiler.py</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">[*] Scanning programming language proficiency...</span>
-        <span class="blank"></span>
-        <svg width="0" height="0">
-          <defs>
-            <linearGradient id="gradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#1aaa44;stop-opacity:1"/>
-              <stop offset="100%" style="stop-color:#39ff6e;stop-opacity:1"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <div class="prog-grid">
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="70"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Python</div></div>
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="60"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Java</div></div>
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="55"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">JavaScript</div></div>
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="50"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">C</div></div>
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="50"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">C++</div></div>
-          <div class="circular-progress-item"><div class="circular-progress-container"><svg class="circular-progress-svg" viewBox="0 0 100 100"><circle class="circular-progress-bg" cx="50" cy="50" r="40"></circle><circle class="circular-progress-fill" cx="50" cy="50" r="40" data-percentage="30"></circle></svg><div class="circular-progress-text">0%</div></div><div class="circular-progress-label">Assembly x86</div></div>
-        </div>
-        <span class="blank"></span>
-        <span class="output-line gc">[+] Scan complete. 6 languages enumerated.</span>
+        <a href="https://www.credly.com/badges/17dbaa45-fb53-40cb-91fb-119f82d88f07/public_url" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
       </div>
-    </div>
-
-    <!-- PROJECTS -->
-    <div class="term-win reveal" id="projects">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/projects — ls -la</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/projects$</span> <span class="whc">ls -la && cat */README.md</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">total 5 projects — drwxr-xr-x  mahir mahir</span>
-        <span class="blank"></span>
-        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">secure-client-server-network/</span></div>
-        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
-          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
-          <span class="output-line">├─ Rocky Linux + Ubuntu with static IPs and <span class="blc">NFS</span> file sharing</span>
-          <span class="output-line">├─ <span class="gc">Apache</span> secured with SSL/TLS · <span class="orc">Fail2Ban</span> for brute-force protection</span>
-          <span class="output-line">└─ Simulated SSH login attacks and validated detection controls</span>
+      <div class="cred-plate reveal reveal-d1">
+        <div>
+          <p class="cred-name">AWS Certified Cloud Practitioner</p>
+          <p class="cred-meta">Amazon Web Services · 2026</p>
         </div>
-        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Feb 2025</span><span class="ls-name">secure-mail-server/</span></div>
-        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
-          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
-          <span class="output-line">├─ <span class="gc">Postfix</span>, <span class="gc">Dovecot</span> and <span class="gc">SpamAssassin</span> on Rocky Linux</span>
-          <span class="output-line">└─ SSL/TLS auth enforced · end-to-end validated via Thunderbird</span>
+        <a href="https://www.credly.com/badges/56ffca5d-23c1-4c6a-90bf-80f0e7e3e6fb/public_url" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
+      </div>
+      <div class="cred-plate reveal reveal-d1">
+        <div>
+          <p class="cred-name">AWS Certified Solutions Architect – Associate</p>
+          <p class="cred-meta">Amazon Web Services · 2026</p>
         </div>
-        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Jul 2025</span><span class="ls-name">honeypot-ids-lab/</span></div>
-        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
-          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
-          <span class="output-line">├─ <span class="orc">Snort IDS</span> + honeypot on Ubuntu to monitor suspicious traffic</span>
-          <span class="output-line">└─ Launched <span class="erc">Kali Linux</span> attack simulations · verified alert generation and log integrity</span>
+        <a href="https://www.credly.com/badges/5ae1ad02-b6bf-4708-a706-e5de9bc876c1/public_url" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
+      </div>
+      <div class="cred-plate reveal reveal-d1">
+        <div>
+          <p class="cred-name">eJPT — Junior Penetration Tester</p>
+          <p class="cred-meta">INE Security · March 2026</p>
         </div>
-        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">enterprise-network-design/</span></div>
-        <div style="padding:.45rem 1rem .7rem;border-bottom:1px solid var(--border);margin-bottom:.25rem;font-size:.76rem;">
-          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
-          <span class="output-line">├─ Multi-branch topology (KL &amp; Australia): <span class="blc">VLANs, ACLs, EtherChannel, OSPF</span></span>
-          <span class="output-line">└─ Enforced security policies ensuring inter-branch connectivity and performance SLAs</span>
+        <a href="https://certs.ine.com/75ac322e-c9aa-4039-87a3-392d8b4cd999" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
+      </div>
+      <div class="cred-plate reveal reveal-d2">
+        <div>
+          <p class="cred-name">RH134 — Red Hat System Administration II</p>
+          <p class="cred-meta">Red Hat · December 2025</p>
         </div>
-        <div class="ls-row"><span class="ls-perm">drwxr-xr-x  mahir</span><span class="ls-date">Mar 2025</span><span class="ls-name">food-ordering-app/</span></div>
-        <div style="padding:.45rem 1rem .6rem;font-size:.76rem;">
-          <span class="output-line muc" style="font-size:.7rem;">README.md</span>
-          <span class="output-line">└─ Java app with <span class="gc">role-based auth</span>, payment processing, cart &amp; order tracking</span>
+        <a href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
+      </div>
+      <div class="cred-plate reveal reveal-d3">
+        <div>
+          <p class="cred-name">RH124 — Red Hat System Administration I</p>
+          <p class="cred-meta">Red Hat · January 2025</p>
         </div>
       </div>
-    </div>
-
-    <!-- CERTIFICATIONS -->
-    <div class="term-win reveal" id="certifications">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/certs — verify --all</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/certs$</span> <span class="whc">ls -la /etc/credentials/ &amp;&amp; verify --all</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">-rw-r--r--  4 certifications found</span>
-        <span class="blank"></span>
-        <div class="cert-item featured">
-          <div class="cert-badge">★ LATEST CERT</div>
-          <span class="output-line"><span class="ywc">[ VERIFIED ]</span>  <span class="whc">eJPT — eLearnSecurity Junior Penetration Tester</span></span>
-          <span class="output-line muc" style="font-size:.72rem;">  INE Security · Issued 23 Mar 2026 · Credential ID: 177694517</span>
-          <a href="https://certs.ine.com/75ac322e-c9aa-4039-87a3-392d8b4cd999" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view certificate ↗</a>
+      <div class="cred-plate reveal reveal-d3">
+        <div>
+          <p class="cred-name">Cybersecurity for Students</p>
+          <p class="cred-meta">LetsDefend · January 2025</p>
         </div>
-        <div class="cert-item">
-          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">RH134 — Red Hat System Administration II</span></span>
-          <span class="output-line muc" style="font-size:.72rem;">  Red Hat · Dec 2025</span>
-          <a href="https://www.credly.com/badges/075389e6-b032-4426-b063-b4e2fcc92cc2/public_url" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view badge on Credly ↗</a>
-        </div>
-        <div class="cert-item">
-          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">RH124 — Red Hat System Administration I</span></span>
-          <span class="output-line muc" style="font-size:.72rem;">  Red Hat · Jan 2025</span>
-        </div>
-        <div class="cert-item">
-          <span class="output-line"><span class="gc">[ VERIFIED ]</span>  <span class="whc">Cybersecurity for Students — Learning Path</span></span>
-          <span class="output-line muc" style="font-size:.72rem;">  LetsDefend · Jan 2025</span>
-          <a href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" target="_blank" rel="noreferrer" style="color:var(--orange);font-size:.72rem;text-decoration:none;">  → view certificate ↗</a>
-        </div>
-        <span class="blank"></span>
-        <span class="output-line gc">[+] 4/4 credentials verified successfully.</span>
+        <a href="https://app.letsdefend.io/certificate/show/07ff0336-83f6-4cb8-a55a-bfab694f8057" target="_blank" rel="noreferrer" class="cred-link" aria-label="View credential"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
       </div>
     </div>
+  </section>
 
-    <!-- ACHIEVEMENTS -->
-    <div class="term-win reveal" id="achievements">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/logs — grep ACHIEVEMENT</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/logs$</span> <span class="whc">grep -r "ACHIEVEMENT" mahir.log --color=always</span></p>
-        <span class="blank"></span>
-        <span class="output-line"><span class="muc">[2026-03-24]</span> <span class="orc">ACHIEVEMENT:</span> Earned <span class="ywc">eJPT</span> certification from INE Security (Credential #177694517)</span>
-        <span class="output-line"><span class="muc">[2025-11-01]</span> <span class="orc">ACHIEVEMENT:</span> Analyzed and triaged <span class="gc">50+</span> security alerts in live SOC under SLA constraints</span>
-        <span class="output-line"><span class="muc">[2025-10-15]</span> <span class="orc">ACHIEVEMENT:</span> Assisted real-world web app &amp; API pentesting for Australian firm and Malaysian govt</span>
-        <span class="output-line"><span class="muc">[2025-09-01]</span> <span class="orc">ACHIEVEMENT:</span> Part of APU FSeC — first licensed Cybersecurity-as-a-Service university intern program <a href="https://thesun.my/education/licensed-to-deliver-professional-cybersecurity/" target="_blank" rel="noreferrer" style="color:var(--orange);text-decoration:none;">[read article ↗]</a></span>
-        <span class="output-line"><span class="muc">[2025-07-22]</span> <span class="orc">ACHIEVEMENT:</span> Technical &amp; Graphics Coordinator for APU Cyber Talk awareness event</span>
-        <span class="blank"></span>
-        <span class="output-line muc">grep: 5 matches found in mahir.log</span>
-      </div>
-    </div>
-
-    <!-- EXPERIENCE -->
-    <div class="term-win reveal" id="experience">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/experience — ps aux</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/experience$</span> <span class="whc">ps aux --sort=-start | grep mahir</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc" style="font-size:.7rem;">USER     PID  %CPU  STARTED  COMPANY                              ROLE</span>
-        <span class="output-line muc" style="font-size:.7rem;">──────────────────────────────────────────────────────────────────────────</span>
-        <span class="blank"></span>
-        <div style="margin-bottom:1.2rem;">
-          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1001</span>  <span class="ywc">HIGH</span>  <span class="blc">Oct 2025</span>  FSeC @ APU / APIIT</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> Junior Penetration Tester / Security Researcher</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="muc">PERIOD :</span> Oct 2025 – Jan 2026  |  Greater Kuala Lumpur, Malaysia</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Conducted real-world digital forensics investigations and offensive security research</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Performed web application and API pentesting for Australian enterprise &amp; Malaysian govt client</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Executed cloud configuration reviews across AWS and Azure; identified and documented misconfigs</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Produced structured pentest reports with risk ratings, PoC evidence and remediation guidance</span>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:1.2rem;">
-          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1002</span>  <span class="ywc">MED </span>  <span class="blc">Jul 2025</span>  APU / APIIT — SIEM Elite Program</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> SOC Analyst Intern</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="muc">PERIOD :</span> Jul 2025 – Nov 2025  |  Greater Kuala Lumpur, Malaysia</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Monitored security events and performed alert triage using MSSGard SIEM per documented runbooks</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Analyzed <span class="ywc">50+</span> security alerts; created and resolved tickets within SOC SLA guidelines</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Performed initial containment and investigation via Linux CLI; documented all triage actions</span>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:1rem;">
-          <span class="output-line" style="font-size:.77rem;"><span class="gc">mahir</span>  <span class="muc">1003</span>  <span class="muc">LOW </span>  <span class="blc">Dec 2022</span>  MD Infotech</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="muc">ROLE   :</span> Graphic Designer  |  Rajshahi, Bangladesh</span>
-          <span class="blank"></span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Produced animated explainer video for a forward-looking company project</span>
-          <span class="output-line" style="font-size:.77rem;">  <span class="gc">$</span> Translated technical specs into visual storytelling — improved stakeholder engagement <span class="gc">~30%</span></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- VOLUNTEER -->
-    <div class="term-win reveal" id="volunteer">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/volunteer — tail -f volunteer.log</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/volunteer$</span> <span class="whc">tail -f /var/log/volunteer.log</span></p>
-        <span class="blank"></span>
-        <span class="output-line"><span class="muc">[Nov 2025]</span> <span class="blc">FSeC APU Open Day — Organization &amp; Management Assistant</span></span>
-        <span class="output-line" style="padding-left:1rem;">└─ Represented APU's Faculty of Security (FSeC) during University Open Day</span>
-        <span class="output-line" style="padding-left:1rem;">└─ Engaged prospective students on cybersecurity career paths</span>
-        <span class="blank"></span>
-        <span class="output-line"><span class="muc">[Jul 2025]</span> <span class="blc">Technical &amp; Graphics Coordinator — APU Cyber Talk</span></span>
-        <span class="output-line" style="padding-left:1rem;">└─ Designed promotional materials and handled technical coordination</span>
-        <span class="output-line" style="padding-left:1rem;">└─ Institutional cybersecurity awareness event — teamwork &amp; creative execution</span>
-        <span class="blank"></span>
-        <span class="output-line muc">--- Waiting for new entries ---</span>
-      </div>
-    </div>
-
-    <!-- EDUCATION -->
-    <div class="term-win reveal" id="education">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/education — cat /etc/os-release</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/education$</span> <span class="whc">cat /etc/os-release &amp;&amp; uname -a</span></p>
-        <span class="blank"></span>
-        <span class="output-line"><span class="gc">Linux</span> mahir-kali 6.6.0-kali #1 SMP PREEMPT_DYNAMIC Debian 6.6 <span class="muc">x86_64 GNU/Linux</span></span>
-        <span class="blank"></span>
-        <span class="output-line"><span class="muc">INSTITUTION=</span>"<span class="gc">Asia Pacific University of Technology and Innovation (APU / APIIT)</span>"</span>
-        <span class="output-line"><span class="muc">PARTNER   =</span>"De Montfort University (UK)"</span>
-        <span class="output-line"><span class="muc">DEGREE    =</span>"<span class="whc">BSc (Hons) Computer Science — Specialism in Cybersecurity</span>"</span>
-        <span class="output-line"><span class="muc">PERIOD    =</span>"Nov 2023 – Nov 2026"</span>
-        <span class="output-line"><span class="muc">CGPA      =</span>"<span class="ywc">3.41</span>"</span>
-        <span class="blank"></span>
-        <span class="output-line muc">RELEVANT_COURSES:</span>
-        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Network Security (Firewall, Web Proxy, IDS/IPS, IAM)</span>
-        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Python Automation, C &amp; Assembly Programming</span>
-        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Red Hat Linux Administration (PAM, Access Control)</span>
-        <span class="output-line" style="padding-left:1rem;"><span class="gc">+</span> Red Team Operations (API Pentesting, Web Exploitation)</span>
-      </div>
-    </div>
-
-    <!-- LANGUAGES -->
-    <div class="term-win reveal" id="languages">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — cat ~/.languages</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">cat ~/.languages</span></p>
-        <span class="blank"></span>
-        <span class="output-line"><span class="whc">LANG_1</span>=<span class="gc">"Bangla"</span>         <span class="muc"># NATIVE — primary language</span></span>
-        <span class="output-line"><span class="whc">LANG_2</span>=<span class="gc">"English"</span>        <span class="muc"># FLUENT — professional proficiency</span></span>
-        <span class="output-line"><span class="whc">LANG_3</span>=<span class="blc">"Hindi &amp; Urdu"</span>   <span class="muc"># BASIC — conversational</span></span>
-        <span class="output-line"><span class="whc">LANG_4</span>=<span class="blc">"Arabic"</span>         <span class="muc"># BASIC — conversational</span></span>
-        <span class="output-line"><span class="whc">LANG_5</span>=<span class="blc">"Japanese"</span>       <span class="muc"># BASIC — learning</span></span>
-        <span class="output-line"><span class="whc">LANG_6</span>=<span class="blc">"Bahasa Melayu"</span>  <span class="muc"># BASIC — conversational</span></span>
-      </div>
-    </div>
-
-    <!-- INTERESTS -->
-    <div class="term-win reveal" id="interests">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — cat interests.json</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">cat ~/.config/interests.json | python3 -m json.tool</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">{</span>
-        <span class="output-line">  <span class="blc">"interests"</span>: <span class="muc">[</span></span>
-        <span class="output-line">    <span class="gc">"Penetration Testing &amp; CTFs"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Low-Level Programming"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Red Team Research"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Project Building &amp; Side Hustles"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Fitness &amp; Self-Improvement"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Business Ideas &amp; Entrepreneurship"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Creative Design"</span><span class="muc">,</span></span>
-        <span class="output-line">    <span class="gc">"Cybersecurity News"</span></span>
-        <span class="output-line">  <span class="muc">]</span></span>
-        <span class="output-line muc">}</span>
-      </div>
-    </div>
-
-    <!-- CYBER ARCHIVE -->
-    <div class="term-win reveal" id="archive">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~/archive — ls -la</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~/archive$</span> <span class="whc">find . -type f -name "*.url" | sort | xargs cat</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">[*] Enumerating cyber archive entries...</span>
-        <span class="blank"></span>
-        <div class="archive-grid">
-
-          <div class="archive-card">
-            <span class="archive-num">001</span>
-            <div class="archive-card-tag">// webapp · discipline</div>
-            <div class="archive-card-title">Trackable</div>
-            <div class="archive-card-desc">Trackable — Personal Life Manager
-
-A fully offline, zero-dependency personal life tracking web app. One HTML file. No installs, no accounts, no cloud. Just open it and start.</div>
-            <div class="archive-card-links">
-              <a href="https://github.com/mahirhacks/Discipline-Tracker" class="archive-link dim">→ github</a>
-            </div>
+  <!-- Hall V: Projects -->
+  <section class="gallery-hall reveal" id="projects">
+    <span class="exhibit-num">V</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span> Installations</p>
+    <h2 class="exhibit-title">Selected Installations</h2>
+    <div class="masterpiece-wall">
+      <article class="masterpiece-frame reveal reveal-d1">
+        <div class="masterpiece-emblem">
+          <span class="masterpiece-index">No. I</span>
+          <div class="masterpiece-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M8 8l2.5 2.5M13.5 13.5L16 16M16 8l-2.5 2.5M10.5 13.5L8 16"/>
+            </svg>
           </div>
-
         </div>
-        <span class="blank"></span>
-        <span class="output-line gc">[+] Archive loaded.</span>
+        <div class="masterpiece-plaque">
+          <p class="masterpiece-title">zero-day-calibration</p>
+          <p class="masterpiece-meta">Research · Honours FYP</p>
+          <p class="masterpiece-desc">CodeBERT/GraphCodeBERT fine-tuned on ~120k C/C++ functions for probabilistic zero-day vulnerability detection. Temporal pipeline with ECE and Brier Score calibration evaluation.</p>
+        </div>
+      </article>
+      <article class="masterpiece-frame reveal reveal-d2">
+        <div class="masterpiece-emblem">
+          <span class="masterpiece-index">No. II</span>
+          <div class="masterpiece-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 14a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+              <circle cx="9" cy="11" r=".5" fill="currentColor"/>
+              <circle cx="12" cy="11" r=".5" fill="currentColor"/>
+              <circle cx="15" cy="11" r=".5" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+        <div class="masterpiece-plaque">
+          <p class="masterpiece-title">LeadBondhu AI</p>
+          <p class="masterpiece-meta">SaaS · Production</p>
+          <p class="masterpiece-desc">AI-powered lead capture for Bangladeshi SMBs. Cloudflare Workers, Supabase, and Gemini API — Bangla, Banglish, and English with Meta Messenger integration.</p>
+          <a href="https://leadbondhuai.online" target="_blank" rel="noreferrer" class="masterpiece-link" aria-label="Visit LeadBondhu"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a>
+        </div>
+      </article>
+      <article class="masterpiece-frame reveal reveal-d3">
+        <div class="masterpiece-emblem">
+          <span class="masterpiece-index">No. III</span>
+          <div class="masterpiece-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <circle cx="12" cy="11" r="2"/>
+              <path d="M12 13v2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="masterpiece-plaque">
+          <p class="masterpiece-title">honeypot-ids-lab</p>
+          <p class="masterpiece-meta">Laboratory · Defence</p>
+          <p class="masterpiece-desc">Snort IDS + honeypot on Ubuntu. Kali-driven attack simulations with verified alert generation and traffic analysis.</p>
+        </div>
+      </article>
+      <article class="masterpiece-frame reveal reveal-d3">
+        <div class="masterpiece-emblem">
+          <span class="masterpiece-index">No. IV</span>
+          <div class="masterpiece-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="5" cy="6" r="2"/>
+              <circle cx="19" cy="6" r="2"/>
+              <circle cx="12" cy="18" r="2"/>
+              <path d="M7 6h10M6.5 7.5 11 16M17.5 7.5 13 16"/>
+            </svg>
+          </div>
+        </div>
+        <div class="masterpiece-plaque">
+          <p class="masterpiece-title">enterprise-network</p>
+          <p class="masterpiece-meta">Infrastructure · Design</p>
+          <p class="masterpiece-desc">Multi-branch topology with VLANs, ACLs, EtherChannel, and OSPF routing — designed and simulated end-to-end.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Hall VI: Archive -->
+  <section class="gallery-hall reveal" id="archive">
+    <span class="exhibit-num">VI</span>
+    <p class="exhibit-label"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v5H4z"/><path d="M6 9v11M18 9v11M10 13h4"/></svg></span> Archive</p>
+    <h2 class="exhibit-title">Side Collection</h2>
+    <div class="archive-piece reveal reveal-d1">
+      <div>
+        <h3>Trackable</h3>
+        <p>Offline personal discipline tracker — one HTML file, zero dependencies.</p>
+      </div>
+      <a href="https://github.com/mahirhacks/Discipline-Tracker" target="_blank" rel="noreferrer" aria-label="View on GitHub"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 4.77 5.07 5.07 0 0 0 17.91 1S16.73.65 14 2.48a13.38 13.38 0 0 0-7 0C4.27.65 3.09 1 3.09 1A5.07 5.07 0 0 0 3 4.77 5.44 5.44 0 0 0 1.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="gallery-hall contact-hall reveal" id="contact">
+    <p class="exhibit-label" style="justify-content:center;"><span class="label-ico"><svg class="ico" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M13 6l6 6-6 6"/></svg></span> Contact</p>
+    <h2 class="exhibit-title">Correspondence</h2>
+    <div class="contact-links">
+      <div class="contact-item">
+        <p class="contact-item-label" aria-label="Email"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="1"/><path d="M2 7l10 7 10-7"/></svg></p>
+        <div class="contact-email-row">
+          <a href="mailto:asifmahir907@gmail.com">asifmahir907@gmail.com</a>
+          <button class="copy-icon-btn" onclick="copyEmail(this)" title="Copy email" aria-label="Copy email">
+            <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="1"/>
+              <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>
+            </svg>
+            <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="contact-item">
+        <p class="contact-item-label" aria-label="LinkedIn"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-12h4v2"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></p>
+        <a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer">mahir907</a>
+      </div>
+      <div class="contact-item">
+        <p class="contact-item-label" aria-label="GitHub"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 4.77 5.07 5.07 0 0 0 17.91 1S16.73.65 14 2.48a13.38 13.38 0 0 0-7 0C4.27.65 3.09 1 3.09 1A5.07 5.07 0 0 0 3 4.77 5.44 5.44 0 0 0 1.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></p>
+        <a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer">mahirhacks</a>
+      </div>
+      <div class="contact-item">
+        <p class="contact-item-label" aria-label="Phone"><svg class="ico" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.86.3 1.7.54 2.5a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 6 6l.67-1.2a2 2 0 0 1 2.11-.45c.8.24 1.64.42 2.5.54A2 2 0 0 1 22 16.92z"/></svg></p>
+        <span>+60 133329115</span>
       </div>
     </div>
+  </section>
 
-    <!-- CONTACT -->
-    <div class="term-win reveal" id="contact">
-      <div class="term-titlebar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="term-tab">bash — ~ — whois mahir.local</span></div>
-      <div class="term-body">
-        <p><span class="prompt-label">root@kali:~$</span> <span class="whc">whois mahir.local &amp;&amp; netstat -an | grep LISTEN</span></p>
-        <span class="blank"></span>
-        <span class="output-line muc">% WHOIS lookup for mahir.local</span>
-        <span class="blank"></span>
-        <div class="whois-row"><span class="wk">registrant-name:</span><span class="wv whc">Mahir Asif</span></div>
-        <div class="whois-row"><span class="wk">email:</span><span class="wv"><a href="/cdn-cgi/l/email-protection#b1d0c2d8d7dcd0d9d8c3888186f1d6dcd0d8dd9fd2dedc"><span class="__cf_email__" data-cfemail="eb8a98828d868a838299d2dbdcab8c868a8287c5888486">[email&#160;protected]</span></a> &nbsp;<button id="copyBtn" onclick="copyEmail(this)" style="background:rgba(57,255,110,.08);border:1px solid var(--green-dim);color:var(--green);font-family:inherit;font-size:.68rem;padding:.12rem .38rem;">[copy]</button></span></div>
-        <div class="whois-row"><span class="wk">phone:</span><span class="wv">+60 133329115</span></div>
-        <div class="whois-row"><span class="wk">linkedin:</span><span class="wv"><a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer">linkedin.com/in/mahir907 ↗</a></span></div>
-        <div class="whois-row"><span class="wk">github:</span><span class="wv"><a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer">github.com/mahirhacks ↗</a></span></div>
-        <div class="whois-row"><span class="wk">address:</span><span class="wv">Serdang Raya Utara, Selangor 43300, Malaysia</span></div>
-        <span class="blank"></span>
-        <span class="output-line muc">% End of WHOIS data.</span>
-        <span class="blank"></span>
-        <span class="output-line muc">Active connections:</span>
-        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">22</span>   0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># ssh — always reachable</span></span>
-        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">80</span>   0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># open to opportunities</span></span>
-        <span class="output-line"><span class="ywc">tcp</span>  0.0.0.0:<span class="gc">443</span>  0.0.0.0:*  <span class="gc">LISTEN</span>  <span class="muc"># secure comms preferred</span></span>
-      </div>
-    </div>
-
-  </div>
-</div>
+</main>
 
 <footer>
-  <p>&copy; <span>Mahir Asif</span> · Designed &amp; Developed with <span>■</span> 2026</p>
+  <p>End of exhibition · <em>Mahir Asif</em> · 2026</p>
 </footer>
 
-</div><!-- /#pageContent -->
-
-<div id="modal">
-  <div class="modal-inner">
-    <div class="modal-glass">
-      <button id="modalClose" style="position:absolute;top:1rem;right:1rem;background:rgba(57,255,110,.08);border:1px solid var(--border);color:var(--green);padding:.3rem .8rem;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.7rem;">[ CLOSE ]</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ── Cursor ── */
-const customCursor = document.getElementById('customCursor');
-document.addEventListener('mousemove', e => {
-  customCursor.style.left = e.clientX + 'px';
-  customCursor.style.top  = e.clientY + 'px';
-});
+<script>
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-/* ── Theme ── */
+/* Theme */
 const themeToggle = document.getElementById('themeToggle');
 const sunIcon = document.getElementById('sunIcon');
 const moonIcon = document.getElementById('moonIcon');
-const saved = localStorage.getItem('theme') || 'dark';
-if (saved === 'light') {
-  document.documentElement.classList.add('light-theme');
-  sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden');
+const saved = localStorage.getItem('theme') || 'light';
+if (saved === 'dark') {
+  document.documentElement.classList.add('dark-theme');
+  sunIcon.classList.remove('hidden');
+  moonIcon.classList.add('hidden');
 }
 themeToggle.addEventListener('click', () => {
-  document.documentElement.classList.toggle('light-theme');
-  const isLight = document.documentElement.classList.contains('light-theme');
-  sunIcon.classList.toggle('hidden', !isLight);
-  moonIcon.classList.toggle('hidden', isLight);
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  /* update star colours for theme */
-  stars.forEach(s => {
-    if (isLight) { s.hue = Math.random() > 0.5 ? 135 : 150; s.lightMode = true; }
-    else         { s.hue = Math.random() > 0.88 ? 180 : 140; s.lightMode = false; }
-  });
+  document.documentElement.classList.toggle('dark-theme');
+  const isDark = document.documentElement.classList.contains('dark-theme');
+  sunIcon.classList.toggle('hidden', !isDark);
+  moonIcon.classList.toggle('hidden', isDark);
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  stars.forEach(s => { s.hue = starHue(); });
 });
 
-/* ── Mobile nav ── */
+/* Mobile nav */
 document.getElementById('navToggle')?.addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('active'));
 document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('active')));
 
-/* ── Telescope ── */
-const telescopeBtn    = document.getElementById('telescopeToggle');
+/* Telescope */
+const telescopeBtn = document.getElementById('telescopeToggle');
 const exitStarViewBtn = document.getElementById('exitStarView');
-const pageContent     = document.getElementById('pageContent');
+const pageContent = document.getElementById('pageContent');
+const spotlight = document.getElementById('spotlight');
 telescopeBtn?.addEventListener('click', () => {
   pageContent.classList.add('hidden');
   exitStarViewBtn.classList.remove('hidden');
   telescopeBtn.classList.add('hidden');
-  document.body.classList.add('star-view');
+  spotlight.style.opacity = '0';
 });
 exitStarViewBtn?.addEventListener('click', () => {
   pageContent.classList.remove('hidden');
   exitStarViewBtn.classList.add('hidden');
   telescopeBtn.classList.remove('hidden');
-  document.body.classList.remove('star-view');
+  spotlight.style.opacity = '';
 });
 
-/* ── Minimize / Restore terminal windows ── */
-document.querySelectorAll('.term-win').forEach(win => {
-  const titlebar = win.querySelector('.term-titlebar');
-  if (!titlebar) return;
-  const dotY = titlebar.querySelector('.dot-y');
-  const dotG = titlebar.querySelector('.dot-g');
-  const body  = win.querySelector('.term-body, .iterm-wrap, .photo-term');
-  if (!dotY || !body) return;
-
-  let collapsed = false;
-
-  dotY.style.cursor = 'pointer';
-  dotY.title = 'Minimize';
-  if (dotG) { dotG.style.cursor = 'pointer'; dotG.title = 'Restore'; }
-
-  dotY.addEventListener('click', e => {
-    e.stopPropagation();
-    if (!collapsed) {
-      body.style.display = 'none';
-      win.style.transition = 'all .2s';
-      collapsed = true;
-      dotY.style.opacity = '.5';
-    }
-  });
-
-  if (dotG) {
-    dotG.addEventListener('click', e => {
-      e.stopPropagation();
-      if (collapsed) {
-        body.style.display = '';
-        collapsed = false;
-        dotY.style.opacity = '';
-      }
-    });
-  }
-});
-
-/* ── Reveal ── */
+/* Reveal on scroll */
 const revealIo = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-}, { threshold: 0.07 });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => revealIo.observe(el));
 
-/* ── Skill bars ── */
-const skillIo = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.skill-fill').forEach(el => setTimeout(() => el.style.width = (el.dataset.fill||0)+'%', 200));
-      skillIo.unobserve(e.target);
+/* Hero background — Perlin flow field (Odysseus-style) */
+(function initHeroFlowField() {
+  const panel = document.getElementById('heroPanel');
+  const canvas = document.getElementById('heroFlow');
+  if (!panel || !canvas) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const COUNT = isMobile ? 140 : 260;
+  const FLOW_SPEED = 0.5;
+  let W = 0, H = 0, t = 0, particles = [], running = true;
+  let fadeAlpha = 0.06;
+  let fiberAlpha = 0.22;
+  let lineW = 1.2;
+  let colors = ['#8B0000', '#A01020', '#B8334A'];
+
+  function n2(x, y) {
+    const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+    return n - Math.floor(n);
+  }
+  function noise(x, y) {
+    const ix = Math.floor(x), iy = Math.floor(y);
+    const fx = x - ix, fy = y - iy;
+    const a = n2(ix, iy), b = n2(ix + 1, iy), c = n2(ix, iy + 1), d = n2(ix + 1, iy + 1);
+    const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+    return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
+  }
+
+  function fadeTrails() {
+    // Erase alpha only — no theme tint, so trails survive light/dark switches
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  function syncTheme() {
+    const dark = document.documentElement.classList.contains('dark-theme');
+
+    if (dark) {
+      colors = ['#DC143C', '#ff6b81', '#f2f0ec'];
+      fiberAlpha = 0.24;
+      fadeAlpha = 0.045;
+      lineW = 1.2;
+    } else {
+      colors = ['#5C0008', '#6B0010', '#7A0018', '#8B0000'];
+      fiberAlpha = 0.36;
+      fadeAlpha = 0.028;
+      lineW = 1.35;
     }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.term-win').forEach(el => skillIo.observe(el));
 
-/* ── Circular progress ── */
-function animateCircle(circle, text, pct) {
-  const r = circle.r.baseVal.value;
-  const circ = r * 2 * Math.PI;
-  circle.style.strokeDasharray  = `${circ} ${circ}`;
-  circle.style.strokeDashoffset = circ;
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        circle.style.strokeDashoffset = circ - (pct/100)*circ;
-        let cur = 0;
-        const iv = setInterval(() => { if (cur < pct) { cur++; text.textContent = cur+'%'; } else clearInterval(iv); }, 16);
-        obs.unobserve(entry.target);
+    particles.forEach((p, i) => { p.c = colors[i % colors.length]; });
+  }
+
+  function captureTrails() {
+    if (!W || !H || !canvas.width) return null;
+    return ctx.getImageData(0, 0, canvas.width, canvas.height);
+  }
+
+  function restoreTrails(snap) {
+    if (!snap || snap.width !== canvas.width || snap.height !== canvas.height) return;
+    ctx.putImageData(snap, 0, 0);
+  }
+
+  function resize() {
+    const nw = Math.max(panel.clientWidth, 1);
+    const nh = Math.max(panel.clientHeight, 1);
+    if (nw === W && nh === H) return;
+
+    const snap = captureTrails();
+    W = nw;
+    H = nh;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    restoreTrails(snap);
+    if (!particles.length && W > 20 && H > 20) {
+      for (let i = 0; i < COUNT; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        particles.push({
+          x, y, px: x, py: y,
+          life: Math.random(),
+          c: colors[i % colors.length],
+        });
       }
-    });
-  }, { threshold: 0.4 });
-  obs.observe(circle);
-}
-document.querySelectorAll('.circular-progress-container').forEach(c => {
-  const circle = c.querySelector('.circular-progress-fill');
-  const text   = c.querySelector('.circular-progress-text');
-  const pct    = parseInt(circle?.dataset?.percentage, 10);
-  if (circle && text && !isNaN(pct)) animateCircle(circle, text, pct);
-});
+    }
+  }
 
-/* ── Copy email ── */
+  function draw() {
+    if (!running) return;
+    requestAnimationFrame(draw);
+    if (!W || !H) return;
+
+    fadeTrails();
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const ang = noise(p.x * 0.004 + t * 0.0008 * FLOW_SPEED, p.y * 0.004 + 100) * Math.PI * 6;
+      const sp = (1 + noise(p.x * 0.003, p.y * 0.003 + 50) * 1.5) * FLOW_SPEED;
+      p.px = p.x;
+      p.py = p.y;
+      p.x += Math.cos(ang) * sp;
+      p.y += Math.sin(ang) * sp;
+      p.life -= 0.001 * FLOW_SPEED;
+      if (p.life <= 0 || p.x < 0 || p.x > W || p.y < 0 || p.y > H) {
+        p.x = Math.random() * W;
+        p.y = Math.random() * H;
+        p.px = p.x;
+        p.py = p.y;
+        p.life = 1;
+        p.c = colors[(i + (t >> 4)) % colors.length];
+      }
+      ctx.beginPath();
+      ctx.moveTo(p.px, p.py);
+      ctx.lineTo(p.x, p.y);
+      ctx.strokeStyle = p.c;
+      ctx.lineWidth = lineW;
+      ctx.lineCap = 'round';
+      ctx.globalAlpha = Math.min(1, p.life * fiberAlpha);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    t += FLOW_SPEED;
+  }
+
+  syncTheme();
+  resize();
+  draw();
+  window.addEventListener('resize', resize);
+  new ResizeObserver(resize).observe(panel);
+  themeToggle?.addEventListener('click', () => requestAnimationFrame(syncTheme));
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running) draw();
+  });
+})();
+
+/* Copy email */
 function copyEmail(btn) {
   navigator.clipboard?.writeText('asifmahir907@gmail.com').then(() => {
-    btn.textContent = '[copied!]'; setTimeout(() => btn.textContent = '[copy]', 1500);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1800);
   });
 }
 
-/* ── Modal ── */
-const modal       = document.getElementById('modal');
-const modalClose  = document.getElementById('modalClose');
-const modalContent= document.getElementById('modalContent');
-function closeModal() { modal.classList.remove('open'); modalContent.innerHTML = ''; }
-modalClose?.addEventListener('click', closeModal);
-modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+/* Gallery cursor */
+const galleryCursor = document.getElementById('galleryCursor');
+const cursorTrail = galleryCursor?.querySelector('.cursor-trail');
+const useCustomCursor = galleryCursor && !isMobile;
 
-/* ── Stars ── */
+if (useCustomCursor) {
+  document.body.classList.add('custom-cursor');
+  let cx = innerWidth / 2, cy = innerHeight / 2;
+  let tx = cx, ty = cy;
+  const hoverTargets = 'a, button, .copy-icon-btn, .skill-word, .masterpiece-frame, .frame, .archive-piece, .cred-plate, .work-piece';
+
+  document.addEventListener('mousemove', e => {
+    cx = e.clientX;
+    cy = e.clientY;
+    galleryCursor.style.transform = `translate(${cx}px, ${cy}px)`;
+    const el = document.elementFromPoint(cx, cy);
+    galleryCursor.classList.toggle('is-hover', !!el?.closest(hoverTargets));
+  });
+
+  document.addEventListener('mousedown', () => galleryCursor.classList.add('is-click'));
+  document.addEventListener('mouseup',   () => galleryCursor.classList.remove('is-click'));
+  document.addEventListener('mouseleave', () => { galleryCursor.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { galleryCursor.style.opacity = ''; });
+
+  (function cursorLoop() {
+    tx += (cx - tx) * 0.1;
+    ty += (cy - ty) * 0.1;
+    cursorTrail.style.transform = `translate(calc(-50% + ${tx - cx}px), calc(-50% + ${ty - cy}px))`;
+    requestAnimationFrame(cursorLoop);
+  })();
+}
+
+/* Stars — same animation, blood moon red only */
+function starHue() {
+  return Math.random() > 0.5 ? 0 : (Math.random() > 0.5 ? 355 : 350);
+}
 const canvas = document.getElementById('starsCanvas');
 const ctx = canvas.getContext('2d');
 const stars = [];
 let mouse = { x: innerWidth/2, y: innerHeight/2 };
-const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
-window.addEventListener('resize', resizeCanvas); resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 if (!isMobile) document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 for (let i = 0; i < 700; i++) {
-  stars.push({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: Math.random()*1.1+0.2,
-    vx: (Math.random()-.5)*.08, vy: (Math.random()-.5)*.08, speed: Math.random()*.4+.1,
-    hue: Math.random()>.88?180:140, lightMode: false });
+  stars.push({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    r: Math.random()*1.1+0.2,
+    vx: (Math.random()-.5)*.08, vy: (Math.random()-.5)*.08,
+    speed: Math.random()*.4+.1,
+    hue: starHue()
+  });
 }
 function animate() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  const dx = isMobile?0:mouse.x-canvas.width/2, dy = isMobile?0:mouse.y-canvas.height/2;
-  const isLight = document.documentElement.classList.contains('light-theme');
+  const dx = isMobile ? 0 : mouse.x - canvas.width/2;
+  const dy = isMobile ? 0 : mouse.y - canvas.height/2;
+  const isDark = document.documentElement.classList.contains('dark-theme');
   stars.forEach(s => {
     s.x += s.vx; s.y += s.vy;
-    if (s.x<0) s.x=canvas.width; if (s.x>canvas.width) s.x=0;
-    if (s.y<0) s.y=canvas.height; if (s.y>canvas.height) s.y=0;
-    const tw = Math.sin(Date.now()/600+s.x*.15)*.4+.6;
-    ctx.beginPath(); ctx.arc(s.x+dx/(25/s.speed),s.y+dy/(25/s.speed),s.r*tw,0,Math.PI*2);
-    if (isLight) {
-      /* deep forest green tones for light mode */
-      const lightness = 28 + Math.floor(Math.random()*4) * 0;
-      ctx.fillStyle=`hsla(${s.hue},80%,${25+tw*15}%,${tw*.85})`;
-      if(s.r>.8){ctx.shadowBlur=5;ctx.shadowColor=`hsl(${s.hue},70%,30%)`;}
+    if (s.x < 0) s.x = canvas.width;
+    if (s.x > canvas.width) s.x = 0;
+    if (s.y < 0) s.y = canvas.height;
+    if (s.y > canvas.height) s.y = 0;
+    const tw = Math.sin(Date.now()/600 + s.x*.15)*.4 + .6;
+    ctx.beginPath();
+    ctx.arc(s.x + dx/(25/s.speed), s.y + dy/(25/s.speed), s.r*tw, 0, Math.PI*2);
+    if (isDark) {
+      ctx.fillStyle = `hsla(${s.hue},90%,${55+tw*15}%,${tw*.75})`;
+      if (s.r > .8) { ctx.shadowBlur = 6; ctx.shadowColor = `hsl(${s.hue},85%,55%)`; }
     } else {
-      ctx.fillStyle=`hsla(${s.hue},100%,65%,${tw*.7})`;
-      if(s.r>.8){ctx.shadowBlur=6;ctx.shadowColor=`hsl(${s.hue},100%,60%)`;}
+      ctx.fillStyle = `hsla(${s.hue},80%,${36+tw*10}%,${tw*.65})`;
+      if (s.r > .8) { ctx.shadowBlur = 5; ctx.shadowColor = `hsl(${s.hue},75%,38%)`; }
     }
-    ctx.fill(); ctx.shadowBlur=0;
+    ctx.fill();
+    ctx.shadowBlur = 0;
   });
   requestAnimationFrame(animate);
 }
 animate();
-
-/* ══════════════════════════════════════════════
-   INTERACTIVE TERMINAL
-══════════════════════════════════════════════ */
-const itermOutput = document.getElementById('itermOutput');
-const itermInput  = document.getElementById('itermInput');
-const itermHint   = document.getElementById('itermHint');
-const cmdHistory  = [];
-let histIdx = -1;
-
-const g  = s => `<span style="color:#39ff6e">${s}</span>`;
-const mu = s => `<span style="color:#4d7a5a">${s}</span>`;
-const bl = s => `<span style="color:#4cc2ff">${s}</span>`;
-const yw = s => `<span style="color:#ffd60a">${s}</span>`;
-const or = s => `<span style="color:#ff6b35;font-weight:600">${s}</span>`;
-const er = s => `<span style="color:#ff453a">${s}</span>`;
-const wh = s => `<span style="color:var(--text-strong,#fff);font-weight:600">${s}</span>`;
-
-const CMDS = {
-  help: () => `
-${g('Available commands:')}
-  ${g('whoami')}         — identity profile
-  ${g('about')}          — about Mahir
-  ${g('skills')}         — skills overview
-  ${g('certs')}          — certifications
-  ${g('experience')}     — work history
-  ${g('projects')}       — project list
-  ${g('archive')}        — cyber archive &amp; links
-  ${g('contact')}        — contact info
-  ${g('nmap')}           — run a recon scan
-  ${g('neofetch')}       — system info
-  ${g('ls')}             — list directory
-  ${g('cat cv')}         — view CV summary
-  ${g('education')}      — academic background
-  ${g('languages')}      — spoken languages
-  ${g('interests')}      — hobbies &amp; interests
-  ${g('achievements')}   — notable achievements
-  ${g('volunteer')}      — volunteer experience
-  ${g('ctf')}            — CTF &amp; hacking stats
-  ${g('status')}         — current availability
-  ${g('ping mahir')}     — test connection
-  ${g('hack')}           — launch an attack 👀
-  ${g('matrix')}         — you know why
-  ${g('uname -a')}       — kernel info
-  ${g('uptime')}         — system uptime
-  ${g('fortune')}        — random hacker quote
-  ${g('date')}           — current date/time
-  ${g('clear')}          — clear the terminal
-  ${mu('────────────────────────────────────────────────')}
-  ${mu('tip:')} try ${g('nmap -sV mahir.local')} or ${g('ping mahir')}!`,
-
-  whoami: () => `
-${wh('MAHIR ASIF')}
-${mu('──────────────────────────────────────────────')}
-${mu('role    :')} ${g('Junior Penetration Tester / eJPT Certified')}
-${mu('domain  :')} Cybersecurity Student @ APU, Malaysia
-${mu('os      :')} ${bl('Kali Linux')} / Windows 11 Pro
-${mu('focus   :')} Web App Pentesting · SOC · Red Teaming
-${mu('cert    :')} ${yw('eJPT')} — INE Security (Issued Mar 2026 · #177694517)
-${mu('status  :')} ${g('● ONLINE')} — open to opportunities`,
-
-  about: () => `
-${g('[*] Loading profile...')}
-
-Hi, I'm ${wh('Mahir Asif')} — a final-year ${g('Cybersecurity student')} at APU, Malaysia.
-Dual-awarded BSc with De Montfort University (UK).
-
-I'm a ${or('certified eJPT penetration tester')} specializing in web
-application security, API testing, and network exploitation.
-
-Real-world experience with Australian enterprise clients and
-Malaysian government engagements. Building toward ${bl('eCPPT / OSCP')}.
-
-${g('[+] Profile loaded successfully.')}`,
-
-  skills: () => `
-${g('[*] Enumerating capabilities...')}
-
-${or('// Offensive')}
-  Web App Pentesting · API Security · OWASP Top 10
-  Burp Suite · Metasploit · Nmap/Nessus · SQLi · XSS/CSRF
-  Privilege Escalation · Recon &amp; OSINT
-
-${bl('// Defensive / Infrastructure')}
-  SIEM (MSSGard) · IDS/IPS (Snort) · Incident Response
-  Linux Administration · Firewall/ACL · IAM/PAM
-  AWS/Azure Review · SSL/TLS Hardening
-
-${g('// Proficiency Bars')}
-  Linux Admin        [${g('███████░░░')}] 76%
-  Web Pentesting     [${g('███████░░░')}] 72%
-  Security Tools     [${g('██████░░░░')}] 65%
-  Networking         [${g('█████░░░░░')}] 58%
-  Python/Bash        [${g('███████░░░')}] 78%`,
-
-  certs: () => `
-${g('[*] Verifying credentials...')}
-
-${yw('★ LATEST')}  ${wh('eJPT')} — eLearnSecurity Junior Penetration Tester
-         INE Security · Issued 23 Mar 2026 · #177694517
-
-${g('[ OK ]')}  ${wh('RH134')} — Red Hat System Administration II
-         Red Hat · Dec 2025
-
-${g('[ OK ]')}  ${wh('RH124')} — Red Hat System Administration I
-         Red Hat · Jan 2025
-
-${g('[ OK ]')}  ${wh('Cybersecurity for Students')} — LetsDefend
-         Learning Path · Jan 2025
-
-${g('[+] 4/4 credentials verified.')}`,
-
-  experience: () => `
-${g('[*] Fetching work history...')}
-
-${yw('[ OCT 2025 – JAN 2026 ]')}
-  ${wh('Junior Penetration Tester / Security Researcher')}
-  FSeC @ APU / APIIT · Greater Kuala Lumpur
-  ${mu('$')} Real-world web app &amp; API pentesting (AU + MY govt)
-  ${mu('$')} Cloud config reviews (AWS &amp; Azure)
-  ${mu('$')} Pentest reports with risk ratings &amp; PoC evidence
-
-${yw('[ JUL 2025 – NOV 2025 ]')}
-  ${wh('SOC Analyst Intern')}
-  APU / APIIT SIEM Elite Program · Kuala Lumpur
-  ${mu('$')} Alert triage with MSSGard SIEM
-  ${mu('$')} Analyzed ${g('50+')} alerts within SOC SLA guidelines
-
-${yw('[ DEC 2022 ]')}
-  ${wh('Graphic Designer')} — MD Infotech · Rajshahi, Bangladesh
-  ${mu('$')} Stakeholder engagement improved ~30%`,
-
-  projects: () => `
-${g('[*] Loading project directory...')}
-
-${bl('secure-client-server-network/')}  [Dec 2024 – Mar 2025]
-  Rocky Linux + Ubuntu · NFS · SSL/TLS Apache · Fail2Ban
-
-${bl('secure-mail-server/')}            [Dec 2024 – Feb 2025]
-  Postfix + Dovecot + SpamAssassin · SSL/TLS · Thunderbird
-
-${bl('honeypot-ids-lab/')}              [Jul 2025]
-  Snort IDS + honeypot · Kali attack simulations
-
-${bl('enterprise-network-design/')}     [Jan – Mar 2025]
-  VLANs · ACLs · EtherChannel · OSPF · KL &amp; AU branches
-
-${bl('food-ordering-app/')}             [Dec 2024 – Mar 2025]
-  Java · Role-based auth · Payments · Cart
-
-${g('[+] 5 projects found.')}`,
-
-  contact: () => `
-${g('[*] Running whois lookup...')}
-
-${mu('email   :')} asifmahir907@gmail.com
-${mu('phone   :')} +60 133329115
-${mu('linkedin:')} ${g('linkedin.com/in/mahir907')}
-${mu('github  :')} ${g('github.com/mahirhacks')}
-${mu('location:')} Serdang Raya Utara, Selangor, Malaysia
-
-${g('[+] All contact vectors reachable.')}`,
-
-  nmap: () => `
-${mu('Starting Nmap 7.94SVN ( https://nmap.org )')}
-${mu('Nmap scan report for mahir.local (192.168.69.1)')}
-${g('[+] Host is up (0.0011s latency).')}
-
-${mu('PORT      STATE  SERVICE         VERSION')}
-${mu('──────────────────────────────────────────────────────')}
-${yw('022/tcp')}   ${g('open')}   ssh             OpenSSH 9.3p1
-${yw('080/tcp')}   ${g('open')}   http            Apache/2.4.57
-${yw('443/tcp')}   ${g('open')}   ssl/https       Apache/2.4.57
-${yw('8080/tcp')}  ${g('open')}   pentesting      WebApp Engine 1.0
-
-${g('|')} OS Guess: ${bl('Kali Linux 2025.x')} (100%)
-${g('|')} Cert: ${yw('eJPT')} (INE Security, Mar 2026)
-${g('|')} Status: OPEN TO WORK
-${g('|_')} Available for hire: ${g('YES')}
-
-${mu('Nmap done: 1 IP scanned in 2.47 seconds')}`,
-
-  neofetch: () => `
-${g('           .          .      ')}   ${wh('root@kali')}
-${g('          ,8,        ,8.     ')}   ${mu('──────────────────────────────')}
-${g('         ,888,      ,888.    ')}   ${mu('OS:')} Kali Linux Rolling x86_64
-${g('        .8\'\'88,    ,88\'\'8.  ')}   ${mu('Kernel:')} 6.6.0-kali1-amd64
-${g('       .8\'  \'88,,88\'  \'8.  ')}   ${mu('Shell:')} zsh 5.9
-${g('      .8\'    \'8888\'    \'8. ')}   ${mu('Terminal:')} Portfolio v2.0
-${g('     .8\'      \'88\'      \'8.')}   ${mu('Role:')} ${g('Penetration Tester')}
-${g('    .8\'        \'\'        \'8.')}  ${mu('Cert:')} ${yw('eJPT')} (Mar 2026)
-${g('   ,88888888888888888888888. ')}   ${mu('CGPA:')} ${yw('3.41')}
-${g('  .8\'                      \'8.')}  ${mu('Status:')} ${g('● Open to Work')}`,
-
-  ls: () => `
-${mu('total 12')}
-${g('drwxr-xr-x')}  mahir  about/
-${g('drwxr-xr-x')}  mahir  skills/
-${g('drwxr-xr-x')}  mahir  projects/
-${g('drwxr-xr-x')}  mahir  certifications/
-${g('drwxr-xr-x')}  mahir  experience/
-${g('drwxr-xr-x')}  mahir  education/
-${g('drwxr-xr-x')}  mahir  archive/
-${g('drwxr-xr-x')}  mahir  contact/
-${bl('-rw-r--r--')}  mahir  profile.jpg
-${bl('-rw-r--r--')}  mahir  Mahir_Asif_CV.pdf
-${bl('-rw-r--r--')}  mahir  about.txt
-${bl('-rw-r--r--')}  mahir  .secrets  ${mu('# permission denied 😏')}`,
-
-  'cat cv': () => `
-${g('[*] Reading Mahir_Asif_CV.pdf...')}
-
-${wh('MAHIR ASIF')}  —  Junior Penetration Tester
-${mu('─────────────────────────────────────────────────')}
-${mu('email   :')} asifmahir907@gmail.com
-${mu('phone   :')} +60 133329115
-${mu('github  :')} ${g('github.com/mahirhacks')}
-${mu('linkedin:')} ${g('linkedin.com/in/mahir907')}
-
-${yw('EDUCATION')}
-  BSc (Hons) CS — Cybersecurity · APU + De Montfort UK
-  CGPA: ${yw('3.41')} · Nov 2023 – Nov 2026
-
-${yw('CERTIFICATIONS')}
-  ${yw('★')} eJPT — INE Security (Mar 2026)
-  ✓ RH134 — Red Hat Sys Admin II (Dec 2025)
-  ✓ RH124 — Red Hat Sys Admin I  (Jan 2025)
-
-${yw('LATEST EXPERIENCE')}
-  Junior Pentester @ FSeC APU  (Oct 2025 – Jan 2026)
-  SOC Analyst Intern @ APU SIEM Elite (Jul – Nov 2025)
-
-${g('[+] For full CV, use the contact section or reach out via LinkedIn.')}`,
-
-  education: () => `
-${g('[*] Fetching academic records...')}
-
-${wh('INSTITUTION')} : Asia Pacific University (APU / APIIT)
-${wh('PARTNER')}     : De Montfort University, UK
-${wh('DEGREE')}      : BSc (Hons) CS — Cybersecurity
-${wh('PERIOD')}      : Nov 2023 – Nov 2026
-${wh('CGPA')}        : ${yw('3.41')}
-
-${bl('RELEVANT COURSES:')}
-  + Network Security (Firewall, Web Proxy, IDS/IPS, IAM)
-  + Python Automation, C &amp; Assembly Programming
-  + Red Hat Linux Administration (PAM, Access Control)
-  + Red Team Operations (API Pentesting, Web Exploitation)
-
-${g('[+] Academic records loaded.')}`,
-
-  languages: () => `
-${g('[*] Loading language environment...')}
-
-${wh('LANG_1')} = ${g('"Bangla"')}        ${mu('# NATIVE — primary')}
-${wh('LANG_2')} = ${g('"English"')}       ${mu('# FLUENT — professional')}
-${wh('LANG_3')} = ${bl('"Hindi & Urdu"')} ${mu('# BASIC — conversational')}
-${wh('LANG_4')} = ${bl('"Arabic"')}       ${mu('# BASIC — conversational')}
-${wh('LANG_5')} = ${bl('"Japanese"')}     ${mu('# BASIC — learning')}
-${wh('LANG_6')} = ${bl('"Bahasa Melayu"')}${mu('# BASIC — conversational')}
-
-${g('[+] 6 language modules loaded.')}`,
-
-  interests: () => `
-${g('[*] Parsing ~/.config/interests.json...')}
-
-  ${g('●')} Penetration Testing &amp; CTFs
-  ${g('●')} Low-Level Programming
-  ${g('●')} Red Team Research
-  ${g('●')} Project Building &amp; Side Hustles
-  ${g('●')} Fitness &amp; Self-Improvement
-  ${g('●')} Business Ideas &amp; Entrepreneurship
-  ${g('●')} Creative Design
-  ${g('●')} Cybersecurity News
-
-${g('[+] 8 interests loaded successfully.')}`,
-
-  achievements: () => `
-${g('[*] Running grep on achievement log...')}
-
-${yw('[2026-03-24]')} ${or('ACHIEVEMENT:')} Earned ${yw('eJPT')} — INE Security (#177694517)
-${yw('[2025-11-01]')} ${or('ACHIEVEMENT:')} Triaged ${g('50+')} live alerts within SOC SLAs
-${yw('[2025-10-15]')} ${or('ACHIEVEMENT:')} Real-world pentesting for AU firm &amp; MY govt
-${yw('[2025-09-01]')} ${or('ACHIEVEMENT:')} Part of APU FSeC — 1st licensed CaaS university program
-${yw('[2025-07-22]')} ${or('ACHIEVEMENT:')} Tech &amp; Graphics Coordinator · APU Cyber Talk event
-
-${mu('grep: 5 matches found in mahir.log')}`,
-
-  volunteer: () => `
-${g('[*] Tailing volunteer.log...')}
-
-${mu('[Nov 2025]')} ${bl('FSeC APU Open Day — Organization &amp; Management')}
-  └─ Represented APU FSeC during University Open Day
-  └─ Engaged prospective students on cybersecurity paths
-
-${mu('[Jul 2025]')} ${bl('Technical &amp; Graphics Coordinator — APU Cyber Talk')}
-  └─ Designed promo materials &amp; handled tech coordination
-  └─ Institutional cybersecurity awareness event
-
-${mu('--- Waiting for new log entries ---')}`,
-
-  archive: () => `
-${g('[*] Opening cyber archive...')}
-
-${bl('001')}  ${wh('CTF Writeup')}          — coming soon
-${bl('002')}  ${wh('Security Tool')}        — coming soon
-${bl('003')}  ${wh('Research Article')}     — coming soon
-${bl('004')}  ${wh('Homelab Docs')}         — coming soon
-${bl('005')}  ${wh('Web Project')}          — coming soon
-${bl('006')}  ${wh('Design Work')}          — coming soon
-
-${mu('→')} Scroll down to the ${g('Cyber Archive')} section for links &amp; details.
-${g('[+] Archive index loaded.')}`,
-
-  ctf: () => `
-${g('[*] Querying CTF database...')}
-
-${wh('Platform')}        ${wh('Status')}     ${wh('Notes')}
-${mu('─────────────────────────────────────────────────')}
-${bl('TryHackMe')}       ${g('Active')}     Building path
-${bl('HackTheBox')}      ${yw('Starting')}   Machines queue loaded
-${bl('PicoCTF')}         ${g('Active')}     Web + forensics focus
-${bl('CTFtime')}         ${yw('Watching')}   Team lookout
-
-${or('ACTIVE LEARNING PATH:')}
-  → eJPT ${g('✓ DONE')} → eCPPT → OSCP (target: 2027)
-  → Currently focusing on Active Directory attacks
-
-${g('[+] Keep grinding. Every box is a lesson.')}`,
-
-  status: () => `
-${g('[*] Fetching availability status...')}
-
-${wh('AVAILABILITY')}  : ${g('● OPEN TO WORK')}
-${wh('ROLE TARGET')}   : Junior Penetration Tester / SOC Analyst
-${wh('LOCATION')}      : Selangor, Malaysia (Hybrid/Remote OK)
-${wh('NOTICE')}        : Immediate availability
-${wh('CERT')}          : ${yw('eJPT')} certified (INE Security, Mar 2026)
-${wh('NEXT TARGET')}   : ${bl('eCPPT → OSCP')}
-
-${g('[+] Open to full-time, internship, and freelance gigs.')}`,
-
-  'ping mahir': () => {
-    const target = 'mahir.local';
-    const ip = '192.168.69.1';
-    const container = document.createElement('div');
-    container.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
-    container.innerHTML = `<span style="color:#4d7a5a">PING ${target} (${ip}): 56 bytes of data</span>`;
-    itermOutput.appendChild(container);
-    itermOutput.scrollTop = itermOutput.scrollHeight;
-
-    let seq = 0;
-    const times = [];
-    const maxPings = 4;
-
-    const interval = setInterval(() => {
-      const ms = (Math.random() * 0.3 + 0.28).toFixed(2);
-      times.push(parseFloat(ms));
-      const line = document.createElement('div');
-      line.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
-      line.innerHTML = `64 bytes from ${ip}: icmp_seq=${seq} ttl=64 <span style="color:#39ff6e">time=${ms} ms</span>`;
-      itermOutput.appendChild(line);
-      itermOutput.scrollTop = itermOutput.scrollHeight;
-      seq++;
-      if (seq >= maxPings) {
-        clearInterval(interval);
-        const min = Math.min(...times).toFixed(3);
-        const max = Math.max(...times).toFixed(3);
-        const avg = (times.reduce((a,b)=>a+b,0)/times.length).toFixed(3);
-        const summary = document.createElement('div');
-        summary.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
-        summary.innerHTML = `\n<span style="color:#4d7a5a">--- ${target} ping statistics ---</span>\n${maxPings} packets transmitted, ${maxPings} received, <span style="color:#39ff6e">0% packet loss</span>\nround-trip min/avg/max = <span style="color:#ffd60a">${min}/${avg}/${max} ms</span>\n<span style="color:#39ff6e">[+] Connection established. Mahir is reachable 👋</span>`;
-        itermOutput.appendChild(summary);
-        itermOutput.scrollTop = itermOutput.scrollHeight;
-      }
-    }, 600);
-    return '';
-  },
-
-  'uname -a': () => `
-${g('Linux')} mahir-kali 6.6.0-kali1-amd64 #1 SMP PREEMPT_DYNAMIC
-Debian 6.6.15-2kali1 x86_64 GNU/Linux
-${mu('Built for:')} ${bl('Offensive Security · Red Teaming · eJPT')}`,
-
-  uptime: () => {
-    const d = new Date();
-    const yr = d.getFullYear() - 2001;
-    return `
-${g(' 09:42:13 up')} ${yw(yr + ' years, 3 months')} ${g('— 1 user')}
-${mu('load average: 0.61 (learning), 0.84 (hacking), 0.99 (grinding)')}
-${g('[+] System has been running strong since 2001.')}`;
-  },
-
-  date: () => {
-    const now = new Date();
-    return `${g(now.toString())}\n${mu('Timezone: Asia/Kuala_Lumpur (MYT +0800)')}`;
-  },
-
-  fortune: () => {
-    const quotes = [
-      `${g('"The quieter you become, the more you are able to hear."')}\n${mu('  — Kali Linux motto')}`,
-      `${g('"Offense informs defense. Defense informs offense."')}\n${mu('  — Every good hacker, ever')}`,
-      `${g('"Root is not a destination. It\'s a mindset."')}\n${mu('  — Unknown CTF player')}`,
-      `${g('"If you know the enemy and know yourself, you need not fear."')}\n${mu('  — Sun Tzu (also a pentester)')}`,
-      `${g('"The best exploit is one that was never needed."')}\n${mu('  — Every CISO\'s dream')}`,
-      `${g('"In cybersecurity, curiosity is your best weapon."')}\n${mu('  — Mahir Asif, probably')}`,
-    ];
-    return `\n${quotes[Math.floor(Math.random() * quotes.length)]}\n\n${mu('Run')} <span style="color:#39ff6e">fortune</span> ${mu('again for another.')}`;
-  },
-
-  hack: () => `
-${g('[*] Initializing exploit framework...')}
-${mu('Loading modules... ████████████████ 100%')}
-
-${yw('[!] Target identified: mahir.local')}
-${bl('[>] Attempting privilege escalation...')}
-${g('[+] Access granted. Welcome, you.')}
-
-${wh('But honestly? The real hack is building something great.')}
-${mu('Close this terminal and scroll down — the work speaks louder.')}
-${g('[+] Have fun. Stay curious. Stay ethical.')}`,
-
-  matrix: () => `
-${g('Wake up, Neo...')}
-${g('The Matrix has you...')}
-${g('Follow the white rabbit 🐇')}
-
-${mu('(There is no spoon.)')}
-${mu('But there IS an eJPT cert.')}
-${g('[+] Red pill chosen. Reality loaded.')}`,
-  'sudo rm -rf /':     () => er('\nNice try. I\'ve seen that one before.'),
-  'sudo su':           () => er('\n[sudo] password for mahir: \nSorry, you are not allowed to be root here. Nice try 😏'),
-  'rm -rf /':          () => er('\nPermission denied. Also, really? 🙄'),
-  'cat /etc/passwd':   () => `${mu('root:x:0:0:root:/root:/bin/zsh')}\n${g('mahir:x:1000:1000:Mahir Asif:/home/mahir:/bin/zsh')}\n${mu('[+] Only one user matters here.')}`,
-  'cat .secrets':      () => er('\nbash: .secrets: Permission denied\n\n[!] Nice try though 😏'),
-  'pwd':               () => g('/home/mahir'),
-  'id':                () => `${g('uid=1000(mahir)')} ${yw('gid=1000(mahir)')} ${bl('groups=1000(mahir),27(sudo),1337(pentesters)')}`,
-  'ifconfig':          () => `${bl('eth0:')} flags=4163\n        inet ${g('192.168.69.1')}  netmask 255.255.255.0\n${bl('lo:')}   inet ${g('127.0.0.1')}  netmask 255.0.0.0`,
-  'nmap -sv mahir.local': () => CMDS['nmap'](),
-  'nmap -sv':          () => CMDS['nmap'](),
-  'cat about.txt':     () => CMDS['about'](),
-  'cat profile.txt':   () => CMDS['about'](),
-  'cat cv.pdf':        () => CMDS['cat cv'](),
-  'man mahir':         () => CMDS['whoami'](),
-  exit:                () => mu('\nlogout\nConnection to mahir.local closed.'),
-};
-
-function appendLine(html) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  div.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:.78rem;';
-  itermOutput.appendChild(div);
-  itermOutput.scrollTop = itermOutput.scrollHeight;
-}
-
-function promptHTML() {
-  return `<span style="color:#39ff6e;font-weight:700">┌──(root㉿kali)-[~]\n└─# </span>`;
-}
-
-function runCommand(cmd) {
-  appendLine(`${promptHTML()}${wh(cmd)}`);
-  const trimmed = cmd.trim().toLowerCase();
-  if (!trimmed) return;
-  cmdHistory.unshift(cmd);
-  histIdx = -1;
-  if (trimmed === 'clear') { itermOutput.innerHTML = ''; return; }
-  const fn = CMDS[trimmed];
-  if (fn) {
-    const result = fn();
-    if (result) appendLine(result);
-  } else {
-    appendLine(`${er('bash: ' + cmd + ': command not found')}\n${mu('type')} <span style="color:#39ff6e">help</span> ${mu('for a list of commands')}`);
-  }
-}
-
-/* Boot sequence */
-const boot = [
-  { t:   0, h: mu('Kali GNU/Linux Rolling · tty1') },
-  { t: 200, h: mu('mahir-kali login: ') + wh('root') },
-  { t: 500, h: mu('Password: ') + wh('••••••••••') },
-  { t: 900, h: g('[  OK  ] Started session 1 of user root.') },
-  { t:1100, h: '' },
-  { t:1200, h: g('┌──(root㉿kali)-[~]') },
-  { t:1300, h: g('└─# ') + mu('./recon.sh --target mahir.local') },
-  { t:1600, h: '' },
-  { t:1700, h: mu('[*] Starting reconnaissance...') },
-  { t:2000, h: g('[+] Host is up · Identity profile located') },
-  { t:2100, h: '' },
-  { t:2200, h: mu('┌──────────────────────────────────────────────────┐') },
-  { t:2260, h: mu('│') + `  ${wh('TARGET')}  :  ${wh('MAHIR ASIF')}                              ` + mu('│') },
-  { t:2310, h: mu('│') + `  ${mu('ROLE')}    :  ${g('Junior Penetration Tester / eJPT')}        ` + mu('│') },
-  { t:2360, h: mu('│') + `  ${mu('CERT')}    :  ${yw('eJPT')} — INE Security (Mar 2026)          ` + mu('│') },
-  { t:2410, h: mu('│') + `  ${mu('DOMAIN')}  :  Cybersecurity Student @ APU, Malaysia      ` + mu('│') },
-  { t:2460, h: mu('│') + `  ${mu('STATUS')}  :  ${g('● ONLINE')} — ${g('open to opportunities')}            ` + mu('│') },
-  { t:2510, h: mu('└──────────────────────────────────────────────────┘') },
-  { t:2620, h: '' },
-  { t:2720, h: g('[+] Recon complete. Type ') + wh('help') + g(' to explore.') },
-];
-boot.forEach(({ t, h }) => setTimeout(() => appendLine(h === '' ? '&nbsp;' : h), t));
-setTimeout(() => { itermHint.innerHTML = `type <span style="color:var(--green)">help</span> for commands · ↑↓ for history · tab to autocomplete`; }, 3000);
-
-/* Input events */
-itermInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    runCommand(itermInput.value);
-    itermInput.value = '';
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    if (histIdx < cmdHistory.length - 1) { histIdx++; itermInput.value = cmdHistory[histIdx]; }
-  } else if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    if (histIdx > 0) { histIdx--; itermInput.value = cmdHistory[histIdx]; }
-    else { histIdx = -1; itermInput.value = ''; }
-  } else if (e.key === 'Tab') {
-    e.preventDefault();
-    const partial = itermInput.value.trim().toLowerCase();
-    if (!partial) return;
-    const matches = Object.keys(CMDS).filter(c => c.startsWith(partial));
-    if (matches.length === 1) { itermInput.value = matches[0]; }
-    else if (matches.length > 1) { appendLine(`${mu('Possible completions: ')}${matches.map(m => `<span style="color:#39ff6e">${m}</span>`).join('  ')}`); }
-  }
-});
-
-itermInput.addEventListener('click', () => itermInput.focus());
-document.querySelector('.iterm-wrap')?.addEventListener('click', () => itermInput.focus());
-
 </script>
 </body>
 </html>
