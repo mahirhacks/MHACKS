@@ -52,8 +52,8 @@
     .contact-footer a:hover {
       text-shadow: -2px 0 1px rgba(255, 45, 35, .72), 2px 0 1px rgba(0, 190, 255, .72);
     }
-    .noise { position: fixed; inset: 0; z-index: 100; Xekute-events: none; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
-    .scroll-control { --scroll-offset: 0px; --scroll-rail-color: rgba(255,255,255,.48); --scroll-thumb-color: var(--accent); position: fixed; z-index: 88; top: 50%; right: 0; width: 52px; height: 25vh; padding: 0; border: 0; background: transparent; transform: translateY(-50%); cursor: Xekute; touch-action: none; }
+    .noise { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
+    .scroll-control { --scroll-offset: 0px; --scroll-rail-color: rgba(255,255,255,.48); --scroll-thumb-color: var(--accent); position: fixed; z-index: 88; top: 50%; right: 0; width: 52px; height: 25vh; padding: 0; border: 0; background: transparent; transform: translateY(-50%); cursor: pointer; touch-action: none; }
     .scroll-control[data-tone="light"] { --scroll-rail-color: rgba(10,10,10,.42); --scroll-thumb-color: var(--accent); }
     .scroll-control[data-tone="dark"] { --scroll-rail-color: rgba(255,255,255,.48); --scroll-thumb-color: var(--accent); }
     .scroll-control[data-tone="accent"] { --scroll-rail-color: rgba(255,255,255,.72); --scroll-thumb-color: var(--ink); }
@@ -68,7 +68,7 @@
     .site-header { position: fixed; inset: 0 0 auto; z-index: 90; height: 72px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 var(--pad); color: var(--white); mix-blend-mode: difference; }
     .brand { font: 500 12px "DM Mono", monospace; letter-spacing: .15em; text-decoration: none; text-transform: uppercase; }
     .availability { justify-self: center; display: flex; align-items: center; gap: 9px; font: 400 10px "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
-    .menu-btn { justify-self: end; border: 0; padding: 8px 0; background: transparent; color: inherit; font: 500 11px "DM Mono", monospace; letter-spacing: .14em; text-transform: uppercase; cursor: Xekute; }
+    .menu-btn { justify-self: end; border: 0; padding: 8px 0; background: transparent; color: inherit; font: 500 11px "DM Mono", monospace; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
     .menu { position: fixed; inset: 0; z-index: 80; background: var(--ink); color: var(--white); display: grid; place-content: center; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility .35s; }
     .menu.open { opacity: 1; visibility: visible; }
     .menu nav { display: flex; flex-direction: column; align-items: center; }
@@ -125,7 +125,7 @@
     .project:nth-child(2) { grid-column: span 5; background: #bcbcb7; color: var(--ink); --shape: #653fe8; --shape-alt: #9a5cff; --shape-rgb: 101,63,232; --shape-rest: rgba(10,10,10,.18); }
     .project:nth-child(3) { grid-column: span 6; background: #dededb; color: var(--ink); --shape: #ffc928; --shape-alt: #ffc928; --shape-rgb: 255,201,40; --shape-rest: rgba(10,10,10,.18); }
     .project:nth-child(4) { grid-column: span 6; background: #dededb; color: var(--ink); --shape: #246cff; --shape-alt: #43ddff; --shape-rgb: 36,108,255; --shape-rest: rgba(10,10,10,.18); }
-    .project::before, .project::after { content: ""; position: absolute; z-index: -1; box-sizing: border-box; color: var(--shape-rest); opacity: 1; Xekute-events: none; transition: color .35s ease, border-color .35s ease, filter .35s ease, transform .55s cubic-bezier(.2,.72,.2,1); }
+    .project::before, .project::after { content: ""; position: absolute; z-index: -1; box-sizing: border-box; color: var(--shape-rest); opacity: 1; pointer-events: none; transition: color .35s ease, border-color .35s ease, filter .35s ease, transform .55s cubic-bezier(.2,.72,.2,1); }
     .project:hover::before, .project:hover::after { color: var(--shape); border-color: var(--shape); filter: drop-shadow(-2px 0 1px rgba(var(--shape-rgb),.72)) drop-shadow(2px 0 1px var(--shape-alt)); }
 
     /* Joblicator — orbital workspace and a skewed application grid. */
@@ -370,7 +370,7 @@
       .hero-copy { min-height: 100svh; }
       .hero-visual { height: 100svh; }
     }
-    @media (hover: none), (Xekute: coarse) {
+    @media (hover: none), (pointer: coarse) {
       .scroll-rail { opacity: .55; transform: scaleY(1); }
       .menu a:hover { transform: none; }
       .capability:hover h3 { transform: none; }
@@ -429,7 +429,7 @@
         <a class="project reveal" href="joblicator.html"><div class="project-top"><span>01 / Local AI / Productivity</span><span class="project-arrow">↗</span></div><div><h3>Joblicator</h3><p>A local-first job application studio that captures roles, maintains a structured career profile, and runs a three-stage Ollama pipeline to tailor résumés and cover letters. A React workspace, Python REST backend, visual template editor, review workflow, and Jinja-powered HTML/PDF export keep the entire process private and on-device.</p><div class="project-tags"><span>React</span><span>Python</span><span>Ollama</span><span>HTML + PDF</span></div></div></a>
         <a class="project reveal" href="https://leadbondhuai.online" target="_blank" rel="noreferrer"><div class="project-top"><span>02 / SaaS / Production</span><span class="project-arrow">↗</span></div><div><h3>LeadBondhu AI</h3><p>A serverless lead-capture and notification platform integrating Meta channels, Gemini, Supabase, Resend, and Cloudflare—with security reviews built into delivery.</p><div class="project-tags"><span>React</span><span>Node</span><span>Cloudflare</span><span>VAPT</span></div></div></a>
         <a class="project reveal" href="jarvis.html"><div class="project-top"><span>03 / Voice AI / Windows</span><span class="project-arrow">↗</span></div><div><h3>Jarvis</h3><p>A hands-free local Windows assistant built around wake-word activation, faster-whisper speech recognition, layered intent routing, tool execution, and text-to-speech. Everyday commands take a deterministic fast path while an Ollama model resolves only ambiguous requests.</p><div class="project-tags"><span>Python</span><span>faster-whisper</span><span>Ollama</span><span>Voice UX</span></div></div></a>
-        <a class="project reveal" href="Xekute.html"><div class="project-top"><span>04 / Security / Desktop / Local AI</span><span class="project-arrow">↗</span></div><div><h3>Xekute</h3><p>A local-first workspace for authorized penetration testing and vulnerability assessment. It connects scope and Rules of Engagement, intercepted HTTP traffic, evidence, findings, security tools, an application behavior map, WebClone, terminal access, and a policy-controlled Ollama assistant in one Windows desktop application.</p><div class="project-tags"><span>Electron</span><span>Security Proxy</span><span>Ollama</span><span>App Map</span></div></div></a>
+        <a class="project reveal" href="xekute.html"><div class="project-top"><span>04 / Security / Desktop / Local AI</span><span class="project-arrow">↗</span></div><div><h3>Xekute</h3><p>A local-first workspace for authorized penetration testing and vulnerability assessment. It connects scope and Rules of Engagement, intercepted HTTP traffic, evidence, findings, security tools, an application behavior map, WebClone, terminal access, and a policy-controlled Ollama assistant in one Windows desktop application.</p><div class="project-tags"><span>Electron</span><span>Security Proxy</span><span>Ollama</span><span>App Map</span></div></div></a>
       </div>
     </section>
 
@@ -551,21 +551,21 @@
       const tone = sectionBelow?.closest('.contact') ? 'accent' : sectionBelow?.closest('.hero, .expertise, .menu') ? 'dark' : 'light';
       scrollControl.dataset.tone = tone;
     };
-    const scrollFromXekute = event => {
+    const scrollFromPointer = event => {
       const bounds = scrollRail.getBoundingClientRect();
       const thumbHeight = scrollThumb.offsetHeight;
       const progress = Math.min(Math.max((event.clientY - bounds.top - thumbHeight / 2) / Math.max(bounds.height - thumbHeight, 1), 0), 1);
       const maximum = document.documentElement.scrollHeight - innerHeight;
       scrollTo({ top: maximum * progress, behavior: scrollControl.classList.contains('dragging') ? 'auto' : 'smooth' });
     };
-    scrollControl.addEventListener('Xekutedown', event => {
+    scrollControl.addEventListener('pointerdown', event => {
       scrollControl.classList.add('dragging');
-      scrollControl.setXekuteCapture(event.XekuteId);
-      scrollFromXekute(event);
+      scrollControl.setPointerCapture(event.pointerId);
+      scrollFromPointer(event);
     });
-    scrollControl.addEventListener('Xekutemove', event => { if (scrollControl.classList.contains('dragging')) scrollFromXekute(event); });
-    scrollControl.addEventListener('Xekuteup', event => { scrollControl.classList.remove('dragging'); scrollControl.releaseXekuteCapture(event.XekuteId); });
-    scrollControl.addEventListener('Xekutecancel', () => scrollControl.classList.remove('dragging'));
+    scrollControl.addEventListener('pointermove', event => { if (scrollControl.classList.contains('dragging')) scrollFromPointer(event); });
+    scrollControl.addEventListener('pointerup', event => { scrollControl.classList.remove('dragging'); scrollControl.releasePointerCapture(event.pointerId); });
+    scrollControl.addEventListener('pointercancel', () => scrollControl.classList.remove('dragging'));
     scrollControl.addEventListener('keydown', event => {
       const steps = { ArrowUp: -80, ArrowDown: 80, PageUp: -innerHeight * .8, PageDown: innerHeight * .8 };
       if (event.key in steps) { event.preventDefault(); scrollBy({ top: steps[event.key], behavior: 'smooth' }); }

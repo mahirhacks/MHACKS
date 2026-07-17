@@ -24,24 +24,24 @@ const updateScroll = () => {
   control.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
 };
 
-const scrollFromXekute = event => {
+const scrollFromPointer = event => {
   const bounds = rail.getBoundingClientRect();
   const height = thumb.offsetHeight;
   const progress = Math.min(Math.max((event.clientY - bounds.top - height / 2) / Math.max(bounds.height - height, 1), 0), 1);
   scrollTo({ top: (document.documentElement.scrollHeight - innerHeight) * progress, behavior: control.classList.contains('dragging') ? 'auto' : 'smooth' });
 };
 
-control?.addEventListener('Xekutedown', event => {
+control?.addEventListener('pointerdown', event => {
   control.classList.add('dragging');
-  control.setXekuteCapture(event.XekuteId);
-  scrollFromXekute(event);
+  control.setPointerCapture(event.pointerId);
+  scrollFromPointer(event);
 });
-control?.addEventListener('Xekutemove', event => { if (control.classList.contains('dragging')) scrollFromXekute(event); });
-control?.addEventListener('Xekuteup', event => {
+control?.addEventListener('pointermove', event => { if (control.classList.contains('dragging')) scrollFromPointer(event); });
+control?.addEventListener('pointerup', event => {
   control.classList.remove('dragging');
-  if (control.hasXekuteCapture(event.XekuteId)) control.releaseXekuteCapture(event.XekuteId);
+  if (control.hasPointerCapture(event.pointerId)) control.releasePointerCapture(event.pointerId);
 });
-control?.addEventListener('Xekutecancel', () => control.classList.remove('dragging'));
+control?.addEventListener('pointercancel', () => control.classList.remove('dragging'));
 control?.addEventListener('keydown', event => {
   const step = { ArrowUp:-80, ArrowDown:80, PageUp:-innerHeight*.8, PageDown:innerHeight*.8 }[event.key];
   if (step) { event.preventDefault(); scrollBy({ top:step, behavior:'smooth' }); }
