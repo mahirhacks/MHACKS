@@ -14,7 +14,7 @@
 }
 body.theme-joblicator { --accent:#d8ff00; --accent-rgb:216,255,0; --accent-2:#f4ffb8; }
 body.theme-jarvis { --accent:#c8201c; --accent-rgb:200,32,28; --accent-2:#ffc928; }
-body.theme-pointer { --accent:#3478ff; --accent-rgb:52,120,255; --accent-2:#8eb5ff; }
+body.theme-Xekute { --accent:#3478ff; --accent-rgb:52,120,255; --accent-2:#8eb5ff; }
 body.theme-jarvis .product-stage { background:linear-gradient(135deg,#74100e 0%,#ad1916 46%,#d72a20 100%); }
 body.theme-jarvis .product-stage::before { border-color:rgba(255,201,40,.72); }
 body.theme-jarvis .stage-window { border-color:rgba(255,201,40,.46); box-shadow:24px 24px 0 rgba(255,201,40,.28); }
@@ -45,7 +45,7 @@ a { color:inherit; }
 a,button { -webkit-tap-highlight-color:transparent; }
 .mono,.eyebrow { font-family:'DM Mono',monospace; letter-spacing:.12em; text-transform:uppercase; }
 .eyebrow { margin:0; font-size:10px; line-height:1.4; }
-.noise { position:fixed; inset:0; z-index:100; pointer-events:none; opacity:.035; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
+.noise { position:fixed; inset:0; z-index:100; Xekute-events:none; opacity:.035; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
 
 .product-header { position:fixed; inset:0 0 auto; z-index:90; height:70px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 var(--pad); color:var(--white); mix-blend-mode:difference; }
 .product-header a,.product-header span { font:500 10px 'DM Mono',monospace; letter-spacing:.13em; text-transform:uppercase; text-decoration:none; }
@@ -53,7 +53,7 @@ a,button { -webkit-tap-highlight-color:transparent; }
 .product-header .github-link { justify-self:end; }
 .product-header a:hover { text-decoration:underline; text-underline-offset:5px; }
 
-.scroll-control { --offset:0px; position:fixed; z-index:88; top:50%; right:0; width:48px; height:24vh; transform:translateY(-50%); cursor:pointer; touch-action:none; }
+.scroll-control { --offset:0px; position:fixed; z-index:88; top:50%; right:0; width:48px; height:24vh; transform:translateY(-50%); cursor:Xekute; touch-action:none; }
 .scroll-rail { position:relative; width:2px; height:100%; margin:auto; background:rgba(255,255,255,.4); opacity:0; transform:scaleY(.9); transition:.25s ease; }
 .scroll-thumb { position:absolute; top:var(--offset); left:50%; width:8px; height:32px; background:var(--accent); transform:translateX(-50%); box-shadow:0 0 14px rgba(var(--accent-rgb),.35); }
 .scroll-control:hover .scroll-rail,.scroll-control:focus-visible .scroll-rail,.scroll-control.dragging .scroll-rail { opacity:1; transform:scaleY(1); }
@@ -182,7 +182,7 @@ a,button { -webkit-tap-highlight-color:transparent; }
   .hero-copy { min-height:68svh; padding-top:84px; padding-bottom:36px; }
   .hero-meta .eyebrow:last-child { display:none; }
   .product-name { max-width:100%; font-size:clamp(54px,18vw,86px); line-height:.82; overflow-wrap:normal; }
-  body.theme-pointer .product-name { font-size:clamp(48px,16.7vw,72px); }
+  body.theme-Xekute .product-name { font-size:clamp(48px,16.7vw,72px); }
   .hero-end { margin-top:5vh; }
   .hero-summary { font-size:16px; }
   .hero-actions { display:grid; grid-template-columns:1fr 1fr; }
@@ -237,7 +237,7 @@ a,button { -webkit-tap-highlight-color:transparent; }
   .install-panel { padding:14px; }
   .install-code { font-size:8px; }
 }
-@media(hover:none),(pointer:coarse) {
+@media(hover:none),(Xekute:coarse) {
   .scroll-rail { opacity:.5; transform:scaleY(1); }
   .button:hover { transform:none; }
   .feature:hover { padding-left:0; }
