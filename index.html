@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Mahir Asif is a cybersecurity researcher and penetration tester building safer systems through offensive security, machine learning, and engineering.">
+  <meta name="description" content="Mahir Asif is a cybersecurity and AI security engineer working across offensive security, security automation, agentic systems, machine learning security, cloud, and software engineering.">
   <meta name="theme-color" content="#0a0a0a">
-  <meta property="og:title" content="Mahir Asif — Cybersecurity Researcher">
-  <meta property="og:description" content="I break systems, study the patterns, and build safer ones.">
+  <meta property="og:title" content="Mahir Asif — AI Security & Offensive Security Engineer">
+  <meta property="og:description" content="Offensive security, AI security, security automation, and engineered resilience.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mahir Asif — Cybersecurity Researcher">
-  <meta name="twitter:description" content="Offensive security, vulnerability research, and engineered resilience.">
+  <meta name="twitter:title" content="Mahir Asif — AI Security & Offensive Security Engineer">
+  <meta name="twitter:description" content="Offensive security, agentic AI security, vulnerability research, and security automation.">
   <meta name="twitter:image" content="og.png">
-  <title>Mahir Asif Offensive Security & Research</title>
+  <title>Mahir Asif — AI Security & Offensive Security Engineer</title>
   <link rel="icon" href="icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
       --pad: clamp(20px, 4vw, 64px);
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; scrollbar-width: none; overflow-x: clip; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; scrollbar-width: none; }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: Inter, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     body { -ms-overflow-style: none; }
     html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
@@ -125,32 +125,46 @@
     .project:nth-child(2) { grid-column: span 5; background: #bcbcb7; color: var(--ink); --shape: #653fe8; --shape-alt: #9a5cff; --shape-rgb: 101,63,232; --shape-rest: rgba(10,10,10,.18); }
     .project:nth-child(3) { grid-column: span 6; background: #dededb; color: var(--ink); --shape: #ffc928; --shape-alt: #ffc928; --shape-rgb: 255,201,40; --shape-rest: rgba(10,10,10,.18); }
     .project:nth-child(4) { grid-column: span 6; background: #dededb; color: var(--ink); --shape: #246cff; --shape-alt: #43ddff; --shape-rgb: 36,108,255; --shape-rest: rgba(10,10,10,.18); }
+    .project:nth-child(5) { grid-column: span 6; background: var(--ink); color: var(--white); --shape: #ff6f91; --shape-alt: #ffb36b; --shape-rgb: 255,111,145; --shape-rest: rgba(255,255,255,.20); }
+    .project:nth-child(6) { grid-column: span 6; background: #c7c7c2; color: var(--ink); --shape: #3dd6c6; --shape-alt: #84ffdc; --shape-rgb: 61,214,198; --shape-rest: rgba(10,10,10,.18); }
     .project::before, .project::after { content: ""; position: absolute; z-index: -1; box-sizing: border-box; color: var(--shape-rest); opacity: 1; pointer-events: none; transition: color .35s ease, border-color .35s ease, filter .35s ease, transform .55s cubic-bezier(.2,.72,.2,1); }
     .project:hover::before, .project:hover::after { color: var(--shape); border-color: var(--shape); filter: drop-shadow(-2px 0 1px rgba(var(--shape-rgb),.72)) drop-shadow(2px 0 1px var(--shape-alt)); }
 
-    /* Joblicator — orbital workspace and a skewed application grid. */
-    .project:nth-child(1)::before { width: 58%; aspect-ratio: 1; right: -15%; top: -8%; border: 1px solid var(--shape-rest); border-radius: 50%; }
-    .project:nth-child(1)::after { width: 41%; aspect-ratio: 1.15; left: -13%; bottom: -19%; border: 1px solid var(--shape-rest); transform: rotate(-8deg); background: repeating-linear-gradient(90deg, transparent 0 24%, currentColor 24% calc(24% + 1px), transparent calc(24% + 1px) 49%), repeating-linear-gradient(0deg, transparent 0 24%, currentColor 24% calc(24% + 1px), transparent calc(24% + 1px) 49%); }
-    .project:nth-child(1):hover::before { transform: scale(1.08); }
-    .project:nth-child(1):hover::after { transform: rotate(-4deg) scale(1.05); }
+    /* Xekute — bounded viewport and crosshair. */
+    .project:nth-child(1)::before { width: 58%; height: 72%; right: -10%; top: 7%; border: 1px solid var(--shape-rest); border-radius: 30px; transform: rotate(-5deg); }
+    .project:nth-child(1)::after { width: 38%; aspect-ratio: 1; left: -8%; top: -8%; border: 1px solid var(--shape-rest); border-radius: 50%; background: linear-gradient(90deg, transparent calc(50% - .5px), currentColor calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)), linear-gradient(0deg, transparent calc(50% - .5px), currentColor calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)); }
+    .project:nth-child(1):hover::before { transform: rotate(-2deg) translate(-6px,4px) scale(1.03); }
+    .project:nth-child(1):hover::after { transform: rotate(8deg) scale(1.08); }
 
-    /* LeadBondhu — violet broadcast ellipse and a clean signal trajectory. */
-    .project:nth-child(2)::before { width: 47%; aspect-ratio: .72; right: -9%; top: -14%; border: 1px solid var(--shape-rest); border-radius: 50%; transform: rotate(13deg); }
-    .project:nth-child(2)::after { width: 88%; height: 38%; left: -38%; bottom: 8%; border-top: 1px solid var(--shape-rest); border-right: 1px solid var(--shape-rest); transform: skewX(-24deg) rotate(-12deg); }
-    .project:nth-child(2):hover::before { transform: rotate(8deg) translateX(-10px) scale(1.06); }
-    .project:nth-child(2):hover::after { transform: skewX(-18deg) rotate(-9deg) translateX(8px); }
+    /* VULNERA — model layers and a risk core. */
+    .project:nth-child(2)::before { width: 50%; aspect-ratio: 1; right: -12%; top: -16%; border: 1px solid var(--shape-rest); border-radius: 50%; background: radial-gradient(circle, transparent 0 34%, currentColor 34% calc(34% + 1px), transparent calc(34% + 1px) 58%, currentColor 58% calc(58% + 1px), transparent calc(58% + 1px)); }
+    .project:nth-child(2)::after { width: 68%; height: 34%; left: -30%; bottom: 8%; border: 1px solid var(--shape-rest); transform: skewX(-18deg) rotate(-8deg); }
+    .project:nth-child(2):hover::before { transform: scale(1.08) rotate(6deg); }
+    .project:nth-child(2):hover::after { transform: skewX(-12deg) rotate(-4deg) translateX(10px); }
 
-    /* Jarvis — golden arc-reactor diamond and concentric core. */
-    .project:nth-child(3)::before { width: 44%; aspect-ratio: 1; right: -3%; top: -18%; border: 1px solid var(--shape-rest); transform: rotate(45deg); }
-    .project:nth-child(3)::after { width: 29%; aspect-ratio: 1; left: 15%; bottom: -14%; border: 1px solid var(--shape-rest); border-radius: 50%; background: radial-gradient(circle, transparent 0 36%, currentColor 36% calc(36% + 1px), transparent calc(36% + 1px)); }
+    /* Mentora — teaching loop and verified board state. */
+    .project:nth-child(3)::before { width: 44%; aspect-ratio: 1; right: -4%; top: -18%; border: 1px solid var(--shape-rest); transform: rotate(45deg); }
+    .project:nth-child(3)::after { width: 30%; aspect-ratio: 1; left: 14%; bottom: -14%; border: 1px solid var(--shape-rest); border-radius: 50%; background: radial-gradient(circle, transparent 0 36%, currentColor 36% calc(36% + 1px), transparent calc(36% + 1px)); }
     .project:nth-child(3):hover::before { transform: rotate(52deg) scale(1.07); }
     .project:nth-child(3):hover::after { transform: scale(1.12); }
 
-    /* Xekute — a framed viewport with a precise crosshair. */
-    .project:nth-child(4)::before { width: 55%; height: 71%; right: -9%; top: 10%; border: 1px solid var(--shape-rest); border-radius: 28px; transform: rotate(-5deg); }
-    .project:nth-child(4)::after { width: 38%; aspect-ratio: 1; left: -7%; top: -8%; border: 1px solid var(--shape-rest); border-radius: 50%; background: linear-gradient(90deg, transparent calc(50% - .5px), currentColor calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)), linear-gradient(0deg, transparent calc(50% - .5px), currentColor calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)); }
-    .project:nth-child(4):hover::before { transform: rotate(-2deg) translate(-6px,4px); }
-    .project:nth-child(4):hover::after { transform: rotate(8deg) scale(1.08); }
+    /* LeadBondhu — broadcast ellipse and signal trajectory. */
+    .project:nth-child(4)::before { width: 47%; aspect-ratio: .72; right: -9%; top: -14%; border: 1px solid var(--shape-rest); border-radius: 50%; transform: rotate(13deg); }
+    .project:nth-child(4)::after { width: 88%; height: 38%; left: -38%; bottom: 8%; border-top: 1px solid var(--shape-rest); border-right: 1px solid var(--shape-rest); transform: skewX(-24deg) rotate(-12deg); }
+    .project:nth-child(4):hover::before { transform: rotate(8deg) translateX(-10px) scale(1.06); }
+    .project:nth-child(4):hover::after { transform: skewX(-18deg) rotate(-9deg) translateX(8px); }
+
+    /* Joblicator — orbital workspace and application grid. */
+    .project:nth-child(5)::before { width: 54%; aspect-ratio: 1; right: -14%; top: -10%; border: 1px solid var(--shape-rest); border-radius: 50%; }
+    .project:nth-child(5)::after { width: 40%; aspect-ratio: 1.15; left: -12%; bottom: -18%; border: 1px solid var(--shape-rest); transform: rotate(-8deg); background: repeating-linear-gradient(90deg, transparent 0 24%, currentColor 24% calc(24% + 1px), transparent calc(24% + 1px) 49%), repeating-linear-gradient(0deg, transparent 0 24%, currentColor 24% calc(24% + 1px), transparent calc(24% + 1px) 49%); }
+    .project:nth-child(5):hover::before { transform: scale(1.08); }
+    .project:nth-child(5):hover::after { transform: rotate(-4deg) scale(1.05); }
+
+    /* Jarvis — layered local routing. */
+    .project:nth-child(6)::before { width: 52%; height: 62%; right: -12%; top: 10%; border: 1px solid var(--shape-rest); transform: rotate(8deg); }
+    .project:nth-child(6)::after { width: 34%; aspect-ratio: 1; left: -5%; bottom: -10%; border: 1px solid var(--shape-rest); border-radius: 50%; background: linear-gradient(90deg, transparent calc(50% - .5px), currentColor calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)); }
+    .project:nth-child(6):hover::before { transform: rotate(3deg) translateX(-8px) scale(1.05); }
+    .project:nth-child(6):hover::after { transform: scale(1.1); }
     .project-top { display: flex; justify-content: space-between; align-items: start; font: 400 10px "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
     .project-arrow { width: 36px; height: 36px; border: 1px solid currentColor; display: grid; place-content: center; font-size: 18px; transition: background .2s, color .2s; }
     .project:hover .project-arrow { background: var(--accent); color: var(--ink); border-color: var(--accent); }
@@ -253,7 +267,6 @@
     @media (max-width: 900px) {
       :root { --pad: clamp(24px,5vw,42px); }
       .site-header { height: 66px; grid-template-columns: 1fr auto; padding-left: max(var(--pad),env(safe-area-inset-left)); padding-right: max(var(--pad),env(safe-area-inset-right)); }
-      .brand, .menu-btn { min-height: 44px; display: inline-flex; align-items: center; }
       .availability { display: none; }
       .menu { overflow-y: auto; padding: 88px var(--pad) 42px; place-content: center stretch; }
       .menu nav { width: 100%; align-items: flex-start; }
@@ -267,7 +280,7 @@
       .hero-visual img { object-position: 52% center; }
       .section { padding-top: clamp(100px,14vw,135px); padding-bottom: clamp(100px,14vw,135px); }
       .section-head { grid-template-columns: 1fr; gap: 24px; margin-bottom: clamp(54px,9vw,78px); }
-      .section-head h2 { min-width: 0; max-width: 100%; font-size: clamp(56px,10.5vw,90px); }
+      .section-head h2 { max-width: 100%; font-size: clamp(56px,12vw,102px); }
       .about-grid, .credentials-grid { grid-template-columns: 1fr; gap: 64px; }
       .about-portrait { width: min(100%,590px); max-height: 680px; margin-inline: auto; }
       .about-copy .lead { font-size: clamp(34px,6.5vw,56px); }
@@ -297,10 +310,7 @@
     @media (max-width: 600px) {
       :root { --pad: clamp(18px,5vw,24px); }
       .site-header { height: 60px; }
-      .site-header { padding-left: max(var(--pad), env(safe-area-inset-left)); padding-right: max(var(--pad), env(safe-area-inset-right)); }
       .brand, .menu-btn { font-size: 10px; }
-      .brand, .menu-btn { min-height: 44px; display: inline-flex; align-items: center; }
-      .menu-btn { padding: 10px 0; }
       .menu { padding-top: 78px; padding-bottom: 30px; }
       .menu a { font-size: clamp(40px,13vw,62px); }
       .hero-copy { min-height: 68svh; padding-top: 88px; padding-bottom: 34px; }
@@ -316,10 +326,9 @@
       .crosshair::before { width: 42px; top: 14px; left: -6px; }
       .crosshair::after { height: 42px; left: 14px; top: -6px; }
       .ticker-track span { padding-block: 12px; font-size: 9px; }
-      .section { padding-top: 84px; padding-bottom: 84px; padding-left: max(var(--pad), env(safe-area-inset-left)); padding-right: max(var(--pad), env(safe-area-inset-right)); }
+      .section { padding-top: 84px; padding-bottom: 84px; }
       .section-head { margin-bottom: 48px; gap: 18px; }
-      .section-head h2 { min-width: 0; font-size: clamp(42px,10.5vw,56px); line-height: .88; }
-      .motion-clip { padding-inline: .04em; margin-inline: -.04em; }
+      .section-head h2 { font-size: clamp(48px,14.2vw,72px); line-height: .88; }
       .about-grid { gap: 44px; }
       .about-portrait { width: 100%; aspect-ratio: 4/5; }
       .about-copy .lead { margin-bottom: 34px; font-size: clamp(29px,8.6vw,42px); line-height: 1.02; }
@@ -348,11 +357,11 @@
       .experience-points { grid-template-columns: 1fr; }
       .credentials-aside { min-height: 290px; padding: 24px; }
       .credentials-aside h3 { font-size: clamp(32px,10vw,46px); }
-      .credential { gap: 15px; min-height: 56px; padding: 21px 0; }
+      .credential { gap: 15px; padding: 21px 0; }
       .credential h3 { font-size: clamp(18px,5.5vw,24px); line-height: 1.08; }
       .credential h3, .experience-body h3 { overflow-wrap: anywhere; }
-      .contact { min-height: 72svh; padding: 84px max(var(--pad), env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(var(--pad), env(safe-area-inset-left)); }
-      .contact h2 { font-size: clamp(54px,15vw,78px); line-height: .84; letter-spacing: -.07em; }
+      .contact { min-height: 72svh; padding: 84px var(--pad) max(26px,env(safe-area-inset-bottom)); }
+      .contact h2 { font-size: clamp(48px,13.2vw,72px); line-height: .86; letter-spacing: -.07em; }
       .contact-links { grid-template-columns: 1fr; margin-top: 54px; }
       .contact-links a { min-height: 54px; padding: 18px 0; display: flex; align-items: center; }
       .contact-footer { flex-direction: column; gap: 12px; margin-top: 42px; }
@@ -362,10 +371,10 @@
     }
     @media (max-width: 380px) {
       .hero-title { font-size: 20vw; }
-      .section-head h2 { font-size: 10.5vw; }
+      .section-head h2 { font-size: 13.5vw; }
       .project { min-height: 410px !important; }
       .project:nth-child(1) { min-height: 510px !important; }
-      .contact h2 { font-size: 14.2vw; }
+      .contact h2 { font-size: 12.8vw; }
     }
     @media (max-height: 500px) and (orientation: landscape) {
       .site-header { height: 54px; }
@@ -407,70 +416,74 @@
   <main id="page-content">
     <section class="hero" id="top">
       <div class="hero-copy">
-        <div class="hero-kicker"><p class="eyebrow">Cybersecurity researcher</p><p class="eyebrow">Kuala Lumpur / MY</p></div>
+        <div class="hero-kicker"><p class="eyebrow">AI Security / Offensive Security</p><p class="eyebrow">Kuala Lumpur / MY</p></div>
         <h1 class="hero-title"><span>Mahir</span><span class="outline">Asif</span></h1>
-        <div class="hero-bottom"><span class="hero-number">01 — 06 / PORTFOLIO 2026</span><p class="hero-intro">I break systems, study the patterns, and <strong>build safer ones.</strong> Offensive security meets machine learning and precise engineering.</p></div>
+        <div class="hero-bottom"><span class="hero-number">01 — 06 / PORTFOLIO 2026</span><p class="hero-intro">I break systems, engineer agentic workflows, and <strong>build safer intelligent systems.</strong> Offensive security meets AI security and precise engineering.</p></div>
       </div>
-      <div class="hero-visual" aria-label="Portrait of Mahir Asif"><img src="profile.jpeg" alt="Mahir Asif, cybersecurity researcher" fetchpriority="high" decoding="async"><span class="crosshair" aria-hidden="true"></span><span class="hero-stamp">Research / OffSec / Build</span></div>
+      <div class="hero-visual" aria-label="Portrait of Mahir Asif"><img src="profile.jpeg" alt="Mahir Asif, AI security and offensive security engineer" fetchpriority="high" decoding="async"><span class="crosshair" aria-hidden="true"></span><span class="hero-stamp">AI Security / OffSec / Build</span></div>
     </section>
 
-    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Web penetration testing</span><span>Vulnerability research</span><span>ML security</span><span>Cloud review</span><span>API security</span><span>Web penetration testing</span><span>Vulnerability research</span><span>ML security</span><span>Cloud review</span><span>API security</span></div></div>
+    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>AI security</span><span>Agentic systems</span><span>Security automation</span><span>Web &amp; API testing</span><span>ML security</span><span>Cloud security</span><span>AI security</span><span>Agentic systems</span><span>Security automation</span><span>Web &amp; API testing</span><span>ML security</span><span>Cloud security</span></div></div>
 
     <section class="section" id="about">
-      <div class="section-head reveal"><p class="eyebrow">01 / Profile</p><h2>Curious by nature.<br><em>Adversarial</em> by craft.</h2></div>
+      <div class="section-head reveal"><p class="eyebrow">01 / Profile</p><h2>Adversarial by craft.<br><em>Systems</em> by obsession.</h2></div>
       <div class="about-grid">
         <figure class="about-portrait reveal"><img src="profile.jpeg" alt="Black and white portrait of Mahir Asif" loading="lazy" decoding="async"></figure>
         <div class="about-copy reveal">
-          <p class="lead">I look at a system and immediately want to understand how it was built and where its assumptions fail.</p>
-          <div class="about-columns"><p>I’m Mahir, a cybersecurity researcher and penetration tester. My work spans web and API testing, cloud configuration review, network security, and vulnerability research. I move quickly, document clearly, and treat every finding as a path toward a stronger system.</p><p>That same instinct drives my engineering work: from production SaaS to machine-learning pipelines for zero-day vulnerability risk prediction. If the problem sits outside my current wheelhouse, I learn the missing piece and keep moving.</p></div>
-          <div class="facts"><div class="fact"><b>eJPT . eWPTX</b><span>Offensive security</span></div><div class="fact"><b>3× AWS</b><span>Cloud certified</span></div><div class="fact"><b>KL</b><span>Based in Malaysia</span></div></div>
+          <p class="lead">I like systems most when I can understand their assumptions, stress them, and engineer better ones.</p>
+          <div class="about-columns"><p>I’m Mahir, a cybersecurity and AI security engineer focused on offensive security, web and API testing, security automation, cloud security, and vulnerability research. I have hands-on client assessment experience and I care about how real assessments are scoped, executed, verified, and documented.</p><p>My engineering work extends into agentic AI and ML security: Xekute explores bounded AI-assisted security assessment workflows, while VULNERA applies code-focused machine learning to function-level vulnerability risk estimation. I care about deterministic verification, evidence-first systems, and turning research ideas into usable software.</p></div>
+          <div class="facts"><div class="fact"><b>eJPT / SAA</b><span>Security + cloud</span></div><div class="fact"><b>3× AWS</b><span>Cloud certified</span></div><div class="fact"><b>AI × OffSec</b><span>Current focus</span></div></div>
         </div>
       </div>
     </section>
 
     <section class="section work" id="work">
-      <div class="section-head reveal"><p class="eyebrow">02 / Selected work</p><h2>Built to <em>probe</em> the edges.</h2></div>
+      <div class="section-head reveal"><p class="eyebrow">02 / Selected work</p><h2>Built where AI meets <em>attack surface.</em></h2></div>
       <div class="project-grid">
-        <a class="project reveal" href="joblicator.html"><div class="project-top"><span>01 / Local AI / Productivity</span><span class="project-arrow">↗</span></div><div><h3>Joblicator</h3><p>A local-first job application studio that captures roles, maintains a structured career profile, and runs a three-stage Ollama pipeline to tailor résumés and cover letters. A React workspace, Python REST backend, visual template editor, review workflow, and Jinja-powered HTML/PDF export keep the entire process private and on-device.</p><div class="project-tags"><span>React</span><span>Python</span><span>Ollama</span><span>HTML + PDF</span></div></div></a>
-        <a class="project reveal" href="https://leadbondhuai.online" target="_blank" rel="noreferrer"><div class="project-top"><span>02 / SaaS / Production</span><span class="project-arrow">↗</span></div><div><h3>LeadBondhu AI</h3><p>A serverless lead-capture and notification platform integrating Meta channels, Gemini, Supabase, Resend, and Cloudflare—with security reviews built into delivery.</p><div class="project-tags"><span>React</span><span>Node</span><span>Cloudflare</span><span>VAPT</span></div></div></a>
-        <a class="project reveal" href="jarvis.html"><div class="project-top"><span>03 / Voice AI / Windows</span><span class="project-arrow">↗</span></div><div><h3>Jarvis</h3><p>A hands-free local Windows assistant built around wake-word activation, faster-whisper speech recognition, layered intent routing, tool execution, and text-to-speech. Everyday commands take a deterministic fast path while an Ollama model resolves only ambiguous requests.</p><div class="project-tags"><span>Python</span><span>faster-whisper</span><span>Ollama</span><span>Voice UX</span></div></div></a>
-        <a class="project reveal" href="xekute.html"><div class="project-top"><span>04 / Security / Desktop / Local AI</span><span class="project-arrow">↗</span></div><div><h3>Xekute</h3><p>A local-first workspace for authorized penetration testing and vulnerability assessment. It connects scope and Rules of Engagement, intercepted HTTP traffic, evidence, findings, security tools, an application behavior map, WebClone, terminal access, and a policy-controlled Ollama assistant in one Windows desktop application.</p><div class="project-tags"><span>Electron</span><span>Security Proxy</span><span>Ollama</span><span>App Map</span></div></div></a>
+        <a class="project reveal" href="xekute.html"><div class="project-top"><span>01 / AI Security / Security Automation</span><span class="project-arrow">↗</span></div><div><h3>Xekute</h3><p>A local-first AI-assisted security assessment platform that unifies scope, intercepted traffic, evidence, findings, security tooling, and agentic workflows. Its custom harness uses role-based tool access, multi-level authority controls, scope and risk gates, deterministic verification and recovery, delegated agents, and a SQLite/FTS5 assessment intelligence engine for querying large evidence corpora without pushing the full workspace into model context.</p><div class="project-tags"><span>AI Agents</span><span>Tool Gating</span><span>SQLite / FTS5</span><span>HTTP Analysis</span></div></div></a>
+        <a class="project reveal" href="https://github.com/mahirhacks/VULNERA" target="_blank" rel="noreferrer"><div class="project-top"><span>02 / ML Security / Research</span><span class="project-arrow">↗</span></div><div><h3>VULNERA</h3><p>A function-level vulnerability risk estimation system for C/C++ code. The research pipeline adapts GraphCodeBERT to security code, combines learned representations with supervised classifiers and signature-based corroboration, and exposes risk analysis through an end-to-end Python, FastAPI, and React workflow.</p><div class="project-tags"><span>GraphCodeBERT</span><span>PyTorch</span><span>FastAPI</span><span>ML Security</span></div></div></a>
+        <a class="project reveal" href="https://github.com/mahirhacks/Mentora" target="_blank" rel="noreferrer"><div class="project-top"><span>03 / Agentic AI / Realtime</span><span class="project-arrow">↗</span></div><div><h3>Mentora</h3><p>A voice-first visual AI tutor where an LLM plans short teaching turns, deterministic board tools construct and verify the visual state, and a realtime voice layer performs the validated explanation. Built around strict script validation, turn control, state verification, and reliable multimodal orchestration.</p><div class="project-tags"><span>Realtime AI</span><span>TypeScript</span><span>Tool Use</span><span>Verification</span></div></div></a>
+        <a class="project reveal" href="https://leadbondhuai.online" target="_blank" rel="noreferrer"><div class="project-top"><span>04 / SaaS / Production</span><span class="project-arrow">↗</span></div><div><h3>LeadBondhu AI</h3><p>A production multilingual AI lead-capture platform for Bangladeshi SMBs, supporting Bangla, Banglish, and English while integrating Meta messaging channels, Gemini, Supabase, Resend, and Cloudflare-based serverless infrastructure.</p><div class="project-tags"><span>React</span><span>Cloudflare</span><span>Supabase</span><span>Gemini</span></div></div></a>
+        <a class="project reveal" href="joblicator.html"><div class="project-top"><span>05 / AI Automation / Local LLM</span><span class="project-arrow">↗</span></div><div><h3>Joblicator</h3><p>A local-first job application workspace that stores structured career data and job postings, then runs reviewable LLM stages to generate tailored résumés and cover letters. A React interface, Python backend, visual templates, and local HTML/PDF export keep the workflow auditable and portable.</p><div class="project-tags"><span>React</span><span>Python</span><span>LLM Pipeline</span><span>HTML + PDF</span></div></div></a>
+        <a class="project reveal" href="jarvis.html"><div class="project-top"><span>06 / Local AI / Voice UX</span><span class="project-arrow">↗</span></div><div><h3>Jarvis</h3><p>A local Windows voice assistant using wake-word detection, faster-whisper speech recognition, layered intent routing, deterministic tool execution, and a local LLM fallback for ambiguous commands so common actions stay fast and predictable.</p><div class="project-tags"><span>Python</span><span>faster-whisper</span><span>Ollama</span><span>Tool Routing</span></div></div></a>
       </div>
     </section>
 
     <section class="section expertise" id="expertise">
-      <div class="section-head reveal"><p class="eyebrow">03 / Capabilities</p><h2>Attack surface to <em>architecture.</em></h2></div>
+      <div class="section-head reveal"><p class="eyebrow">03 / Capabilities</p><h2>Attack surface to <em>agent architecture.</em></h2></div>
       <div class="capability-list">
-        <div class="capability reveal"><span class="num">01</span><h3>Offensive Security</h3><p>Web / API / network testing · privilege escalation · OSINT · VAPT reporting</p></div>
-        <div class="capability reveal"><span class="num">02</span><h3>Security Research</h3><p>OWASP · WSTG · STRIDE · vulnerability analysis · experimental evaluation</p></div>
-        <div class="capability reveal"><span class="num">03</span><h3>ML Engineering</h3><p>Transformer models · PyTorch · pipeline design · calibration · local LLMs</p></div>
-        <div class="capability reveal"><span class="num">04</span><h3>Cloud &amp; Systems</h3><p>AWS · Azure review · Linux administration · Bash · serverless architecture</p></div>
-        <div class="capability reveal"><span class="num">05</span><h3>Product Engineering</h3><p>Python · JavaScript · React · Node · databases · software delivery</p></div>
+        <div class="capability reveal"><span class="num">01</span><h3>Offensive Security</h3><p>Web / API testing · reconnaissance · validation · cloud review · VAPT reporting</p></div>
+        <div class="capability reveal"><span class="num">02</span><h3>AI &amp; Agent Security</h3><p>Tool boundaries · authority models · scope controls · agent permissions · human-in-the-loop design</p></div>
+        <div class="capability reveal"><span class="num">03</span><h3>Security Automation</h3><p>Agent harnesses · deterministic execution · verification · recovery · evidence pipelines</p></div>
+        <div class="capability reveal"><span class="num">04</span><h3>ML Security Research</h3><p>GraphCodeBERT · PyTorch · dataset pipelines · model adaptation · calibrated risk estimation</p></div>
+        <div class="capability reveal"><span class="num">05</span><h3>Cloud &amp; Systems</h3><p>AWS · Azure review · Linux · networking · Bash · serverless architecture</p></div>
+        <div class="capability reveal"><span class="num">06</span><h3>Product Engineering</h3><p>Python · TypeScript · React · Electron · FastAPI · APIs · software delivery</p></div>
       </div>
     </section>
 
     <section class="section experience" id="experience">
-      <div class="section-head reveal"><p class="eyebrow">04 / Experience</p><h2>Fieldwork over <em>theory.</em></h2></div>
+      <div class="section-head reveal"><p class="eyebrow">04 / Experience</p><h2>Research that <em>ships.</em></h2></div>
       <div class="experience-list">
         <article class="experience-item reveal">
-          <div class="experience-meta"><p class="experience-date">Oct 2025 — Jan 2026<br>Kuala Lumpur, Malaysia</p><span class="experience-index">01</span></div>
-          <div class="experience-body"><h3>Junior Penetration Tester</h3><p class="experience-org">FSeC @ APU / APIIT</p><ul class="experience-points"><li>Tested web applications and APIs for Australian enterprise and Malaysian government clients.</li><li>Reviewed security configurations across AWS and Azure environments.</li><li>Produced structured penetration-testing reports with CVSS-rated findings.</li><li>Translated technical weaknesses into practical remediation guidance.</li></ul></div>
+          <div class="experience-meta"><p class="experience-date">2025 — Present<br>Kuala Lumpur, Malaysia</p><span class="experience-index">01</span></div>
+          <div class="experience-body"><h3>Independent Security &amp; AI Engineering</h3><p class="experience-org">Research / Open-source / Product work</p><ul class="experience-points"><li>Architected Xekute, a local-first AI-assisted security assessment platform with bounded agent execution, tool gating, verification, and evidence intelligence.</li><li>Built VULNERA, a code-focused ML research pipeline for function-level vulnerability risk estimation in C/C++.</li><li>Shipped production and experimental AI systems spanning SaaS, realtime voice, local LLM workflows, and deterministic tool orchestration.</li><li>Focus current research on the intersection of offensive security, agentic AI, security automation, and reliable autonomous systems.</li></ul></div>
         </article>
         <article class="experience-item reveal">
-          <div class="experience-meta"><p class="experience-date">December 2022<br>Rajshahi, Bangladesh</p><span class="experience-index">02</span></div>
-          <div class="experience-body"><h3>Graphic Designer</h3><p class="experience-org">MD Infotech</p><ul class="experience-points"><li>Created an animated explainer that visualized a future company project.</li><li>Translated intricate technical specifications into a concise visual narrative.</li><li>Developed the project concept, motion direction, and supporting graphics.</li><li>Helped increase stakeholder engagement with a clearer presentation of the concept.</li></ul></div>
+          <div class="experience-meta"><p class="experience-date">Oct 2025 — Jan 2026<br>Kuala Lumpur, Malaysia</p><span class="experience-index">02</span></div>
+          <div class="experience-body"><h3>Junior Penetration Tester</h3><p class="experience-org">FSeC @ APU / APIIT</p><ul class="experience-points"><li>Performed web application and API penetration testing for Australian enterprise and Malaysian government clients.</li><li>Reviewed security configurations across AWS and Azure environments.</li><li>Documented vulnerabilities using structured, CVSS-based severity ratings and reproducible evidence.</li><li>Translated technical findings into practical remediation guidance to reduce client attack surface.</li></ul></div>
         </article>
       </div>
     </section>
 
     <section class="section" id="credentials">
-      <div class="section-head reveal"><p class="eyebrow">05 / Credentials</p><h2>Proof, not <em>posture.</em></h2></div>
+      <div class="section-head reveal"><p class="eyebrow">05 / Credentials</p><h2>Foundation for <em>the work.</em></h2></div>
       <div class="credentials-grid">
-        <a class="credentials-aside reveal" href="#experience" aria-label="View professional experience">
-          <div class="credentials-aside-top"><span>Experience snapshot</span><span class="credentials-aside-mark">↗</span></div>
-          <div><h3>Junior Penetration Tester</h3><p>FSeC @ APU / APIIT<br>Kuala Lumpur · 2025—2026</p><span class="credentials-aside-link">View full experience →</span></div>
+        <a class="credentials-aside reveal" href="#work" aria-label="View selected security and AI projects">
+          <div class="credentials-aside-top"><span>Current focus</span><span class="credentials-aside-mark">↗</span></div>
+          <div><h3>AI Security + Security Automation</h3><p>Offensive security · agent systems · ML security · engineering</p><span class="credentials-aside-link">View selected work →</span></div>
         </a>
         <div class="credentials-list reveal">
+          <div class="credential"><div><h3>BSc (Hons) Computing / Cybersecurity</h3><p>Asia Pacific University / 2026 · CGPA 3.38</p></div><span>—</span></div>
           <a class="credential" href="https://www.credly.com/badges/17dbaa45-fb53-40cb-91fb-119f82d88f07/public_url" target="_blank" rel="noreferrer"><div><h3>AWS Certified AI Practitioner</h3><p>Amazon Web Services / 2026</p></div><span>↗</span></a>
           <a class="credential" href="https://www.credly.com/badges/56ffca5d-23c1-4c6a-90bf-80f0e7e3e6fb/public_url" target="_blank" rel="noreferrer"><div><h3>AWS Certified Cloud Practitioner</h3><p>Amazon Web Services / 2026</p></div><span>↗</span></a>
           <a class="credential" href="https://www.credly.com/badges/5ae1ad02-b6bf-4708-a706-e5de9bc876c1/public_url" target="_blank" rel="noreferrer"><div><h3>AWS Solutions Architect — Associate</h3><p>Amazon Web Services / 2026</p></div><span>↗</span></a>
@@ -483,7 +496,7 @@
     </section>
 
     <section class="contact" id="contact">
-      <div><p class="eyebrow">06 / Start a conversation</p><h2>Have a system worth <span class="outline-text">testing?</span></h2></div>
+      <div><p class="eyebrow">06 / Start a conversation</p><h2>Have a system worth <span class="outline-text">testing?</span> Or an agent worth trusting?</h2></div>
       <div><div class="contact-links"><a href="mailto:asifmahir907@gmail.com">Email ↗</a><a href="https://www.linkedin.com/in/mahir907" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://github.com/mahirhacks" target="_blank" rel="noreferrer">GitHub ↗</a><a href="Mahir_Asif_CV.pdf" target="_blank">Résumé ↗</a></div><div class="contact-footer"><span>© 2026 Mahir Asif</span><span>Kuala Lumpur, Malaysia</span><a href="#top">Back to top ↑</a></div></div>
     </section>
   </main>
