@@ -14,7 +14,7 @@
 }
 body.theme-joblicator { --accent:#d8ff00; --accent-rgb:216,255,0; --accent-2:#f4ffb8; }
 body.theme-jarvis { --accent:#c8201c; --accent-rgb:200,32,28; --accent-2:#ffc928; }
-body.theme-Xekute { --accent:#3478ff; --accent-rgb:52,120,255; --accent-2:#8eb5ff; }
+body.theme-Xekute { --accent:#8f8f8f; --accent-rgb:143,143,143; --accent-2:#c6c6c6; }
 body.theme-vulnera { --accent:#8d68ff; --accent-rgb:141,104,255; --accent-2:#d8ccff; }
 body.theme-mentora { --accent:#ffc928; --accent-rgb:255,201,40; --accent-2:#fff1b8; }
 body.theme-jarvis .product-stage { background:linear-gradient(135deg,#74100e 0%,#ad1916 46%,#d72a20 100%); }
