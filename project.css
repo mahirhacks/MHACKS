@@ -40,6 +40,7 @@ body.theme-jarvis .scroll-thumb { background:var(--accent-2); box-shadow:0 0 14p
 body.theme-Xekute .product-hero { display:block; min-height:100svh; background:#090909; }
 body.theme-Xekute .hero-copy { min-height:100svh; align-items:center; padding:120px var(--pad) 64px; text-align:center; }
 body.theme-Xekute .hero-meta { width:100%; text-align:left; }
+body.theme-Xekute .product-logo { width:clamp(88px,11vw,150px); height:auto; margin:4vh auto 0; border-radius:24%; }
 body.theme-Xekute .product-name { margin:0 auto; text-align:center; }
 body.theme-Xekute .hero-end { grid-template-columns:1fr; width:min(100%,780px); margin-top:0; text-align:center; }
 body.theme-Xekute .hero-actions { justify-content:center; }
